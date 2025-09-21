@@ -1,0 +1,526 @@
+.themesion-show{
+	display:block !important;
+}
+.themesion-hide{
+	display:none !important;
+}
+.customize-pane-child input[type=color],
+.customize-pane-child input[type=date],
+.customize-pane-child input[type=datetime-local],
+.customize-pane-child input[type=datetime],
+.customize-pane-child input[type=email],
+.customize-pane-child input[type=month],
+.customize-pane-child input[type=number],
+.customize-pane-child input[type=password],
+.customize-pane-child input[type=search],
+.customize-pane-child input[type=tel],
+.customize-pane-child input[type=text],
+.customize-pane-child input[type=time],
+.customize-pane-child input[type=url],
+.customize-pane-child input[type=week],
+.customize-pane-child select,
+.customize-pane-child textarea {
+	border-radius: 0;
+	border-color: rgb(204, 204, 204);
+}
+div[id$='-single-style'] label img,
+div[id$='-cat-style'] label img,
+div[id$='-related-style'] label img,
+div[id$='blogroll-view'] label img,
+div[id$='-group-style'] label img {
+	width: 130px;
+	margin-bottom: 0;
+}
+.customize-control.customize-control-kirki-generic.customize-control-has-small-gap>span.customize-control-title,
+.customize-control.customize-control-kirki-generic.customize-control-has-small-gap>label.customize-control-title,
+.customize-control.customize-control-kirki-generic.customize-control-has-small-gap>div>label.customize-control-title,
+.customize-control.customize-control-kirki-generic.customize-control-has-small-gap>label>span.customize-control-title,
+.customize-control.customize-control-kirki-generic.customize-control-has-small-gap>div>div>.customize-control-title,
+.customize-control-label>span.customize-control-title {
+	margin-top: 29px;
+	padding-bottom: 5px !important;
+	margin-bottom: 15px !important;
+	font-size: 17px;
+	border-bottom: 1px solid #d1d1d1;
+	color: black;
+	display: block;
+}
+.kirki-control-form.has-default-label-style{
+	padding-top: 25px;
+}
+li[data-kirki-parent-control-type="kirki-background"] .kirki-control-form.has-default-label-style{
+	padding-top: 15px;
+	margin-bottom: -10px;
+}
+span.customize-control-title:empty{
+	display: none !important;
+}
+.kirki-control-form.has-default-label-style span.customize-control-title{
+	font-size: 17px;
+	margin-top: -7px;
+	color: black;
+}
+.customize-control.customize-control-kirki.customize-control-kirki-radio-image>label,
+.customize-control-label{
+	display: block;
+}
+.customize-control-title.kirki-tooltip-wrapper {
+	position: relative;
+	z-index: 1;
+}
+#revslider-update,
+#js_composer-update{
+	display:none;
+}
+.customize-control.customize-control-kirki-custom{
+	background: transparent;
+	padding-top: 20px;
+}
+.kirki-host-font-locally{
+	display: none !important;
+}
+.cf-nav ul li a:focus{
+	box-shadow: none;
+}
+.cf-elm-block {
+	padding-top: 15px;
+}
+.rs-update-notice-wrap{
+	display:none !important;
+}
+.thsn-revslider-thumb{
+	max-height: 70px;
+	width: auto;
+	display: block;
+}
+.acf-input .fip-icons-container span i::before{
+	font-size: 25px;
+}
+#acf_after_title-sortables{
+	padding-bottom: 10px;
+}
+#postimagediv {
+	margin-top: 20px;
+}
+.icons-selector .selector-arrows i::before {
+	font-size: 20px;
+	color: #616161;
+}
+.icons-selector .selector-arrows i:hover::before {
+	color: black;
+	background: #dedede;
+}
+/* ------------------------ */
+/*  Kirki - Image Selector  */
+.customize-control-kirki-radio-image label{
+	padding: 3px;
+}
+.customize-control-kirki-radio-image label img {
+	max-width: 96%;
+	border: 3px solid #c7c7c7;
+	padding: 2px;
+	margin-bottom: 10px;
+}
+.customize-control-kirki-radio-image input:checked + label img {
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	border-color: #3498DB !important;
+	border-width: 3px !important;
+}
+.themesion-option-heading h2 {
+	margin-bottom: 6px;
+	margin-top: 0px;
+	color: #0085ba;
+}
+/* Preload selector */
+div#input_preloader-image label {
+	float: left;
+	display: inline-block;
+	width: 32%;
+	padding: 0px;
+}
+div#input_preloader-image img {
+	max-width: 80%;
+}
+.kirki-input-container .wp-picker-holder {
+	width: 100%;
+}
+/************************/
+/****   ACF Styles   ****/
+.thsn-radio-image-selector input:checked ~ img,
+.thsn-radio-image-selector input:checked ~ div {
+	border-color: #2BBAFF;
+}
+.thsn-radio-image-selector input ~ img,
+.thsn-radio-image-selector input ~ div {
+	border-color: #333;
+	padding: 7px !important;
+	margin: 0 0 12px;
+}
+.thsn-radio-image-selector input {
+	display: none !important;
+}
+.thsn-radio-image-selector input ~ img,
+.thsn-radio-image-selector input ~ div {
+	padding: 3px;
+	border: 3px solid #eee;
+}
+.acf-input .acf-range-wrap input[type="number"]{
+	min-width: 4em;
+}
+#acf-thsn-photo-gallery-group{
+	margin-top: 25px;
+}
+#acf-thsn-photo-gallery-group .hndle,
+#acf-thsn-photo-gallery-group .handlediv{
+	display: none;
+}
+#acf-thsn-photo-gallery-group .acf-photo-gallery-metabox-list li{
+	width: 150px;
+	height: 150px;
+}
+#cfpf-format-gallery-preview{
+	display: none !important;
+}
+#acf-thsn-logo-link .link-title, div#acf-thsn-logo-link .link-url {
+	display: block;
+}
+/***********************/
+/**** Dynamic color ****/
+label[class$="globalcolor"] img {
+	background: #ff0000;
+}
+/**********************/
+/**** Page Builder ****/
+select.sgicon,
+option.sgicon {
+	font-family: inherit !important;
+}
+/***************************/
+/**** Slider Revolution ****/
+#rso_menu_notices,
+#add_on_management,
+#contactsupport,
+#new_slider_from_template,
+div.rso_scrollmenuitem[data-ref="#plugin_activation_row"],
+#plugin_update_row,
+#plugin_activation_row,
+#plugin_news_row{
+	display: none !important;
+}
+#rs_overview .new_slider_block i.material-icons,
+.rs_library_element .rsle_footer i.material-icons,
+#current_width_height i.material-icons{
+	width: unset;
+	height: auto;
+	position: inherit;
+}
+.rsle_footer .show_rsle.material-icons{
+	font-size: 20px;
+}
+/*****************************/
+/**** Post list thumbnail ****/
+td.themesion_featured_image.column-themesion_featured_image img {
+	max-width: 90px;
+	height: auto;
+}
+/*****************************/
+/***** Merlin Message Box ****/
+.thsn-merlin-message {
+	padding: 20px;
+	display: table;
+	position: relative;
+}
+.thsn-merlin-message-box {
+	background: #fff url(images/logo-watermark.jpg) bottom right no-repeat;
+	background-size: 100px auto;
+}
+.rtl .thsn-merlin-message-box{
+	background: #fff url(images/logo-watermark.jpg) bottom left no-repeat;
+}
+.thsn-merlin-message-btn {
+	position: relative;
+	z-index: 1;
+}
+.thsn-merlin-message .thsn-merlin-message-btn .button-hero,
+.thsn-merlin-message .thsn-merlin-message-conform-btn .button{
+	box-shadow: none !important;
+	background-color: #fe226a;
+	text-shadow: none;
+	text-transform: uppercase;
+	font-size: 13px;
+	letter-spacing: 0.5px;
+	border: none;
+	border-radius: 0;
+	font-weight: 600;
+	padding-top: 3px;
+}
+.rtl .thsn-merlin-message .thsn-merlin-message-btn .button-hero{
+	font-family: system-ui;
+}
+.thsn-merlin-message .thsn-merlin-message-conform-btn .button-primary,
+.thsn-merlin-message .thsn-merlin-message-conform-btn .button {
+	color: #fe226a;
+	background: white;
+	border: 2px solid #fe226a;
+	padding: 2px 15px;
+	height: auto;
+}
+.thsn-merlin-message .thsn-merlin-message-conform-btn .thsn-disable-merlin-message-cancel,
+.thsn-merlin-message .thsn-merlin-message-conform-btn .button.thsn-disable-ratings-message-cancel {
+	background: #fe226a;
+	color: white;
+}
+.thsn-merlin-message .thsn-merlin-message-small {
+	text-align: center;
+}
+.thsn-merlin-message .thsn-merlin-message-small a{
+	color: #333;
+	text-decoration: none;
+	position: relative;
+	display: inline-block;
+}
+.thsn-merlin-message .thsn-merlin-message-small a::after{
+	content: "";
+	background-color: #fe226a;
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	bottom: -4px;
+	left: 0;
+	-webkit-transition: all .4s;
+	-moz-transition: all .4s;
+	transition: all .4s;
+}
+.rtl .thsn-merlin-message .thsn-merlin-message-small a::after{
+	right: 0;
+	left: inherit;
+}
+.thsn-merlin-message .thsn-merlin-message-small a:hover::after{
+	width: 0%;
+}
+.thsn-merlin-message-logo,
+.thsn-merlin-message-vline,
+.thsn-merlin-message-text,
+.thsn-merlin-message-btn{
+	display: table-cell;
+	vertical-align: middle;
+	padding-right: 15px;
+}
+.rtl .thsn-merlin-message-vline,
+.rtl .thsn-merlin-message-text,
+.rtl .thsn-merlin-message-logo{
+	padding: 0 0 0 15px;
+}
+.thsn-merlin-message-logo img{
+	max-height: 50px;
+}
+.thsn-merlin-message-btn{
+	text-align: right;
+	padding-right: 0px;
+}
+.thsn-merlin-message-text{
+	letter-spacing: 0.5px;
+}
+.thsn-merlin-message-box .thsn-merlin-message-text H2{
+	margin-top: 0;
+}
+.thsn-merlin-message-text p{
+	font-size: 16px;
+}
+.thsn-merlin-message-vline-i{
+	width: 2px;
+	height: 101px;
+	background: #e4e4e4;
+	margin: 0 20px;
+}
+.thsn-merlin-message-small{
+	padding-top: 20px;
+}
+.thsn-merlin-message-conform-i{
+	display: table;
+	padding-top: 13px;
+	padding-left: 11px;
+}
+.thsn-merlin-message-conform-col{
+	display: table-cell;
+	vertical-align: top;
+	padding-right: 20px;
+}
+.thsn-merlin-message-conform{
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 2;
+}
+.thsn-merlin-message-conform-text h3{
+	margin-top: 5px;
+}
+.thsn-merlin-message-conform-btn{
+	padding-top: 15px;
+}
+.merlin__button--blue:focus {
+	color: white;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message .thsn-merlin-message-btn .button-hero.thsn-happy-btn,
+.thsn-merlin-ratings-box .thsn-merlin-message .thsn-merlin-message-btn .button-hero.thsn-ratings-doc-btn,
+.thsn-merlin-ratings-box .thsn-merlin-message .thsn-merlin-message-btn .button-hero.thsn-ratings-support-btn{
+	color: #fe226a;
+	background: white;
+	border: 2px solid #fe226a;
+	padding: 0 15px;
+	height: auto;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-btn-1,
+.thsn-merlin-ratings-box .thsn-merlin-message-btn-2 {
+	float: left;
+}
+.rtl .thsn-merlin-ratings-box .thsn-merlin-message-btn-1,
+.rtl .thsn-merlin-ratings-box .thsn-merlin-message-btn-2{
+	float: right;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-btn-1 {
+	padding-right: 25px;
+}
+.rtl .thsn-merlin-ratings-box .thsn-merlin-message-btn-1{
+	padding: 0 0 0 25px;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-btn{
+	min-width: 580px;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-conform-col{
+	text-align: center;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-conform-i{
+	margin: 0 auto;
+}
+.thsn-merlin-ratings-box {
+	border: 5px solid #bfbfbf;
+}
+.thsn-pright-15{
+	padding-right:15px;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-arrow-area {
+	background: transparent url(images/big-arrow.png) no-repeat center right;
+	width: 510px;
+	height: 109px;
+	padding-top: 1px;
+	padding-left: 12px;
+	padding-right: 36px;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-arrow-area h2 {
+	margin-bottom: 5px;
+}
+.thsn-merlin-ratings-box .thsn-merlin-5star-right-area{
+	display: table-cell;
+	padding-top: 0;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-small{
+	padding-top: 15px;
+}
+.thsn-merlin-ratings-box .thsn-merlin-message-text h2{
+	font-size: 24px;
+	line-height: 34px;
+	margin-bottom: 5px;
+}
+.thsn-merlin-ratings-box-back-link {
+	position: absolute;
+	top: 0;
+	left: 5px;
+	z-index: 99;
+}
+.thsn-merlin-ratings-box-back-link a{
+	color: #808080;
+	font-size: 14px;
+	height: 30px;
+	display: block;
+	text-align: center;
+	line-height: 30px;
+	text-decoration: none;
+}
+@media (max-width: 1500px){
+	.thsn-merlin-ratings-box .thsn-merlin-message-btn {
+		min-width: auto;
+		text-align: center;
+	}
+	.thsn-merlin-ratings-box .thsn-merlin-message-btn-1,
+	.thsn-merlin-ratings-box .thsn-merlin-message-btn-2{
+		float: none !important;
+		padding: 0 !important
+	}
+	.thsn-merlin-ratings-box .thsn-merlin-message-btn-2{
+		margin-top: 15px;
+	}
+}
+@media (max-width: 1200px){
+	.thsn-merlin-message-vline,
+	.thsn-merlin-message-logo{
+		display: none !important;
+	}
+}
+@media (max-width: 991px){
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-logo,
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-vline,
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-text,
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-btn {
+		display: block;
+		padding-right: 0px;
+	}
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-vline{
+		display: none;
+	}
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-logo,
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-text,
+	.thsn-merlin-message-box:not(.thsn-merlin-ratings-box) .thsn-merlin-message-btn {
+		text-align: center;
+	}
+}
+@media (max-width: 767px){
+	.thsn-merlin-ratings-box .thsn-merlin-message-logo,
+	.thsn-merlin-ratings-box .thsn-merlin-message-vline,
+	.thsn-merlin-ratings-box .thsn-merlin-message-text,
+	.thsn-merlin-ratings-box .thsn-merlin-message-btn {
+		text-align: center;
+		display: block;
+		padding-right: 0px;
+	}
+}
+/* --------------------------------------
+ * Elementor - thsn_imgselect
+ * ---------------------------------------*/
+span.thsn-imgselect-thumb {
+	border: 3px solid gainsboro;
+	display: inline-block;
+	padding: 0px;
+	margin: 5px;
+}
+.iris-slider.iris-strip{
+	width: 22.2px !important;
+}
+/* --------------------------------------
+ * Header change event alert message
+ * ---------------------------------------*/
+.thsn-alert-message{
+	color: red;
+	font-weight: 500;
+}
+/* Widget custom option */
+.thsn-widget-option {
+	border: 1px solid #c7c7c7;
+	padding: 0 10px;
+	background: #ededed;
+	margin-bottom: 15px;
+}
+.thsn-widget-option input {
+	border-radius: 0;
+}
+.thsn-widget-option label {
+	font-weight: bold;
+	letter-spacing: 0.5px;
+}
+.thsn-widget-small-text,
+.thsn-widget-small-text code{
+	font-size: 11px;
+}

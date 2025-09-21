@@ -1,0 +1,26 @@
+<wpml-config>
+  <custom-types>
+    <custom-type translate="1">thsn-portfolio</custom-type>
+    <custom-type translate="1">thsn-service</custom-type>
+    <custom-type translate="1">thsn-team-member</custom-type>
+    <custom-type translate="1">thsn-testimonial</custom-type>
+    <custom-type translate="1">thsn-client</custom-type>
+  </custom-types>
+  <taxonomies>
+    <taxonomy translate="1">thsn-portfolio-category</taxonomy>
+    <taxonomy translate="1">thsn-service-category</taxonomy>
+    <taxonomy translate="1">thsn-team-group</taxonomy>
+    <taxonomy translate="1">thsn-testimonial-cat</taxonomy>
+    <taxonomy translate="1">thsn-client-group</taxonomy>
+  </taxonomies>
+  <admin-texts>
+    <key name="theme_mods_itinc">
+      <key name="header-btn-text"/>
+      <key name="copyright-text"/>
+      <key name="portfolio-details">
+        <key name="line_title"/>
+        <key name="line_type"/>
+      </key>
+    </key>
+  </admin-texts>
+</wpml-config>

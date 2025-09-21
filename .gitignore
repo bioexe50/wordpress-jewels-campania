@@ -1,0 +1,66 @@
+# WordPress .gitignore
+
+# WordPress core files
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/license.txt
+/readme.html
+
+# Configuration files with sensitive data
+wp-config.php
+.htaccess
+
+# Cache and temporary files
+/wp-content/cache/
+/wp-content/backups/
+/wp-content/upgrade/
+/wp-content/updraft/
+
+# Upload files (media)
+/wp-content/uploads/
+
+# Plugins and themes to exclude (can be re-downloaded)
+# Comment out if you want to version them
+/wp-content/plugins/updraftplus/
+/wp-content/plugins/updraftplus-disabled/
+/wp-content/plugins/navz-photo-gallery-disabled/
+
+# Debug and log files
+/wp-content/debug.log
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+*.swo
+
+# Environment and secrets
+.env
+.env.local
+.env.production
+
+# Backup files
+*.sql
+*.sql.gz
+*.tar.gz
+*.zip
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Node modules if using build tools
+node_modules/
+npm-debug.log*
+
+# Composer
+/vendor/
+composer.phar
+
+# Security keys and salts (if stored separately)
+wp-salts.php

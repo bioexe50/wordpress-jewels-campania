@@ -227,7 +227,7 @@ $kirki_options_array = array(
 				'settings'		=> 'global-color',
 				'label'			=> esc_attr__( 'Global Color', 'itinc' ),
 				'description'	=> esc_attr__( 'This color will be globally applied to most of elements parts and special texts', 'itinc' ),
-				'default'		=> '#dc2626',
+				'default'		=> '#8cbc43',
 			),
 			array(
 				'type'			=> 'color',

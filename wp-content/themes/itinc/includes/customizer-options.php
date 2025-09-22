@@ -245,8 +245,8 @@ $kirki_options_array = array(
 					'last'		=> esc_attr__( 'Ending Color', 'itinc' ),
 				),
 				'default'	=> array(
-				  'first'		=> '#8cbc43',
-				  'last'		=> '#71bc00',
+				  'first'		=> '#c19d07',
+				  'last'		=> '#c19d07',
 				),
 			),
 			array(
@@ -331,7 +331,7 @@ $kirki_options_array = array(
 				),
 				'default'	=> array(
 					'normal'	=> '#202426',
-					'hover'		=> '#8cbc43',
+					'hover'		=> '#c19d07',
 				),
 			),
 			array(
@@ -649,7 +649,7 @@ $kirki_options_array = array(
 					'font-size'			=> '15px',
 					'line-height'		=> '25px',
 					'letter-spacing'	=> '0.5px',
-					'color'				=> '#8cbc43',
+					'color'				=> '#c19d07',
 					'text-transform'	=> 'uppercase',
 					'font-backup'		=> '',
 					'font-style'		=> 'normal',

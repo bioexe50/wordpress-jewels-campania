@@ -1,13 +1,13 @@
 <?php
 $all_data = thsn_get_all_option_array();
 extract($all_data);
-$gradient_first = '#c19d07';
-$gradient_last  = '#c19d07';
-// if( function_exists('thsn_get_base_option') ){
-// 	$gradient_colors = thsn_get_base_option('gradient-color');
-// 	$gradient_first  = ( !empty($gradient_colors['first']) ) ? $gradient_colors['first'] : '#dc143c' ;
-// 	$gradient_last   = ( !empty($gradient_colors['last'])  ) ? $gradient_colors['last']  : '#dc143c' ;
-// }
+$gradient_first = '#ffff00';
+$gradient_last  = '#ffff00';
+if( function_exists('thsn_get_base_option') ){
+	$gradient_colors = thsn_get_base_option('gradient-color');
+	$gradient_first  = ( !empty($gradient_colors['first']) ) ? $gradient_colors['first'] : '#ffff00' ;
+	$gradient_last   = ( !empty($gradient_colors['last'])  ) ? $gradient_colors['last']  : '#ffff00' ;
+}
 ?>
 <?php echo thsn_all_options_values('background'); ?>
 <?php echo thsn_all_options_values('typography'); ?>

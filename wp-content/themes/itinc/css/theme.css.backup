@@ -112,7 +112,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	left: 0;
 	width: 1px;
 	height: 50px;
-	background-color: #ff6b6b;
+	background-color: #eee;
 	top: 50%;
 	-webkit-transform: translateX(0%) translateY(-50%);
 	-ms-transform: translateX(0%) translateY(-50%);
@@ -126,7 +126,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	font-size: 22px;
 }
 .thsn-header-style-2 .thsn-right-box .thsn-header-contactinfo .thsn-header-button-text-2{
-	color: #e74c3c;
+	color: #7b7b7b;
 	font-size: 15px;
 }
 .thsn-header-style-2 .thsn-right-box .thsn-header-contactinfo::after {
@@ -166,7 +166,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	content: "";
 	width: 1px;
 	height: 100%;
-	background-color: #ff6b6b;
+	background-color: #eee;
 	position: absolute;
 	left: -30px;
 	top: 0;
@@ -192,7 +192,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	text-align: center;
 	background-color: transparent;
 	border-radius: 50%;
-	color: #2c3e50;
+	color: #1c325b;
 }
 .thsn-header-style-4 .thsn-header-button {
 	display: inline-block;
@@ -1093,7 +1093,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	width: 90%;
 	z-index: -1;
 	height: 100%;
-	background-color: #dc3545;
+	background-color: #8cbc43;
 	border-radius: 8px;
 }
 /*** thsn-ihbox-style-17 ***/
@@ -1238,7 +1238,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	border-top-right-radius: 5px;
 	font-size: 14px;
 	text-transform: uppercase;
-	background-color: #dc3545;
+	background-color: #8cbc43;
 	color: #fff;
 }
 .thsn-blog-style-1 .thsn-meta-date-wrapper a{
@@ -1283,7 +1283,7 @@ button, html input[type=button], input[type=reset], input[type=submit]{
 	font-size: 15px;
 }
 .thsn-blog-style-1 .thsn-meta-container .thsn-meta-line a{
-	color: #e74c3c;
+	color: #7b7b7b;
 }
 .thsn-blog-style-1 .thsn-featured-wrapper img{
 	width: 100%;
@@ -1537,7 +1537,7 @@ body.blog .thsn-blog-classic .thsn-featured-img-wrap::after {
 	left: -15px;
 	font-style: normal;
 	font-weight: 500;
-	background: #dc3545;
+	background: #8cbc43;
 	width: 60px;
 	height: 60px;
 	text-align: center;
@@ -1694,13 +1694,13 @@ blockquote small {
 	background-color: #cb2027;
 }
 .thsn-social-share .thsn-social-li-snapchat-ghost a{
-	background-color: #dc3545;
+	background-color: #fffc00;
 }
 .thsn-social-share .thsn-social-li-skype a{
 	background-color: #00aff0;
 }
 .thsn-social-share .thsn-social-li-android a{
-	background-color: #e74c3c;
+	background-color: #a4c639;
 }
 .thsn-social-share .thsn-social-li-dribbble a{
 	background-color: #ea4c89;
@@ -2971,7 +2971,7 @@ border-radius: 6px;
 .thsn-element-testimonial-style-3 .themesion-box-star-ratings{
 	position: absolute;
 	top: 6px;
-	color: #e74c3c;
+	color: #ffae00;
 }
 /*=== Testimonial style 4 ===*/
 .thsn-testimonial-style-4 .themesion-testimonial-wrapper {
@@ -3913,7 +3913,7 @@ div.widget .single-service-contact-inner ul.thsn-social-links li {
 	padding: 0;
 	border: none;
 	outline: none;
-	background-color: #c82333;
+	background-color: #fcaf17;
 	top: 5px;
 	height: 50px;
 	color: #ffffff;
@@ -4790,7 +4790,7 @@ footer.site-footer.thsn-footer-widget-yes::before {
 /*=== thsn-static-box-style-1 ===*/
 .thsn-static-box-style-1 .thsn-contentbox {
 	padding: 30px;
-	background-color: #c82333;
+	background-color: #fcaf17;
 	-webkit-border-bottom-right-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomright: 5px;
@@ -4810,7 +4810,7 @@ footer.site-footer.thsn-footer-widget-yes::before {
 /*=== thsn-static-box-style-2 ===*/
 .thsn-static-box-style-2 .thsn-contentbox {
 	padding: 30px;
-	background-color: #c82333;
+	background-color: #fcaf17;
 	margin-top: -30px;
 	width: calc(100% - 60px);
 	margin: 0 auto;
@@ -5076,7 +5076,7 @@ body {
 	right: 0;
 	width: 100px;
 	text-align: center;
-	background:#dc3545;
+	background:#f2c21a;
 }
 .thsn-company-hostory .company_detail .content{
 	font-size: 16px;
@@ -5245,7 +5245,7 @@ body {
 	font-size: 14px;
 	font-weight: 700;
 	margin: 0 0 4px 6px;
-	color: #e74c3c;
+	color: #7b7b7b;
 }
 .thsn-pricing-table-box .themesion-ptable-symbol,
 .thsn-pricing-table-box .themesion-ptable-price {
@@ -5622,7 +5622,7 @@ body {
 }
 .thsn-team-style-1 .themesion-box-team-position,
 .thsn-service-style-4 .thsn-service-cat a{
-	color: #dc3545;
+	color: #8cbc43;
 }
 .thsn-team-single-style-1 .thsn-team-designation{
 	font-size: 15px;
@@ -5643,7 +5643,7 @@ body {
 	padding: 0;
 	border: none;
 	outline: none;
-	background-color: #c82333;
+	background-color: #fcaf17;
 	top: 5px;
 	height: 50px;
 	color: #ffffff;
@@ -6044,7 +6044,7 @@ h3#order_review_heading,
 	font-weight: bold;
 	display: inline-block;
 	margin: 0 2px;
-	border: 1px solid #ff6b6b;
+	border: 1px solid #eee;
 	color: #2c2c2c;
 	border-radius: 6px;
 }

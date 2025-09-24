@@ -7,7 +7,6 @@ body .thsn-header-style-1 .thsn-header-button a,
     color: #000000 !important; /* Testo nero */
     background: #c19d07 !important; /* SFONDO ORO come richiesto */
     background-image: none !important;
-    text-shadow: none !important;
     padding: 12px 20px !important;
     border-radius: 6px !important;
     font-weight: 700 !important;
@@ -26,7 +25,6 @@ body .thsn-header-style-1 .thsn-header-button a:hover,
     color: #c19d07 !important; /* TESTO ORO al hover */
     border-color: #c19d07 !important; /* Bordo oro */
     text-decoration: none !important;
-    text-shadow: none !important;
     box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
 }
 
@@ -34,7 +32,6 @@ body .thsn-header-style-1 .thsn-header-button a:hover,
 body .thsn-header-style-1 .thsn-header-button a:after,
 .site-header .thsn-header-style-1 .thsn-header-button a:after {
     color: #000000 !important; /* Icona nera di default */
-    text-shadow: none !important;
     font-size: 30px !important;
     opacity: 1 !important;
     transition: color 0.3s ease !important;
@@ -51,7 +48,6 @@ body .thsn-header-style-1 .thsn-header-button a:focus,
 body .thsn-header-style-1 .thsn-header-button a:active {
     background: #ffffff !important;
     color: #c19d07 !important;
-    text-shadow: none !important;
     outline: 3px solid #c19d07 !important;
     outline-offset: 2px !important;
 }
@@ -62,7 +58,6 @@ body .thsn-header-style-1 .thsn-sticky-on .thsn-header-button a,
     color: #000000 !important;
     background: #c19d07 !important; /* ORO CORRETTO */
     background-image: none !important;
-    text-shadow: none !important;
     border-color: #9a7b05 !important;
 }
 
@@ -82,34 +77,46 @@ body #menu-toggle,
     padding: 10px !important;
     border-radius: 4px !important;
     font-weight: bold !important;
-    text-shadow: none !important;
 }
 
 body #menu-toggle:hover,
 body #menu-toggle:focus {
     background: #9a7b05 !important;
     color: #000000 !important;
-    text-shadow: none !important;
     outline: 2px solid #000000 !important;
 }
 
-/* NUOVO FIX - IHBOX NUMBER ELEMENTS - NO TEXT SHADOW */
-/* Fix contrasto per numeri nelle box (01, 02, 03, 04) */
+/* NUOVO FIX - IHBOX NUMBER ELEMENTS - STATI NORMALE E HOVER */
+/* Stato normale: numero #8E7306 su sfondo bianco */
 .thsn-ihbox-box-number,
 .thsn-ihbox .thsn-ihbox-box-number,
 .thsn-miconheading-style-18 .thsn-ihbox-box-number {
-    color: #c19d07 !important; /* ORO CORRETTO del sito per massimo contrasto */
+    color: #8E7306 !important; /* Numero oro scuro su sfondo bianco */
     background: transparent !important;
     font-weight: 900 !important;
-    text-shadow: none !important; /* NESSUNA OMBRA */
-    font-size: 30px !important; /* Font size 30px */
+    font-size: 30px !important;
 }
 
-/* Hover state per ihbox - mantieni come originale ma rimuovi shadows */
+/* Stato hover della card: numero #c19d07 */
 .thsn-ihbox:hover .thsn-ihbox-box-number,
 .thsn-ihbox-box:hover .thsn-ihbox-box-number {
-    text-shadow: none !important; /* RIMUOVI OMBRA ANCHE AL HOVER */
+    color: #c19d07 !important; /* Numero oro chiaro al hover */
 }
+
+/* Stato hover: testo bianco */
+.thsn-ihbox:hover .thsn-element-title,
+.thsn-ihbox:hover .thsn-heading-desc,
+.thsn-ihbox:hover .thsn-ihbox-contents h2,
+.thsn-ihbox:hover .thsn-ihbox-contents .thsn-heading-desc {
+    color: #ffffff !important; /* Testo bianco al hover */
+}
+
+/* Stato hover: Read More bianco */
+.thsn-ihbox:hover .thsn-ihbox-btn a,
+.thsn-ihbox:hover .thsn-ihbox-btn a span {
+    color: #ffffff !important; /* Read More bianco al hover */
+}
+
 
 /* NUOVO FIX - TEXT CONTRAST #8E7306 per READ MORE e TESTI */
 /* Read More buttons */
@@ -121,7 +128,6 @@ a[class*="read-more"],
 a[href*="read-more"] {
     color: #8E7306 !important; /* Nuovo colore per contrasto migliorato */
     text-decoration: none !important;
-    text-shadow: none !important;
     transition: color 0.3s ease !important;
 }
 
@@ -143,56 +149,113 @@ a[href*="read-more"]:hover {
 .entry-content p,
 .widget-content,
 .widget-text {
-    color: #8E7306 !important; /* Colore testi migliorato per contrasto */
-    text-shadow: none !important;
+    color: #000000 !important; /* Colore nero per massimo contrasto */
 }
 
-/* Link generici con contrasto migliorato */
-a:not(.thsn-header-button a):not(#menu-toggle),
-.entry-content a,
-.widget a,
-p a {
+/* ========================================
+   NAVIGATION MENUS
+======================================== */
+
+/* Menu generici - oro scuro, no underline */
+nav a,
+.menu a,
+.navigation a {
     color: #8E7306 !important;
-    text-shadow: none !important;
+    text-decoration: none !important;
+}
+
+nav a:hover,
+.menu a:hover,
+.navigation a:hover {
+    color: #5a4a04 !important;
+    text-decoration: none !important;
+}
+
+/* Top Menu specifico - oro chiaro normale, oro scuro sticky */
+#thsn-top-menu a {
+    color: #c19d07 !important; /* Oro chiaro stato normale */
+    text-decoration: none !important;
+}
+
+#thsn-top-menu a:hover {
+    color: #8E7306 !important; /* Oro scuro al hover */
+}
+
+/* Top Menu sticky state */
+.thsn-sticky-on #thsn-top-menu a {
+    color: #8E7306 !important; /* Oro scuro su sfondo bianco */
+}
+
+.thsn-sticky-on #thsn-top-menu a:hover {
+    color: #5a4a04 !important; /* Oro più scuro al hover */
+}
+
+/* ========================================
+   BODY TEXT LINKS
+======================================== */
+
+/* Link nel contenuto - con underline per accessibilità */
+.entry-content a,
+.widget-content a,
+.thsn-heading-desc a,
+.thsn-element-desc a {
+    color: #8E7306 !important;
     text-decoration: underline !important;
 }
 
-/* Link hover generici */
-a:not(.thsn-header-button a):not(#menu-toggle):hover,
 .entry-content a:hover,
-.widget a:hover,
-p a:hover {
+.widget-content a:hover,
+.thsn-heading-desc a:hover,
+.thsn-element-desc a:hover {
     color: #5a4a04 !important;
     text-decoration: underline !important;
 }
 
-/* GLOBAL TEXT SHADOW REMOVAL - ULTIMATE FIX */
-/* Rimuovi TUTTE le text-shadow da elementi con colore oro */
-*[style*="#c19d07"],
-*[class*="thsn-header"],
-*[class*="thsn-ihbox"],
-.thsn-header-button *,
-.thsn-ihbox-box-number,
-#menu-toggle,
-*[style*="#8E7306"] {
-    text-shadow: none !important;
-}
 
-/* FORM ACCESSIBILITY FIXES */
+/* ========================================
+   FORM ACCESSIBILITY FIXES
+======================================== */
 
-/* Search form improvements */
+/* Search form - fix label accessibility issue */
 .search-form,
 form[role="search"] {
     position: relative;
 }
 
-.search-form .screen-reader-text {
+/* Search label - make visible for WCAG 2.5.3 compliance */
+.search-form label,
+form[role="search"] label {
+    display: inline-block !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin-bottom: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+/* Screen reader text dentro il label - mantieni nascosto */
+.search-form label .screen-reader-text {
     position: absolute !important;
     left: -9999px !important;
     top: auto !important;
     width: 1px !important;
     height: 1px !important;
     overflow: hidden !important;
+}
+
+/* Aggiungi testo visibile al label via CSS */
+.search-form label:before,
+form[role="search"] label:before {
+    content: "Search: " !important;
+    display: inline !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
 }
 
 /* Search input improvements */
@@ -204,7 +267,6 @@ input[type="search"] {
     font-size: 16px !important;
     color: #333 !important;
     background: #fff !important;
-    text-shadow: none !important;
 }
 
 .search-form input[type="search"]:focus,
@@ -213,7 +275,6 @@ input[type="search"]:focus {
     outline: 2px solid #8E7306 !important;
     outline-offset: 2px !important;
     background: #fff !important;
-    text-shadow: none !important;
 }
 
 /* Search button improvements */
@@ -227,13 +288,11 @@ input[type="search"]:focus {
     font-size: 14px !important;
     cursor: pointer !important;
     transition: background 0.3s ease !important;
-    text-shadow: none !important;
 }
 
 .search-form button[type="submit"]:hover,
 .search-form .search-submit:hover {
     background: #5a4a04 !important;
-    text-shadow: none !important;
 }
 
 .search-form button[type="submit"]:focus,
@@ -241,7 +300,6 @@ input[type="search"]:focus {
     outline: 2px solid #ffffff !important;
     outline-offset: 2px !important;
     box-shadow: 0 0 0 4px #8E7306 !important;
-    text-shadow: none !important;
 }
 
 /* Generic form control improvements */
@@ -249,7 +307,6 @@ input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="h
 select,
 textarea {
     min-height: 44px !important; /* WCAG touch target size */
-    text-shadow: none !important;
 }
 
 input:focus:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="hidden"]),
@@ -257,21 +314,22 @@ select:focus,
 textarea:focus {
     outline: 2px solid #8E7306 !important; /* Nuovo colore */
     outline-offset: 2px !important;
-    text-shadow: none !important;
 }
 
-/* Responsive - mantenimento contrasto */
+/* ========================================
+   RESPONSIVE FIXES
+======================================== */
+
+/* Tablet - Header button adjustment */
 @media (max-width: 1199px) {
     body .thsn-header-style-1 .thsn-header-button a,
     .site-header .thsn-header-style-1 .thsn-header-button a {
         padding: 10px 15px !important;
         font-size: 14px !important;
         color: #000000 !important;
-        background: #c19d07 !important; /* ORO CORRETTO */
-        text-shadow: none !important;
+        background: #c19d07 !important;
     }
 
-    /* Responsive hover */
     body .thsn-header-style-1 .thsn-header-button a:hover,
     .site-header .thsn-header-style-1 .thsn-header-button a:hover {
         background: #ffffff !important;
@@ -279,11 +337,43 @@ textarea:focus {
     }
 }
 
+/* Tablet - ihbox title typography fix */
+@media (max-width: 991px) {
+    .thsn-ihbox-style-17 .thsn-element-title {
+        font-size: 25px !important;
+        line-height: 36px !important;
+        margin-bottom: 0px !important;
+    }
+}
+
+/* Mobile - Elementor section padding fix */
+@media (max-width: 767px) {
+    .elementor-57 .elementor-element.elementor-element-5e43a3ae {
+        padding: 80px 15px 55px 15px !important; /* Era 100px top, 35px bottom */
+    }
+}
+
+/* ========================================
+   FOOTER COPYRIGHT
+======================================== */
+
+/* Footer copyright - tutto bianco */
+.thsn-footer-copyright-text-area,
+.thsn-footer-copyright-text-area p,
+.thsn-footer-copyright-text-area a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+/* Footer copyright hover - oro */
+.thsn-footer-copyright-text-area a:hover {
+    color: #c19d07 !important;
+}
+
 /* Force tutti gli stili per debugging */
 * .thsn-header-button a {
     color: #000000 !important;
     background-color: #c19d07 !important; /* ORO CORRETTO */
-    text-shadow: none !important;
 }
 
 /* NO DEBUG BORDERS */

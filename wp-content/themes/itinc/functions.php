@@ -797,3 +797,21 @@ function thsn_remove_ratings_message() {
 }
 }
 
+
+/* Accessibility CSS Fix - Auto-enqueue */
+function thsn_accessibility_styles() {
+    wp_enqueue_style( 'thsn-accessibility-fix', get_template_directory_uri() . '/accessibility-fix.css', array(), '1.0.0', 'all' );
+}
+add_action( 'wp_enqueue_scripts', 'thsn_accessibility_styles', 999 );
+
+/* Accessibility JavaScript Fix */
+function thsn_accessibility_scripts() {
+    wp_enqueue_script( 'thsn-accessibility-fix-js', get_template_directory_uri() . '/accessibility-fix-js.js', array('jquery'), '1.0.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'thsn_accessibility_scripts', 999 );
+
+/* Form Label Accessibility Fix */
+function thsn_form_label_fix() {
+    wp_enqueue_script( 'thsn-form-label-fix', get_template_directory_uri() . '/form-label-fix.js', array('jquery'), '1.0.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'thsn_form_label_fix', 999 );

@@ -1,0 +1,293 @@
+/* Accessibility Fix - Complete Version - TEXT CONTRAST #8E7306 */
+
+/* DOWNLOAD BUTTON - ORO BACKGROUND + NERO TEXT + WHITE HOVER */
+body .thsn-header-style-1 .thsn-right-box .thsn-header-button a,
+body .thsn-header-style-1 .thsn-header-button a,
+.site-header .thsn-header-style-1 .thsn-header-button a {
+    color: #000000 !important; /* Testo nero */
+    background: #c19d07 !important; /* SFONDO ORO come richiesto */
+    background-image: none !important;
+    text-shadow: none !important;
+    padding: 12px 20px !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    border: 2px solid #9a7b05 !important; /* Bordo oro più scuro */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* HOVER STATE - SFONDO BIANCO + TESTO ORO come richiesto */
+body .thsn-header-style-1 .thsn-right-box .thsn-header-button a:hover,
+body .thsn-header-style-1 .thsn-header-button a:hover,
+.site-header .thsn-header-style-1 .thsn-header-button a:hover {
+    background: #ffffff !important; /* SFONDO BIANCO al hover */
+    background-image: none !important;
+    color: #c19d07 !important; /* TESTO ORO al hover */
+    border-color: #c19d07 !important; /* Bordo oro */
+    text-decoration: none !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Fix icona - colore coordinato con hover */
+body .thsn-header-style-1 .thsn-header-button a:after,
+.site-header .thsn-header-style-1 .thsn-header-button a:after {
+    color: #000000 !important; /* Icona nera di default */
+    text-shadow: none !important;
+    font-size: 30px !important;
+    opacity: 1 !important;
+    transition: color 0.3s ease !important;
+}
+
+/* Icona oro al hover */
+body .thsn-header-style-1 .thsn-header-button a:hover:after,
+.site-header .thsn-header-style-1 .thsn-header-button a:hover:after {
+    color: #c19d07 !important; /* Icona oro al hover */
+}
+
+/* Stati focus e active per accessibilità */
+body .thsn-header-style-1 .thsn-header-button a:focus,
+body .thsn-header-style-1 .thsn-header-button a:active {
+    background: #ffffff !important;
+    color: #c19d07 !important;
+    text-shadow: none !important;
+    outline: 3px solid #c19d07 !important;
+    outline-offset: 2px !important;
+}
+
+/* Sticky header state - mantieni stili base */
+body .thsn-header-style-1 .thsn-sticky-on .thsn-header-button a,
+.thsn-sticky-on .thsn-header-style-1 .thsn-header-button a {
+    color: #000000 !important;
+    background: #c19d07 !important; /* ORO CORRETTO */
+    background-image: none !important;
+    text-shadow: none !important;
+    border-color: #9a7b05 !important;
+}
+
+/* Sticky hover */
+body .thsn-header-style-1 .thsn-sticky-on .thsn-header-button a:hover,
+.thsn-sticky-on .thsn-header-style-1 .thsn-header-button a:hover {
+    background: #ffffff !important;
+    color: #c19d07 !important;
+}
+
+/* Menu toggle button - accessibilità migliorata */
+body #menu-toggle,
+.site-header #menu-toggle {
+    color: #000000 !important;
+    background: #c19d07 !important; /* ORO CORRETTO */
+    border: 2px solid #000000 !important;
+    padding: 10px !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    text-shadow: none !important;
+}
+
+body #menu-toggle:hover,
+body #menu-toggle:focus {
+    background: #9a7b05 !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    outline: 2px solid #000000 !important;
+}
+
+/* NUOVO FIX - IHBOX NUMBER ELEMENTS - NO TEXT SHADOW */
+/* Fix contrasto per numeri nelle box (01, 02, 03, 04) */
+.thsn-ihbox-box-number,
+.thsn-ihbox .thsn-ihbox-box-number,
+.thsn-miconheading-style-18 .thsn-ihbox-box-number {
+    color: #c19d07 !important; /* ORO CORRETTO del sito per massimo contrasto */
+    background: transparent !important;
+    font-weight: 900 !important;
+    text-shadow: none !important; /* NESSUNA OMBRA */
+    font-size: 30px !important; /* Font size 30px */
+}
+
+/* Hover state per ihbox - mantieni come originale ma rimuovi shadows */
+.thsn-ihbox:hover .thsn-ihbox-box-number,
+.thsn-ihbox-box:hover .thsn-ihbox-box-number {
+    text-shadow: none !important; /* RIMUOVI OMBRA ANCHE AL HOVER */
+}
+
+/* NUOVO FIX - TEXT CONTRAST #8E7306 per READ MORE e TESTI */
+/* Read More buttons */
+.thsn-ihbox-btn a,
+.thsn-ihbox-btn a span,
+.thsn-read-more-link a,
+.thsn-read-more a,
+a[class*="read-more"],
+a[href*="read-more"] {
+    color: #8E7306 !important; /* Nuovo colore per contrasto migliorato */
+    text-decoration: none !important;
+    text-shadow: none !important;
+    transition: color 0.3s ease !important;
+}
+
+/* Read More hover */
+.thsn-ihbox-btn a:hover,
+.thsn-ihbox-btn a:hover span,
+.thsn-read-more-link a:hover,
+.thsn-read-more a:hover,
+a[class*="read-more"]:hover,
+a[href*="read-more"]:hover {
+    color: #5a4a04 !important; /* Colore più scuro al hover */
+    text-decoration: underline !important;
+}
+
+/* Testi generali con problemi di contrasto */
+.thsn-heading-desc,
+.thsn-element-desc,
+.thsn-desc,
+.entry-content p,
+.widget-content,
+.widget-text {
+    color: #8E7306 !important; /* Colore testi migliorato per contrasto */
+    text-shadow: none !important;
+}
+
+/* Link generici con contrasto migliorato */
+a:not(.thsn-header-button a):not(#menu-toggle),
+.entry-content a,
+.widget a,
+p a {
+    color: #8E7306 !important;
+    text-shadow: none !important;
+    text-decoration: underline !important;
+}
+
+/* Link hover generici */
+a:not(.thsn-header-button a):not(#menu-toggle):hover,
+.entry-content a:hover,
+.widget a:hover,
+p a:hover {
+    color: #5a4a04 !important;
+    text-decoration: underline !important;
+}
+
+/* GLOBAL TEXT SHADOW REMOVAL - ULTIMATE FIX */
+/* Rimuovi TUTTE le text-shadow da elementi con colore oro */
+*[style*="#c19d07"],
+*[class*="thsn-header"],
+*[class*="thsn-ihbox"],
+.thsn-header-button *,
+.thsn-ihbox-box-number,
+#menu-toggle,
+*[style*="#8E7306"] {
+    text-shadow: none !important;
+}
+
+/* FORM ACCESSIBILITY FIXES */
+
+/* Search form improvements */
+.search-form,
+form[role="search"] {
+    position: relative;
+}
+
+.search-form .screen-reader-text {
+    position: absolute !important;
+    left: -9999px !important;
+    top: auto !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+}
+
+/* Search input improvements */
+.search-form input[type="search"],
+input[type="search"] {
+    border: 2px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    font-size: 16px !important;
+    color: #333 !important;
+    background: #fff !important;
+    text-shadow: none !important;
+}
+
+.search-form input[type="search"]:focus,
+input[type="search"]:focus {
+    border-color: #8E7306 !important; /* Nuovo colore per focus */
+    outline: 2px solid #8E7306 !important;
+    outline-offset: 2px !important;
+    background: #fff !important;
+    text-shadow: none !important;
+}
+
+/* Search button improvements */
+.search-form button[type="submit"],
+.search-form .search-submit {
+    background: #8E7306 !important; /* Nuovo colore */
+    color: #ffffff !important; /* Testo bianco per contrasto */
+    border: none !important;
+    padding: 10px 16px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease !important;
+    text-shadow: none !important;
+}
+
+.search-form button[type="submit"]:hover,
+.search-form .search-submit:hover {
+    background: #5a4a04 !important;
+    text-shadow: none !important;
+}
+
+.search-form button[type="submit"]:focus,
+.search-form .search-submit:focus {
+    outline: 2px solid #ffffff !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px #8E7306 !important;
+    text-shadow: none !important;
+}
+
+/* Generic form control improvements */
+input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="hidden"]),
+select,
+textarea {
+    min-height: 44px !important; /* WCAG touch target size */
+    text-shadow: none !important;
+}
+
+input:focus:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="hidden"]),
+select:focus,
+textarea:focus {
+    outline: 2px solid #8E7306 !important; /* Nuovo colore */
+    outline-offset: 2px !important;
+    text-shadow: none !important;
+}
+
+/* Responsive - mantenimento contrasto */
+@media (max-width: 1199px) {
+    body .thsn-header-style-1 .thsn-header-button a,
+    .site-header .thsn-header-style-1 .thsn-header-button a {
+        padding: 10px 15px !important;
+        font-size: 14px !important;
+        color: #000000 !important;
+        background: #c19d07 !important; /* ORO CORRETTO */
+        text-shadow: none !important;
+    }
+
+    /* Responsive hover */
+    body .thsn-header-style-1 .thsn-header-button a:hover,
+    .site-header .thsn-header-style-1 .thsn-header-button a:hover {
+        background: #ffffff !important;
+        color: #c19d07 !important;
+    }
+}
+
+/* Force tutti gli stili per debugging */
+* .thsn-header-button a {
+    color: #000000 !important;
+    background-color: #c19d07 !important; /* ORO CORRETTO */
+    text-shadow: none !important;
+}
+
+/* NO DEBUG BORDERS */
+.thsn-header-button {
+    border: none !important;
+    margin: 0 !important;
+}

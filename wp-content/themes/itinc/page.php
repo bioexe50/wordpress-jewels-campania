@@ -31,7 +31,6 @@ get_header(); ?>
 							'link_after'  => '</span>',
 						) );
 					?>
-					<h3 class="thsn-hide"><?php the_title(); ?></h3>
 				</div><!-- .entry-content -->
 			</div><!-- #post-## -->
 			<?php thsn_edit_link(); ?>

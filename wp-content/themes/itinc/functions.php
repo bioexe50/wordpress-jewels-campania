@@ -815,3 +815,9 @@ function thsn_form_label_fix() {
     wp_enqueue_script( 'thsn-form-label-fix', get_template_directory_uri() . '/form-label-fix.js', array('jquery'), '1.0.0', true );
 }
 add_action( 'wp_enqueue_scripts', 'thsn_form_label_fix', 999 );
+
+/* Landmark Complementary Fix - WCAG 2.5.3 */
+function thsn_landmark_complementary_fix() {
+    wp_enqueue_script( 'thsn-landmark-fix', get_template_directory_uri() . '/landmark-fix.js', array('jquery'), '1.0.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'thsn_landmark_complementary_fix', 999 );

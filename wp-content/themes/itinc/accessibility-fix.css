@@ -346,10 +346,61 @@ textarea:focus {
     }
 }
 
-/* Mobile - Elementor section padding fix */
+/* Mobile - Typography improvements for better readability */
 @media (max-width: 767px) {
+    /* Main headings - increase for mobile readability */
+    .thsn-element-title,
+    .thsn-ihbox .thsn-element-title,
+    h1, h2 {
+        font-size: 28px !important; /* Era troppo piccolo */
+        line-height: 1.3 !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Body text - WCAG recommends 16px minimum */
+    .thsn-heading-desc,
+    .thsn-element-desc,
+    .thsn-desc,
+    .entry-content p,
+    .widget-content,
+    .widget-text,
+    p {
+        font-size: 16px !important; /* Standard leggibile mobile */
+        line-height: 1.5 !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* ihBox numbers - more visible on mobile */
+    .thsn-ihbox-box-number {
+        font-size: 36px !important; /* Era 30px, troppo piccolo */
+        font-weight: 900 !important;
+    }
+
+    /* Read More buttons - touch-friendly */
+    .thsn-ihbox-btn a,
+    .thsn-read-more-link a,
+    .thsn-read-more a {
+        font-size: 16px !important;
+        padding: 12px 16px !important;
+        min-height: 44px !important; /* WCAG touch target */
+    }
+
+    /* Menu items - readable mobile */
+    #thsn-top-menu a {
+        font-size: 16px !important;
+        padding: 12px 15px !important;
+    }
+
+    /* Footer copyright - legible */
+    .thsn-footer-copyright-text-area,
+    .thsn-footer-copyright-text-area p {
+        font-size: 14px !important; /* Minimo leggibile */
+        line-height: 1.4 !important;
+    }
+
+    /* Elementor section padding fix */
     .elementor-57 .elementor-element.elementor-element-5e43a3ae {
-        padding: 80px 15px 55px 15px !important; /* Era 100px top, 35px bottom */
+        padding: 80px 15px 55px 15px !important;
     }
 }
 

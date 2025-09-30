@@ -174,6 +174,8 @@ class Aule_Booking {
         // AJAX handlers per public
         $this->loader->add_action('wp_ajax_nopriv_aule_check_availability', $plugin_public, 'ajax_check_availability');
         $this->loader->add_action('wp_ajax_aule_check_availability', $plugin_public, 'ajax_check_availability');
+        $this->loader->add_action('wp_ajax_nopriv_aule_get_available_dates', $plugin_public, 'ajax_get_available_dates');
+        $this->loader->add_action('wp_ajax_aule_get_available_dates', $plugin_public, 'ajax_get_available_dates');
         $this->loader->add_action('wp_ajax_nopriv_aule_submit_booking', $plugin_public, 'ajax_submit_booking');
         $this->loader->add_action('wp_ajax_aule_submit_booking', $plugin_public, 'ajax_submit_booking');
         $this->loader->add_action('wp_ajax_aule_get_my_bookings', $plugin_public, 'ajax_get_my_bookings');

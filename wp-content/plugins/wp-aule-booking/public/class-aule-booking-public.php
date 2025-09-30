@@ -182,6 +182,7 @@ class Aule_Booking_Public {
      */
     public function register_shortcodes() {
         add_shortcode('aule_booking_calendar', array($this, 'shortcode_calendar'));
+        add_shortcode('aule_booking_new_calendar', array($this, 'shortcode_new_calendar'));
         add_shortcode('aule_booking_list', array($this, 'shortcode_aule_list'));
         add_shortcode('aule_booking_search', array($this, 'shortcode_search_form'));
     }
@@ -217,6 +218,65 @@ class Aule_Booking_Public {
         // Genera HTML del calendario
         ob_start();
         include WP_AULE_BOOKING_PLUGIN_DIR . 'public/partials/aule-booking-calendar.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * Shortcode per il nuovo calendario stile Calendly
+     *
+     * @since 1.0.0
+     * @param array $atts Attributi dello shortcode
+     * @return string HTML del calendario
+     */
+    public function shortcode_new_calendar($atts) {
+        $atts = shortcode_atts(array(
+            'aula_id' => '',
+            'show_legend' => 'true',
+            'allow_booking' => 'true'
+        ), $atts, 'aule_booking_new_calendar');
+
+        // Validazione aula_id
+        if (empty($atts['aula_id']) || !is_numeric($atts['aula_id'])) {
+            return '<p class="aule-booking-error">' . __('ID aula non valido', 'aule-booking') . '</p>';
+        }
+
+        $aula_id = absint($atts['aula_id']);
+        $aula = $this->database->get_aula_by_id($aula_id);
+
+        if (!$aula || $aula->stato !== 'attiva') {
+            return '<p class="aule-booking-error">' . __('Aula non disponibile', 'aule-booking') . '</p>';
+        }
+
+        // Enqueue CSS e JS specifici per new_calendar
+        wp_enqueue_style(
+            $this->plugin_name . '-new-calendar',
+            WP_AULE_BOOKING_PLUGIN_URL . 'public/css/aule-booking-new-calendar.css',
+            array(),
+            $this->version,
+            'all'
+        );
+
+        wp_enqueue_script(
+            $this->plugin_name . '-new-calendar',
+            WP_AULE_BOOKING_PLUGIN_URL . 'public/js/aule-booking-new-calendar.js',
+            array('jquery'),
+            $this->version,
+            true
+        );
+
+        // Localize script con variabile dedicata
+        wp_localize_script(
+            $this->plugin_name . '-new-calendar',
+            'aulaBookingData',
+            array(
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('aule_booking_public_nonce')
+            )
+        );
+
+        // Genera HTML del calendario
+        ob_start();
+        include WP_AULE_BOOKING_PLUGIN_DIR . 'public/partials/aule-booking-new-calendar.php';
         return ob_get_clean();
     }
 
@@ -273,6 +333,110 @@ class Aule_Booking_Public {
      */
 
     /**
+     * AJAX: Ottieni date disponibili per il mese corrente (NEW_CALENDAR)
+     *
+     * @since 1.0.0
+     */
+    public function ajax_get_available_dates() {
+        check_ajax_referer('aule_booking_public_nonce', 'nonce');
+
+        $aula_id = absint($_POST['aula_id']);
+        $year = absint($_POST['year']);
+        $month = absint($_POST['month']);
+
+        if (!$aula_id || !$year || !$month) {
+            wp_send_json_error(__('Parametri non validi', 'aule-booking'));
+        }
+
+        // Ottieni aula
+        $aula = $this->database->get_aula_by_id($aula_id);
+        if (!$aula || $aula->stato !== 'attiva') {
+            wp_send_json_error(__('Aula non disponibile', 'aule-booking'));
+        }
+
+        // Calcola primo e ultimo giorno del mese
+        $first_day = sprintf('%04d-%02d-01', $year, $month);
+        $last_day = date('Y-m-t', strtotime($first_day));
+
+        // Ottieni slot disponibilità per l'aula
+        $slots_disponibilita = $this->database->get_slot_disponibilita($aula_id, array(
+            'data_inizio' => $first_day,
+            'data_fine' => $last_day
+        ));
+
+        // Ottieni prenotazioni nel periodo
+        $prenotazioni = $this->database->get_prenotazioni(array(
+            'aula_id' => $aula_id,
+            'data_da' => $first_day,
+            'data_a' => $last_day
+        ));
+
+        // Trova date con almeno uno slot disponibile
+        $available_dates = array();
+        $settings = $this->database->get_impostazioni();
+
+        $current_date = new DateTime($first_day);
+        $end_date = new DateTime($last_day);
+
+        while ($current_date <= $end_date) {
+            $day_of_week = $current_date->format('N'); // 1=Monday, 7=Sunday
+            $date_string = $current_date->format('Y-m-d');
+
+            // Controlla se c'è almeno uno slot disponibile per questo giorno
+            foreach ($slots_disponibilita as $slot) {
+                if ($slot->giorno_settimana == $day_of_week) {
+                    // Verifica se la data è nel range di validità
+                    if ($date_string >= $slot->data_inizio_validita &&
+                        (is_null($slot->data_fine_validita) || $date_string <= $slot->data_fine_validita)) {
+
+                        // Verifica se c'è almeno uno slot libero
+                        if ($this->has_available_slots($aula_id, $date_string, $slot, $prenotazioni, $settings)) {
+                            $available_dates[] = $date_string;
+                            break; // Trovato almeno uno slot disponibile, passa al giorno successivo
+                        }
+                    }
+                }
+            }
+
+            $current_date->add(new DateInterval('P1D'));
+        }
+
+        wp_send_json_success($available_dates);
+    }
+
+    /**
+     * Controlla se una data ha almeno uno slot disponibile
+     *
+     * @since 1.0.0
+     * @param int $aula_id
+     * @param string $date_string
+     * @param object $slot_config
+     * @param array $prenotazioni
+     * @param object $settings
+     * @return bool
+     */
+    private function has_available_slots($aula_id, $date_string, $slot_config, $prenotazioni, $settings) {
+        $slot_start = new DateTime($date_string . ' ' . $slot_config->ora_inizio);
+        $slot_end = new DateTime($date_string . ' ' . $slot_config->ora_fine);
+        $duration_minutes = $slot_config->durata_slot_minuti;
+
+        while ($slot_start->format('H:i:s') < $slot_config->ora_fine) {
+            $current_slot_end = clone $slot_start;
+            $current_slot_end->add(new DateInterval('PT' . $duration_minutes . 'M'));
+
+            // Controlla se lo slot è libero e prenotabile
+            if (!$this->is_slot_booked($slot_start, $current_slot_end, $prenotazioni) &&
+                $this->is_slot_bookable($slot_start, $settings)) {
+                return true; // Trovato almeno uno slot disponibile
+            }
+
+            $slot_start->add(new DateInterval('PT' . $duration_minutes . 'M'));
+        }
+
+        return false;
+    }
+
+    /**
      * AJAX: Controlla disponibilità
      *
      * @since 1.0.0
@@ -281,8 +445,17 @@ class Aule_Booking_Public {
         check_ajax_referer('aule_booking_public_nonce', 'nonce');
 
         $aula_id = absint($_POST['aula_id']);
-        $date_start = sanitize_text_field($_POST['start']);
-        $date_end = sanitize_text_field($_POST['end']);
+
+        // Supporta sia range (start/end) per FullCalendar che singola data (date) per NEW_CALENDAR
+        if (isset($_POST['date'])) {
+            // NEW_CALENDAR: singola data
+            $date_start = sanitize_text_field($_POST['date']);
+            $date_end = $date_start;
+        } else {
+            // FullCalendar: range
+            $date_start = sanitize_text_field($_POST['start']);
+            $date_end = sanitize_text_field($_POST['end']);
+        }
 
         if (!$aula_id) {
             wp_send_json_error(__('ID aula non valido', 'aule-booking'));
@@ -333,6 +506,24 @@ class Aule_Booking_Public {
         // Genera slot disponibili basati sulla configurazione
         $available_events = $this->generate_available_slots($aula_id, $date_start, $date_end, $slots_disponibilita, $prenotazioni);
         $events = array_merge($events, $available_events);
+
+        // Se richiesta con singola data (NEW_CALENDAR), restituisci formato semplificato
+        if (isset($_POST['date'])) {
+            $simple_slots = array();
+            foreach ($events as $event) {
+                $start_time = substr($event['start'], 11, 5); // Estrae HH:MM da ISO datetime
+                $end_time = substr($event['end'], 11, 5);
+
+                $simple_slots[] = array(
+                    'id' => $event['id'],
+                    'start' => $start_time,
+                    'end' => $end_time,
+                    'occupied' => ($event['extendedProps']['type'] === 'booked'),
+                    'stato' => isset($event['extendedProps']['stato']) ? $event['extendedProps']['stato'] : 'disponibile'
+                );
+            }
+            wp_send_json($simple_slots);
+        }
 
         // Per FullCalendar eventSources, invia direttamente l'array
         wp_send_json($events);

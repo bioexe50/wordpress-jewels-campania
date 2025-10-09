@@ -190,7 +190,95 @@ class Prenotazione_Aule_SSM_Database {
     }
 
     /**
-     * Elimina slot di disponibilità
+     * Aggiorna slot di disponibilità
+     *
+     * @since 1.0.0
+     * @param int $slot_id ID dello slot da aggiornare
+     * @param array $data Dati da aggiornare
+     * @return bool
+     */
+    public function update_slot($slot_id, $data) {
+        if (empty($slot_id) || empty($data)) {
+            return false;
+        }
+
+        $update_data = array();
+        $format = array();
+
+        // Campi aggiornabili
+        $allowed_fields = array(
+            'ora_inizio' => '%s',
+            'ora_fine' => '%s',
+            'durata_slot_minuti' => '%d',
+            'data_inizio_validita' => '%s',
+            'data_fine_validita' => '%s',
+            'ricorrenza' => '%s',
+            'attivo' => '%d'
+        );
+
+        foreach ($allowed_fields as $field => $field_format) {
+            if (isset($data[$field])) {
+                $update_data[$field] = $data[$field];
+                $format[] = $field_format;
+            }
+        }
+
+        if (empty($update_data)) {
+            return false;
+        }
+
+        $result = $this->wpdb->update(
+            $this->table_slot,
+            $update_data,
+            array('id' => absint($slot_id)),
+            $format,
+            array('%d')
+        );
+
+        return $result !== false;
+    }
+
+    /**
+     * Elimina singolo slot di disponibilità
+     *
+     * @since 1.0.0
+     * @param int $slot_id ID dello slot da eliminare
+     * @return bool
+     */
+    public function delete_slot($slot_id) {
+        if (empty($slot_id)) {
+            return false;
+        }
+
+        return $this->wpdb->delete(
+            $this->table_slot,
+            array('id' => absint($slot_id)),
+            array('%d')
+        ) !== false;
+    }
+
+    /**
+     * Ottieni singolo slot per ID
+     *
+     * @since 1.0.0
+     * @param int $slot_id ID dello slot
+     * @return object|null
+     */
+    public function get_slot_by_id($slot_id) {
+        if (empty($slot_id)) {
+            return null;
+        }
+
+        return $this->wpdb->get_row(
+            $this->wpdb->prepare(
+                "SELECT * FROM {$this->table_slot} WHERE id = %d",
+                absint($slot_id)
+            )
+        );
+    }
+
+    /**
+     * Elimina slot di disponibilità multipli
      *
      * @since 1.0.0
      * @param array $slot_ids Array di ID degli slot da eliminare

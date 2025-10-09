@@ -40,7 +40,8 @@ $giorni_settimana = array(
 
 <div class="wrap">
     <h1 class="wp-heading-inline">
-        🕐 <?php _e('Gestione Slot Disponibilità', 'prenotazione-aule-ssm'); ?>
+        <span class="dashicons dashicons-clock"></span>
+        <?php _e('Gestione Slot Disponibilità', 'prenotazione-aule-ssm'); ?>
     </h1>
 
     <?php if (!empty($_GET['updated'])): ?>
@@ -111,7 +112,7 @@ $giorni_settimana = array(
     <?php elseif (!$selected_aula_id): ?>
         <!-- Nessuna aula selezionata -->
         <div class="no-data">
-            🕐
+            <span class="dashicons dashicons-clock" style="font-size: 48px; color: #ccc;"></span>
             <h3><?php _e('Seleziona un\'aula', 'prenotazione-aule-ssm'); ?></h3>
             <p><?php _e('Scegli un\'aula dal menu a tendina per gestire i suoi slot di disponibilità.', 'prenotazione-aule-ssm'); ?></p>
         </div>
@@ -133,9 +134,9 @@ $giorni_settimana = array(
                     <span class="aula-status <?php echo esc_attr($selected_aula->stato); ?>">
                         <?php
                         switch ($selected_aula->stato) {
-                            case 'attiva': echo '✅ ' . __('Attiva', 'prenotazione-aule-ssm'); break;
-                            case 'non_disponibile': echo '⚠️ ' . __('Non Disponibile', 'prenotazione-aule-ssm'); break;
-                            case 'manutenzione': echo '🔧 ' . __('Manutenzione', 'prenotazione-aule-ssm'); break;
+                            case 'attiva': echo '<span class="dashicons dashicons-yes-alt"></span> ' . __('Attiva', 'prenotazione-aule-ssm'); break;
+                            case 'non_disponibile': echo '<span class="dashicons dashicons-warning"></span> ' . __('Non Disponibile', 'prenotazione-aule-ssm'); break;
+                            case 'manutenzione': echo '<span class="dashicons dashicons-admin-tools"></span> ' . __('Manutenzione', 'prenotazione-aule-ssm'); break;
                         }
                         ?>
                     </span>
@@ -146,7 +147,8 @@ $giorni_settimana = array(
             <div class="slot-generator">
                 <div class="slot-generator-header">
                     <h3>
-                        ⚙️ <?php _e('Generatore Automatico Slot', 'prenotazione-aule-ssm'); ?>
+                        <span class="dashicons dashicons-admin-generic"></span>
+                        <?php _e('Generatore Automatico Slot', 'prenotazione-aule-ssm'); ?>
                     </h3>
                     <p><?php _e('Crea rapidamente slot ricorrenti per l\'aula selezionata.', 'prenotazione-aule-ssm'); ?></p>
                 </div>
@@ -240,13 +242,16 @@ $giorni_settimana = array(
                         <!-- Azioni -->
                         <div class="generator-actions">
                             <button type="submit" class="button button-primary generate-slots">
-                                ⚙️ <?php _e('Genera Slot', 'prenotazione-aule-ssm'); ?>
+                                <span class="dashicons dashicons-admin-generic"></span>
+                                <?php _e('Genera Slot', 'prenotazione-aule-ssm'); ?>
                             </button>
                             <button type="button" class="button preview-slots">
-                                👁️ <?php _e('Anteprima', 'prenotazione-aule-ssm'); ?>
+                                <span class="dashicons dashicons-visibility"></span>
+                                <?php _e('Anteprima', 'prenotazione-aule-ssm'); ?>
                             </button>
                             <button type="reset" class="button button-secondary">
-                                🔄 <?php _e('Reset', 'prenotazione-aule-ssm'); ?>
+                                <span class="dashicons dashicons-update"></span>
+                                <?php _e('Reset', 'prenotazione-aule-ssm'); ?>
                             </button>
                         </div>
                     </form>
@@ -270,7 +275,7 @@ $giorni_settimana = array(
 
                 <?php if (empty($slots)): ?>
                     <div class="no-slots">
-                        🕐
+                        <span class="dashicons dashicons-clock" style="font-size: 48px; color: #ccc;"></span>
                         <h4><?php _e('Nessun slot configurato', 'prenotazione-aule-ssm'); ?></h4>
                         <p><?php _e('Usa il generatore automatico per creare i primi slot di disponibilità.', 'prenotazione-aule-ssm'); ?></p>
                     </div>
@@ -309,14 +314,16 @@ $giorni_settimana = array(
 
                                                     <div class="slot-meta">
                                                         <span class="slot-validity">
-                                                            📅 <?php echo date_i18n('d/m/Y', strtotime($slot->data_inizio_validita)); ?>
+                                                            <span class="dashicons dashicons-calendar-alt"></span>
+                                                            <?php echo date_i18n('d/m/Y', strtotime($slot->data_inizio_validita)); ?>
                                                             <?php if ($slot->data_fine_validita): ?>
                                                                 - <?php echo date_i18n('d/m/Y', strtotime($slot->data_fine_validita)); ?>
                                                             <?php endif; ?>
                                                         </span>
 
                                                         <span class="slot-recurrence">
-                                                            🔄 <?php
+                                                            <span class="dashicons dashicons-update"></span>
+                                                            <?php
                                                             switch ($slot->ricorrenza) {
                                                                 case 'singolo': echo __('Singolo', 'prenotazione-aule-ssm'); break;
                                                                 case 'settimanale': echo __('Settimanale', 'prenotazione-aule-ssm'); break;
@@ -326,7 +333,10 @@ $giorni_settimana = array(
                                                         </span>
 
                                                         <?php if (!$slot->attivo): ?>
-                                                            <span class="slot-status inactive">❌ <?php _e('Disabilitato', 'prenotazione-aule-ssm'); ?></span>
+                                                            <span class="slot-status inactive">
+                                                                <span class="dashicons dashicons-hidden"></span>
+                                                                <?php _e('Disabilitato', 'prenotazione-aule-ssm'); ?>
+                                                            </span>
                                                         <?php endif; ?>
                                                     </div>
                                                 </div>
@@ -335,20 +345,20 @@ $giorni_settimana = array(
                                                     <button class="button button-small edit-slot"
                                                             data-id="<?php echo $slot->id; ?>"
                                                             title="<?php _e('Modifica slot', 'prenotazione-aule-ssm'); ?>">
-                                                        <span class="wp-icon wp-icon-edit"></span>
+                                                        <span class="dashicons dashicons-edit"></span>
                                                     </button>
 
                                                     <button class="button button-small toggle-slot"
                                                             data-id="<?php echo $slot->id; ?>"
                                                             data-status="<?php echo $slot->attivo ? 'disable' : 'enable'; ?>"
                                                             title="<?php echo $slot->attivo ? __('Disabilita slot', 'prenotazione-aule-ssm') : __('Abilita slot', 'prenotazione-aule-ssm'); ?>">
-                                                        <?php echo $slot->attivo ? '❌' : '✅'; ?>
+                                                        <span class="dashicons dashicons-<?php echo $slot->attivo ? 'hidden' : 'visibility'; ?>"></span>
                                                     </button>
 
                                                     <button class="button button-small delete-slot"
                                                             data-id="<?php echo $slot->id; ?>"
                                                             title="<?php _e('Elimina slot', 'prenotazione-aule-ssm'); ?>">
-                                                        <span class="wp-icon wp-icon-remove"></span>
+                                                        <span class="dashicons dashicons-trash"></span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -672,6 +682,41 @@ $giorni_settimana = array(
     font-size: 11px;
     min-width: 32px;
     height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slot-actions .button .dashicons {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+}
+
+.slot-meta .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    vertical-align: text-top;
+}
+
+.slot-status .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* Modal fixes */
+.modal {
+    display: none;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Responsive */
@@ -811,17 +856,17 @@ jQuery(document).ready(function($) {
             data: formData,
             success: function(response) {
                 if (response.success) {
-                    alert('✅ ' + response.data);
+                    AuleBookingAdmin.showNotice(response.data, 'success');
                     location.reload();
                 } else {
-                    alert('❌ Errore: ' + response.data);
+                    AuleBookingAdmin.showNotice('Errore: ' + response.data, 'error');
                 }
             },
             error: function() {
-                alert('❌ Errore di comunicazione con il server');
+                AuleBookingAdmin.showNotice('Errore di comunicazione con il server', 'error');
             },
             complete: function() {
-                $button.prop('disabled', false).text('⚙️ Genera Slot');
+                $button.prop('disabled', false).html('<span class="dashicons dashicons-admin-generic"></span> Genera Slot');
             }
         });
     });
@@ -843,34 +888,187 @@ jQuery(document).ready(function($) {
         $('.bulk-action-selector, .apply-bulk-action').prop('disabled', selectedCount === 0);
     }
 
-    // Azioni singole sui slot
-    $('.delete-slot').on('click', function() {
-        var slotId = $(this).data('id');
+    // Handler per pulsante applica bulk action
+    $('.apply-bulk-action').on('click', function() {
+        var action = $('.bulk-action-selector').val();
+        var $checked = $('.select-slot:checked');
 
-        if (!confirm('Eliminare definitivamente questo slot?')) {
+        if (!action) {
+            alert('Seleziona un\'azione dal menu');
             return;
         }
 
-        // Placeholder - implementare AJAX per eliminazione
-        alert('Eliminazione slot ID: ' + slotId + '\n(Da implementare)');
+        if ($checked.length === 0) {
+            alert('Seleziona almeno uno slot');
+            return;
+        }
+
+        // Prepara messaggio modal
+        var actionText = {
+            'enable': 'abilitare',
+            'disable': 'disabilitare',
+            'delete': 'eliminare definitivamente'
+        };
+
+        var message = 'Vuoi ' + actionText[action] + ' gli slot selezionati?';
+        var countText = $checked.length + ' slot selezionati';
+
+        if (action === 'delete') {
+            countText += ' - Questa azione è irreversibile!';
+        }
+
+        $('#bulkActionMessage').text(message);
+        $('#bulkActionCount').text(countText);
+        $('#confirmBulkBtn').data('action', action);
+        $('#confirmBulkBtn').data('slot-ids', $checked.map(function() {
+            return $(this).val();
+        }).get());
+
+        // Mostra modal
+        var modal = new bootstrap.Modal(document.getElementById('bulkActionModal'));
+        modal.show();
     });
 
-    $('.toggle-slot').on('click', function() {
-        var slotId = $(this).data('id');
-        var action = $(this).data('status');
-
-        // Placeholder - implementare AJAX per toggle
-        alert('Toggle slot ID: ' + slotId + ' (' + action + ')\n(Da implementare)');
-    });
-
-    $('.edit-slot').on('click', function() {
-        var slotId = $(this).data('id');
-
-        // Placeholder - implementare modal di modifica
-        alert('Modifica slot ID: ' + slotId + '\n(Da implementare con modal)');
-    });
+    // Azioni singole sui slot gestite dal file JS esterno (prenotazione-aule-ssm-admin.js)
+    // NON aggiungere handler inline qui - creano conflitti!
 
     // Inizializza anteprima
     updatePreview();
 });
 </script>
+
+<!-- Modal Edit Slot -->
+<div class="modal fade" id="editSlotModal" tabindex="-1" aria-labelledby="editSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSlotModalLabel">
+                    <span class="dashicons dashicons-edit"></span>
+                    <?php _e('Modifica Slot', 'prenotazione-aule-ssm'); ?>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSlotForm">
+                    <input type="hidden" id="edit_slot_id" name="slot_id">
+
+                    <div class="mb-3">
+                        <label for="edit_ora_inizio" class="form-label"><?php _e('Ora Inizio', 'prenotazione-aule-ssm'); ?></label>
+                        <input type="time" class="form-control" id="edit_ora_inizio" name="ora_inizio" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_ora_fine" class="form-label"><?php _e('Ora Fine', 'prenotazione-aule-ssm'); ?></label>
+                        <input type="time" class="form-control" id="edit_ora_fine" name="ora_fine" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_data_inizio" class="form-label"><?php _e('Data Inizio Validità', 'prenotazione-aule-ssm'); ?></label>
+                        <input type="date" class="form-control" id="edit_data_inizio" name="data_inizio" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_data_fine" class="form-label"><?php _e('Data Fine Validità', 'prenotazione-aule-ssm'); ?></label>
+                        <input type="date" class="form-control" id="edit_data_fine" name="data_fine">
+                        <small class="form-text text-muted"><?php _e('Opzionale - lascia vuoto per nessuna scadenza', 'prenotazione-aule-ssm'); ?></small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-secondary" data-bs-dismiss="modal">
+                    <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
+                </button>
+                <button type="button" class="button button-primary" id="saveSlotBtn">
+                    <?php _e('Salva Modifiche', 'prenotazione-aule-ssm'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Conferma Toggle Slot -->
+<div class="modal fade" id="toggleSlotModal" tabindex="-1" aria-labelledby="toggleSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="toggleSlotModalLabel">
+                    <span class="dashicons dashicons-visibility"></span>
+                    <?php _e('Conferma Azione', 'prenotazione-aule-ssm'); ?>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="toggleSlotMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-secondary" data-bs-dismiss="modal">
+                    <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
+                </button>
+                <button type="button" class="button button-primary" id="confirmToggleBtn">
+                    <?php _e('Conferma', 'prenotazione-aule-ssm'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Conferma Eliminazione Slot -->
+<div class="modal fade" id="deleteSlotModal" tabindex="-1" aria-labelledby="deleteSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteSlotModalLabel">
+                    <span class="dashicons dashicons-trash" style="color: white;"></span>
+                    <?php _e('Conferma Eliminazione', 'prenotazione-aule-ssm'); ?>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <strong><?php _e('Attenzione!', 'prenotazione-aule-ssm'); ?></strong>
+                    <?php _e('Questa azione è irreversibile.', 'prenotazione-aule-ssm'); ?>
+                </div>
+                <p><?php _e('Sei sicuro di voler eliminare definitivamente questo slot?', 'prenotazione-aule-ssm'); ?></p>
+                <p class="text-muted"><?php _e('Le prenotazioni associate a questo slot potrebbero essere influenzate.', 'prenotazione-aule-ssm'); ?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-secondary" data-bs-dismiss="modal">
+                    <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
+                </button>
+                <button type="button" class="button button-primary" id="confirmDeleteBtn" style="background: #d63638; border-color: #d63638;">
+                    <span class="dashicons dashicons-trash"></span>
+                    <?php _e('Elimina Definitivamente', 'prenotazione-aule-ssm'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Conferma Bulk Action -->
+<div class="modal fade" id="bulkActionModal" tabindex="-1" aria-labelledby="bulkActionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bulkActionModalLabel">
+                    <span class="dashicons dashicons-yes-alt"></span>
+                    <?php _e('Conferma Azione Multipla', 'prenotazione-aule-ssm'); ?>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="bulkActionMessage"></p>
+                <div class="alert alert-info">
+                    <strong id="bulkActionCount"></strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-secondary" data-bs-dismiss="modal">
+                    <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
+                </button>
+                <button type="button" class="button button-primary" id="confirmBulkBtn">
+                    <?php _e('Conferma', 'prenotazione-aule-ssm'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

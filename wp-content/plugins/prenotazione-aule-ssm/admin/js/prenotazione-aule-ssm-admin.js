@@ -56,6 +56,11 @@
             $(document).on('change', '.aula-selector', this.handleAulaChange);
             $(document).on('click', '.giorno-item', this.handleDaySelection);
 
+            // Gestione slot CRUD
+            $(document).on('click', '.edit-slot', this.handleEditSlot);
+            $(document).on('click', '.toggle-slot', this.handleToggleSlot);
+            $(document).on('click', '.delete-slot', this.handleDeleteSlot);
+
             // Filtri e ricerca
             $(document).on('change', '.filter-aule', this.handleAuleFilter);
             $(document).on('input', '.search-bookings', this.debounce(this.handleBookingSearch, 300));
@@ -436,13 +441,13 @@
             };
 
             $.ajax({
-                url: this.config.ajaxUrl,
+                url: AuleBookingAdmin.config.ajaxUrl,
                 method: 'POST',
                 data: {
                     action: actionMap[action],
                     booking_id: bookingId,
                     note_admin: note,
-                    nonce: this.config.nonce
+                    nonce: AuleBookingAdmin.config.nonce
                 },
                 beforeSend: function() {
                     self.showLoading();
@@ -546,10 +551,10 @@
                 return;
             }
 
-            var formData = $form.serialize() + '&action=aule_generate_slots&nonce=' + this.config.nonce;
+            var formData = $form.serialize() + '&action=aule_generate_slots&nonce=' + AuleBookingAdmin.config.nonce;
 
             $.ajax({
-                url: this.config.ajaxUrl,
+                url: AuleBookingAdmin.config.ajaxUrl,
                 method: 'POST',
                 data: formData,
                 beforeSend: function() {
@@ -603,12 +608,12 @@
             }
 
             $.ajax({
-                url: this.config.ajaxUrl,
+                url: AuleBookingAdmin.config.ajaxUrl,
                 method: 'POST',
                 data: {
                     action: 'aule_get_slots',
                     aula_id: aulaId,
-                    nonce: this.config.nonce
+                    nonce: AuleBookingAdmin.config.nonce
                 },
                 beforeSend: function() {
                     $container.html('<div class="loading-slots">Caricamento slot...</div>');
@@ -756,13 +761,13 @@
             var self = this;
 
             $.ajax({
-                url: this.config.ajaxUrl,
+                url: AuleBookingAdmin.config.ajaxUrl,
                 method: 'POST',
                 data: {
                     action: 'aule_bulk_action',
                     bulk_action: action,
                     ids: ids,
-                    nonce: this.config.nonce
+                    nonce: AuleBookingAdmin.config.nonce
                 },
                 beforeSend: function() {
                     self.showLoading();
@@ -800,7 +805,7 @@
             // Crea form temporaneo per download
             var $form = $('<form>', {
                 method: 'POST',
-                action: this.config.ajaxUrl
+                action: AuleBookingAdmin.config.ajaxUrl
             });
 
             $form.append($('<input>', {
@@ -824,7 +829,7 @@
             $form.append($('<input>', {
                 type: 'hidden',
                 name: 'nonce',
-                value: this.config.nonce
+                value: AuleBookingAdmin.config.nonce
             }));
 
             $form.appendTo('body').submit().remove();
@@ -842,7 +847,7 @@
                 <div class="loading-overlay">
                     <div class="loading-spinner">
                         <div class="wp-loading-spinner">⟳</div>
-                        <p>${message || this.config.strings.loading}</p>
+                        <p>${message || AuleBookingAdmin.config.strings.loading}</p>
                     </div>
                 </div>
             `;
@@ -913,12 +918,12 @@
 
             // Salva nuovo ordinamento
             $.ajax({
-                url: this.config.ajaxUrl,
+                url: AuleBookingAdmin.config.ajaxUrl,
                 method: 'POST',
                 data: {
                     action: 'aule_update_sort_order',
                     order: order,
-                    nonce: this.config.nonce
+                    nonce: AuleBookingAdmin.config.nonce
                 }
             });
         },
@@ -948,6 +953,92 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
+        },
+
+        /**
+         * GESTIONE SLOT CRUD
+         */
+
+        /**
+         * Handler per modifica slot
+         */
+        handleEditSlot: function(e) {
+            e.preventDefault();
+            var slotId = $(this).data('id');
+
+            // Carica dati slot via AJAX
+            $.ajax({
+                url: AuleBookingAdmin.config.ajaxUrl,
+                method: 'POST',
+                data: {
+                    action: 'aule_get_slot',
+                    slot_id: slotId,
+                    nonce: AuleBookingAdmin.config.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        var slot = response.data;
+
+                        // Popola modal con dati slot
+                        $('#edit_slot_id').val(slot.id);
+                        $('#edit_ora_inizio').val(slot.ora_inizio.substring(0, 5)); // HH:MM
+                        $('#edit_ora_fine').val(slot.ora_fine.substring(0, 5)); // HH:MM
+                        $('#edit_data_inizio').val(slot.data_inizio_validita);
+                        $('#edit_data_fine').val(slot.data_fine_validita || '');
+
+                        // Mostra modal
+                        var modal = new bootstrap.Modal(document.getElementById('editSlotModal'));
+                        modal.show();
+                    } else {
+                        AuleBookingAdmin.showNotice(response.data, 'error');
+                    }
+                },
+                error: function() {
+                    AuleBookingAdmin.showNotice('Errore nel caricamento dei dati dello slot', 'error');
+                }
+            });
+        },
+
+        /**
+         * Handler per toggle stato slot
+         */
+        handleToggleSlot: function(e) {
+            e.preventDefault();
+            var $button = $(this);
+            var slotId = $button.data('id');
+            var status = $button.data('status'); // 'enable' or 'disable'
+
+            // Imposta messaggio nel modal
+            var message = status === 'disable' ?
+                'Vuoi disabilitare questo slot? Non sarà più disponibile per le prenotazioni.' :
+                'Vuoi abilitare questo slot? Diventerà nuovamente disponibile per le prenotazioni.';
+            $('#toggleSlotMessage').text(message);
+
+            // Salva dati nel modal per conferma
+            $('#confirmToggleBtn').data('slot-id', slotId);
+            $('#confirmToggleBtn').data('status', status);
+            $('#confirmToggleBtn').data('button', $button);
+
+            // Mostra modal
+            var modal = new bootstrap.Modal(document.getElementById('toggleSlotModal'));
+            modal.show();
+        },
+
+        /**
+         * Handler per eliminazione slot
+         */
+        handleDeleteSlot: function(e) {
+            e.preventDefault();
+            var $button = $(this);
+            var slotId = $button.data('id');
+
+            // Salva dati nel modal per conferma
+            $('#confirmDeleteBtn').data('slot-id', slotId);
+            $('#confirmDeleteBtn').data('button', $button);
+
+            // Mostra modal
+            var modal = new bootstrap.Modal(document.getElementById('deleteSlotModal'));
+            modal.show();
         }
     };
 
@@ -956,6 +1047,165 @@
      */
     $(document).ready(function() {
         AuleBookingAdmin.init();
+
+        // Handler per salvataggio slot edit
+        $(document).on('click', '#saveSlotBtn', function() {
+            var formData = {
+                action: 'aule_update_slot',
+                slot_id: $('#edit_slot_id').val(),
+                ora_inizio: $('#edit_ora_inizio').val() + ':00',
+                ora_fine: $('#edit_ora_fine').val() + ':00',
+                data_inizio: $('#edit_data_inizio').val(),
+                data_fine: $('#edit_data_fine').val(),
+                nonce: AuleBookingAdmin.config.nonce
+            };
+
+            $.ajax({
+                url: AuleBookingAdmin.config.ajaxUrl,
+                method: 'POST',
+                data: formData,
+                beforeSend: function() {
+                    $('#saveSlotBtn').prop('disabled', true).text('Salvataggio...');
+                },
+                success: function(response) {
+                    $('#saveSlotBtn').prop('disabled', false).text('Salva Modifiche');
+
+                    if (response.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('editSlotModal')).hide();
+                        AuleBookingAdmin.showNotice(response.data, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        AuleBookingAdmin.showNotice(response.data, 'error');
+                    }
+                },
+                error: function() {
+                    $('#saveSlotBtn').prop('disabled', false).text('Salva Modifiche');
+                    AuleBookingAdmin.showNotice('Errore nel salvataggio dello slot', 'error');
+                }
+            });
+        });
+
+        // Handler per conferma toggle slot
+        $(document).on('click', '#confirmToggleBtn', function() {
+            var $btn = $(this);
+            var slotId = $btn.data('slot-id');
+            var status = $btn.data('status');
+            var $originalButton = $btn.data('button');
+
+            $.ajax({
+                url: AuleBookingAdmin.config.ajaxUrl,
+                method: 'POST',
+                data: {
+                    action: 'aule_toggle_slot',
+                    slot_id: slotId,
+                    status: status,
+                    nonce: AuleBookingAdmin.config.nonce
+                },
+                beforeSend: function() {
+                    $btn.prop('disabled', true);
+                },
+                success: function(response) {
+                    $btn.prop('disabled', false);
+                    bootstrap.Modal.getInstance(document.getElementById('toggleSlotModal')).hide();
+
+                    if (response.success) {
+                        AuleBookingAdmin.showNotice(response.data, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        AuleBookingAdmin.showNotice(response.data, 'error');
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false);
+                    bootstrap.Modal.getInstance(document.getElementById('toggleSlotModal')).hide();
+                    AuleBookingAdmin.showNotice('Errore nell\'operazione', 'error');
+                }
+            });
+        });
+
+        // Handler per conferma eliminazione slot
+        $(document).on('click', '#confirmDeleteBtn', function() {
+            var $btn = $(this);
+            var slotId = $btn.data('slot-id');
+            var $originalButton = $btn.data('button');
+
+            $.ajax({
+                url: AuleBookingAdmin.config.ajaxUrl,
+                method: 'POST',
+                data: {
+                    action: 'aule_delete_slot',
+                    slot_id: slotId,
+                    nonce: AuleBookingAdmin.config.nonce
+                },
+                beforeSend: function() {
+                    $btn.prop('disabled', true).find('.dashicons').removeClass('dashicons-trash').addClass('dashicons-update');
+                },
+                success: function(response) {
+                    $btn.prop('disabled', false).find('.dashicons').removeClass('dashicons-update').addClass('dashicons-trash');
+                    bootstrap.Modal.getInstance(document.getElementById('deleteSlotModal')).hide();
+
+                    if (response.success) {
+                        AuleBookingAdmin.showNotice(response.data, 'success');
+                        // Rimuovi elemento con animazione
+                        $originalButton.closest('.slot-item').fadeOut(300, function() {
+                            $(this).remove();
+                            // Aggiorna conteggio
+                            var $dayGroup = $originalButton.closest('.day-slots-group');
+                            var remainingSlots = $dayGroup.find('.slot-item').length;
+                            if (remainingSlots === 0) {
+                                $dayGroup.fadeOut(300, function() { $(this).remove(); });
+                            } else {
+                                $dayGroup.find('.slots-count').text('(' + remainingSlots + ' slot)');
+                            }
+                        });
+                    } else {
+                        AuleBookingAdmin.showNotice(response.data, 'error');
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).find('.dashicons').removeClass('dashicons-update').addClass('dashicons-trash');
+                    bootstrap.Modal.getInstance(document.getElementById('deleteSlotModal')).hide();
+                    AuleBookingAdmin.showNotice('Errore nell\'eliminazione', 'error');
+                }
+            });
+        });
+
+        // Handler per conferma bulk action
+        $(document).on('click', '#confirmBulkBtn', function() {
+            var $btn = $(this);
+            var action = $btn.data('action');
+            var slotIds = $btn.data('slot-ids');
+
+            $.ajax({
+                url: AuleBookingAdmin.config.ajaxUrl,
+                method: 'POST',
+                data: {
+                    action: 'aule_bulk_slots',
+                    bulk_action: action,
+                    slot_ids: slotIds,
+                    nonce: AuleBookingAdmin.config.nonce
+                },
+                beforeSend: function() {
+                    $btn.prop('disabled', true).text('Elaborazione...');
+                },
+                success: function(response) {
+                    $btn.prop('disabled', false).text('Conferma');
+                    bootstrap.Modal.getInstance(document.getElementById('bulkActionModal')).hide();
+
+                    if (response.success) {
+                        AuleBookingAdmin.showNotice(response.data, 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        AuleBookingAdmin.showNotice(response.data, 'error');
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).text('Conferma');
+                    bootstrap.Modal.getInstance(document.getElementById('bulkActionModal')).hide();
+                    AuleBookingAdmin.showNotice('Errore nell\'operazione', 'error');
+                }
+            });
+        });
     });
 
     /**

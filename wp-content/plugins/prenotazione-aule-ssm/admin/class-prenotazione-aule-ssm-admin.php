@@ -74,8 +74,8 @@ class Prenotazione_Aule_SSM_Admin {
             'all'
         );
 
-        // Bootstrap per i modal - solo per dashboard e prenotazioni
-        if (in_array($hook_suffix, array('toplevel_page_prenotazione-aule-ssm', 'gestione-aule_page_prenotazione-aule-ssm-prenotazioni'))) {
+        // Bootstrap per i modal - solo per dashboard, prenotazioni e slot
+        if (in_array($hook_suffix, array('toplevel_page_prenotazione-aule-ssm', 'gestione-aule_page_prenotazione-aule-ssm-prenotazioni', 'gestione-aule_page_prenotazione-aule-ssm-slot'))) {
             wp_enqueue_style(
                 'bootstrap-modal',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
@@ -120,9 +120,9 @@ class Prenotazione_Aule_SSM_Admin {
 
         wp_enqueue_script(
             $this->plugin_name . '-admin',
-            PRENOTAZIONE_AULE_SSM_PLUGIN_URL . 'admin/js/prenotazione-aule-ssm-admin.js',
+            PRENOTAZIONE_AULE_SSM_PLUGIN_URL . 'admin/js/prenotazione-aule-ssm-admin.js?nocache=' . time(),
             array('jquery'),
-            $this->version,
+            '2.0.0', // Version bump for cache busting
             true
         );
 
@@ -131,8 +131,8 @@ class Prenotazione_Aule_SSM_Admin {
             wp_enqueue_media();
         }
 
-        // Bootstrap JS per i modal - solo dove necessario
-        if (in_array($hook_suffix, array('toplevel_page_prenotazione-aule-ssm', 'gestione-aule_page_prenotazione-aule-ssm-prenotazioni'))) {
+        // Bootstrap JS per i modal - solo dove necessario (dashboard, prenotazioni, slot)
+        if (in_array($hook_suffix, array('toplevel_page_prenotazione-aule-ssm', 'gestione-aule_page_prenotazione-aule-ssm-prenotazioni', 'gestione-aule_page_prenotazione-aule-ssm-slot'))) {
             wp_enqueue_script(
                 'bootstrap-modal',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
@@ -598,7 +598,7 @@ class Prenotazione_Aule_SSM_Admin {
         }
 
         $aula_id = absint($_POST['aula_id']);
-        $giorni_settimana = array_map('absint', $_POST['giorni_settimana']);
+        $giorni_settimana = isset($_POST['giorni_settimana']) && is_array($_POST['giorni_settimana']) ? array_map('absint', $_POST['giorni_settimana']) : array();
         $ora_inizio = sanitize_text_field($_POST['ora_inizio']);
         $ora_fine = sanitize_text_field($_POST['ora_fine']);
         $durata_slot = absint($_POST['durata_slot']);
@@ -834,5 +834,195 @@ class Prenotazione_Aule_SSM_Admin {
             wp_redirect(add_query_arg('error', 'delete', admin_url('admin.php?page=prenotazione-aule-ssm-aule')));
         }
         exit;
+    }
+
+    /**
+     * AJAX: Aggiorna slot
+     *
+     * @since 1.0.0
+     */
+    public function ajax_update_slot() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $slot_id = absint($_POST['slot_id']);
+        $ora_inizio = sanitize_text_field($_POST['ora_inizio']);
+        $ora_fine = sanitize_text_field($_POST['ora_fine']);
+        $data_inizio = sanitize_text_field($_POST['data_inizio']);
+        $data_fine = !empty($_POST['data_fine']) ? sanitize_text_field($_POST['data_fine']) : null;
+
+        if (!$slot_id || !$ora_inizio || !$ora_fine || !$data_inizio) {
+            wp_send_json_error(__('Dati non validi', 'prenotazione-aule-ssm'));
+        }
+
+        $slot_data = array(
+            'ora_inizio' => $ora_inizio,
+            'ora_fine' => $ora_fine,
+            'data_inizio_validita' => $data_inizio,
+            'data_fine_validita' => $data_fine
+        );
+
+        $result = $this->database->update_slot($slot_id, $slot_data);
+
+        if ($result) {
+            wp_send_json_success(__('Slot aggiornato correttamente', 'prenotazione-aule-ssm'));
+        } else {
+            wp_send_json_error(__('Errore nell\'aggiornamento dello slot', 'prenotazione-aule-ssm'));
+        }
+    }
+
+    /**
+     * AJAX: Toggle stato slot (abilita/disabilita)
+     *
+     * @since 1.0.0
+     */
+    public function ajax_toggle_slot() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $slot_id = absint($_POST['slot_id']);
+        $status = sanitize_text_field($_POST['status']); // 'enable' or 'disable'
+
+        if (!$slot_id || !in_array($status, array('enable', 'disable'))) {
+            wp_send_json_error(__('Dati non validi', 'prenotazione-aule-ssm'));
+        }
+
+        $attivo = ($status === 'enable') ? 1 : 0;
+        $result = $this->database->update_slot($slot_id, array('attivo' => $attivo));
+
+        if ($result) {
+            $message = $attivo ? __('Slot abilitato', 'prenotazione-aule-ssm') : __('Slot disabilitato', 'prenotazione-aule-ssm');
+            wp_send_json_success($message);
+        } else {
+            wp_send_json_error(__('Errore nell\'aggiornamento dello slot', 'prenotazione-aule-ssm'));
+        }
+    }
+
+    /**
+     * AJAX: Elimina slot
+     *
+     * @since 1.0.0
+     */
+    public function ajax_delete_slot() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $slot_id = absint($_POST['slot_id']);
+
+        if (!$slot_id) {
+            wp_send_json_error(__('ID slot non valido', 'prenotazione-aule-ssm'));
+        }
+
+        $result = $this->database->delete_slot($slot_id);
+
+        if ($result) {
+            wp_send_json_success(__('Slot eliminato correttamente', 'prenotazione-aule-ssm'));
+        } else {
+            wp_send_json_error(__('Errore nell\'eliminazione dello slot', 'prenotazione-aule-ssm'));
+        }
+    }
+
+    /**
+     * AJAX: Ottieni dati slot per editing
+     *
+     * @since 1.0.0
+     */
+    public function ajax_get_slot() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $slot_id = absint($_POST['slot_id']);
+
+        if (!$slot_id) {
+            wp_send_json_error(__('ID slot non valido', 'prenotazione-aule-ssm'));
+        }
+
+        $slot = $this->database->get_slot_by_id($slot_id);
+
+        if ($slot) {
+            wp_send_json_success($slot);
+        } else {
+            wp_send_json_error(__('Slot non trovato', 'prenotazione-aule-ssm'));
+        }
+    }
+
+    /**
+     * AJAX: Operazioni bulk su slot
+     *
+     * @since 1.0.0
+     */
+    public function ajax_bulk_slots() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $action = sanitize_text_field($_POST['bulk_action']);
+        $slot_ids = isset($_POST['slot_ids']) && is_array($_POST['slot_ids']) ? array_map('absint', $_POST['slot_ids']) : array();
+
+        if (empty($action) || empty($slot_ids)) {
+            wp_send_json_error(__('Parametri non validi', 'prenotazione-aule-ssm'));
+        }
+
+        $success_count = 0;
+        $error_count = 0;
+
+        switch ($action) {
+            case 'enable':
+                foreach ($slot_ids as $slot_id) {
+                    if ($this->database->update_slot($slot_id, array('attivo' => 1))) {
+                        $success_count++;
+                    } else {
+                        $error_count++;
+                    }
+                }
+                $message = sprintf(__('%d slot abilitati', 'prenotazione-aule-ssm'), $success_count);
+                break;
+
+            case 'disable':
+                foreach ($slot_ids as $slot_id) {
+                    if ($this->database->update_slot($slot_id, array('attivo' => 0))) {
+                        $success_count++;
+                    } else {
+                        $error_count++;
+                    }
+                }
+                $message = sprintf(__('%d slot disabilitati', 'prenotazione-aule-ssm'), $success_count);
+                break;
+
+            case 'delete':
+                if ($this->database->delete_slots($slot_ids)) {
+                    $success_count = count($slot_ids);
+                    $message = sprintf(__('%d slot eliminati', 'prenotazione-aule-ssm'), $success_count);
+                } else {
+                    wp_send_json_error(__('Errore nell\'eliminazione degli slot', 'prenotazione-aule-ssm'));
+                }
+                break;
+
+            default:
+                wp_send_json_error(__('Azione non valida', 'prenotazione-aule-ssm'));
+        }
+
+        if ($success_count > 0) {
+            if ($error_count > 0) {
+                $message .= sprintf(__(' (%d errori)', 'prenotazione-aule-ssm'), $error_count);
+            }
+            wp_send_json_success($message);
+        } else {
+            wp_send_json_error(__('Nessun slot modificato', 'prenotazione-aule-ssm'));
+        }
     }
 }

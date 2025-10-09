@@ -149,6 +149,13 @@ class Prenotazione_Aule_SSM {
         $this->loader->add_action('wp_ajax_aule_delete_booking', $plugin_admin, 'ajax_delete_booking');
         $this->loader->add_action('wp_ajax_aule_get_availability', $plugin_admin, 'ajax_get_availability');
 
+        // AJAX handlers per gestione slot
+        $this->loader->add_action('wp_ajax_aule_get_slot', $plugin_admin, 'ajax_get_slot');
+        $this->loader->add_action('wp_ajax_aule_update_slot', $plugin_admin, 'ajax_update_slot');
+        $this->loader->add_action('wp_ajax_aule_toggle_slot', $plugin_admin, 'ajax_toggle_slot');
+        $this->loader->add_action('wp_ajax_aule_delete_slot', $plugin_admin, 'ajax_delete_slot');
+        $this->loader->add_action('wp_ajax_aule_bulk_slots', $plugin_admin, 'ajax_bulk_slots');
+
         // Salvataggio impostazioni
         $this->loader->add_action('admin_post_prenotazione_aule_ssm_save_settings', $plugin_admin, 'save_settings');
         $this->loader->add_action('admin_post_prenotazione_aule_ssm_save_aula', $plugin_admin, 'save_aula');

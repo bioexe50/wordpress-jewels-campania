@@ -29,7 +29,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
 
 <div class="wrap">
     <h1 class="wp-heading-inline">
-        <span class="wp-icon wp-icon-building"></span>
+        <span class="dashicons dashicons-building"></span>
         <?php echo esc_html($page_title); ?>
     </h1>
 
@@ -61,7 +61,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
     <div class="aula-form-container">
         <div class="aula-form-header">
             <h2>
-                <span class="wp-icon wp-icon-<?php echo $is_edit ? 'edit' : 'add'; ?>"></span>
+                <span class="dashicons dashicons-<?php echo $is_edit ? 'edit' : 'plus-alt'; ?>"></span>
                 <?php echo esc_html($page_title); ?>
             </h2>
         </div>
@@ -178,7 +178,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
 
                     <div class="images-upload-container">
                         <button type="button" class="button upload-image-btn">
-                            <span class="wp-icon wp-icon-image"></span>
+                            <span class="dashicons dashicons-format-image"></span>
                             <?php _e('Aggiungi Immagini', 'prenotazione-aule-ssm'); ?>
                         </button>
 
@@ -190,7 +190,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
                                         <div class="image-preview-item" data-id="<?php echo esc_attr($image_id); ?>">
                                             <img src="<?php echo esc_url($image[0]); ?>" alt="">
                                             <button type="button" class="remove-image" title="<?php _e('Rimuovi immagine', 'prenotazione-aule-ssm'); ?>">
-                                                <span class="wp-icon wp-icon-remove"></span>
+                                                <span class="dashicons dashicons-dismiss"></span>
                                             </button>
                                             <input type="hidden" name="immagini[]" value="<?php echo esc_attr($image_id); ?>">
                                         </div>
@@ -200,7 +200,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
 
                             <div class="image-preview-item add-image-placeholder">
                                 <div class="add-image-btn">
-                                    <span class="wp-icon wp-icon-add"></span>
+                                    <span class="dashicons dashicons-plus-alt"></span>
                                     <small><?php _e('Clicca per aggiungere immagini', 'prenotazione-aule-ssm'); ?></small>
                                 </div>
                             </div>
@@ -215,7 +215,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
                 <!-- Pulsanti Azione -->
                 <div class="form-actions">
                     <button type="submit" class="button button-primary button-large">
-                        <span class="wp-icon wp-icon-save"></span>
+                        <span class="dashicons dashicons-database"></span>
                         <?php echo esc_html($button_text); ?>
                     </button>
 
@@ -225,7 +225,7 @@ $immagini = $is_edit && $aula ? maybe_unserialize($aula->immagini) : array();
 
                     <?php if ($is_edit): ?>
                         <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-add-aula'); ?>" class="button button-large">
-                            <span class="wp-icon wp-icon-add"></span>
+                            <span class="dashicons dashicons-plus-alt"></span>
                             <?php _e('Crea Nuova Aula', 'prenotazione-aule-ssm'); ?>
                         </a>
                     <?php endif; ?>

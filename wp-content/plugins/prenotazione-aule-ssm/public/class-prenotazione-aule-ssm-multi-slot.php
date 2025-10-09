@@ -22,6 +22,10 @@ class Prenotazione_Aule_SSM_Multi_Slot {
         add_action('wp_ajax_nopriv_get_slots_for_date', array($this, 'ajax_get_slots_for_date'));
         add_action('wp_ajax_prenotazione_aule_ssm_multi_booking', array($this, 'ajax_multi_booking'));
         add_action('wp_ajax_nopriv_prenotazione_aule_ssm_multi_booking', array($this, 'ajax_multi_booking'));
+
+        // Endpoint per precaricare prenotazioni del mese
+        add_action('wp_ajax_prenotazione_aule_ssm_get_month_bookings', array($this, 'ajax_get_month_bookings'));
+        add_action('wp_ajax_nopriv_prenotazione_aule_ssm_get_month_bookings', array($this, 'ajax_get_month_bookings'));
     }
 
     public function ajax_get_slots_for_date() {
@@ -106,8 +110,6 @@ class Prenotazione_Aule_SSM_Multi_Slot {
         $nome = sanitize_text_field($_POST['nome_richiedente']);
         $email = sanitize_email($_POST['email_richiedente']);
         $motivo = sanitize_textarea_field($_POST['motivo_prenotazione']);
-        $telefono = isset($_POST['telefono_richiedente']) ? sanitize_text_field($_POST['telefono_richiedente']) : '';
-        $partecipanti = isset($_POST['numero_partecipanti']) ? intval($_POST['numero_partecipanti']) : 1;
 
         if (!$aula_id || empty($selected_slots) || !$cognome || !$nome || !$email || !$motivo) {
             wp_send_json_error(array('message' => 'Compila tutti i campi obbligatori'));
@@ -137,7 +139,7 @@ class Prenotazione_Aule_SSM_Multi_Slot {
                     AND stato IN ('approvata', 'in_attesa')",
                     $aula_id,
                     $slot['date'],
-                    $slot['time']
+                    $slot['time'] . ':00'
                 ));
 
                 if ($existing > 0) {
@@ -154,17 +156,15 @@ class Prenotazione_Aule_SSM_Multi_Slot {
                         'nome_richiedente' => $nome,
                         'cognome_richiedente' => $cognome,
                         'email_richiedente' => $email,
-                        'telefono_richiedente' => $telefono,
                         'motivo_prenotazione' => $motivo,
                         'data_prenotazione' => $slot['date'],
                         'ora_inizio' => $slot['time'] . ':00',
                         'ora_fine' => $ora_fine,
-                        'numero_partecipanti' => $partecipanti,
                         'stato' => 'in_attesa',
                         'gruppo_prenotazione' => $gruppo_prenotazione,
                         'created_at' => current_time('mysql')
                     ),
-                    array('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s')
+                    array('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
                 );
 
                 if (!$inserted) {
@@ -205,6 +205,44 @@ class Prenotazione_Aule_SSM_Multi_Slot {
         );
 
         wp_mail($to, $subject, $message);
+    }
+
+    /**
+     * Ottieni tutte le prenotazioni di un mese (per rendering calendario)
+     */
+    public function ajax_get_month_bookings() {
+        check_ajax_referer('prenotazione_aule_ssm_public_nonce', 'nonce');
+
+        $aula_id = intval($_POST['aula_id']);
+        $year = intval($_POST['year']);
+        $month = intval($_POST['month']);
+
+        if (!$aula_id || !$year || !$month) {
+            wp_send_json_error(array('message' => 'Parametri mancanti'));
+        }
+
+        global $wpdb;
+        $table_prenotazioni = $wpdb->prefix . 'prenotazione_aule_ssm_prenotazioni';
+
+        // Primo e ultimo giorno del mese
+        $first_day = sprintf('%04d-%02d-01', $year, $month);
+        $last_day = date('Y-m-t', strtotime($first_day));
+
+        // Ottieni tutte le prenotazioni del mese
+        $bookings = $wpdb->get_results($wpdb->prepare(
+            "SELECT data_prenotazione, ora_inizio, ora_fine, motivo_prenotazione,
+                    nome_richiedente, cognome_richiedente
+             FROM $table_prenotazioni
+             WHERE aula_id = %d
+             AND data_prenotazione BETWEEN %s AND %s
+             AND stato IN ('approvata', 'in_attesa')
+             ORDER BY data_prenotazione, ora_inizio",
+            $aula_id,
+            $first_day,
+            $last_day
+        ), ARRAY_A);
+
+        wp_send_json_success(array('bookings' => $bookings));
     }
 }
 

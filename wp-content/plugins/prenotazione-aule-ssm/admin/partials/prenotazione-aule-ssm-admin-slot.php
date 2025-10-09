@@ -90,7 +90,7 @@ $giorni_settimana = array(
             <?php if ($selected_aula_id): ?>
                 <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-add-aula&edit=1&id=' . $selected_aula_id); ?>"
                    class="button button-secondary">
-                    <span class="wp-icon wp-icon-edit"></span>
+                    <span class="dashicons dashicons-edit"></span>
                     <?php _e('Modifica Aula', 'prenotazione-aule-ssm'); ?>
                 </a>
             <?php endif; ?>
@@ -100,11 +100,11 @@ $giorni_settimana = array(
     <?php if (empty($aule)): ?>
         <!-- Nessuna aula disponibile -->
         <div class="no-data">
-            <span class="wp-icon wp-icon-building" style="font-size: 3em; opacity: 0.3;"></span>
+            <span class="dashicons dashicons-building" style="font-size: 3em; opacity: 0.3;"></span>
             <h3><?php _e('Nessuna aula disponibile', 'prenotazione-aule-ssm'); ?></h3>
             <p><?php _e('Crea prima un\'aula per configurare gli slot di disponibilità.', 'prenotazione-aule-ssm'); ?></p>
             <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-add-aula'); ?>" class="button button-primary">
-                <span class="wp-icon wp-icon-add"></span>
+                <span class="dashicons dashicons-plus-alt"></span>
                 <?php _e('Aggiungi Aula', 'prenotazione-aule-ssm'); ?>
             </a>
         </div>
@@ -123,14 +123,14 @@ $giorni_settimana = array(
             <!-- Header aula selezionata -->
             <div class="selected-aula-info">
                 <h2>
-                    <span class="wp-icon wp-icon-building"></span>
+                    <span class="dashicons dashicons-building"></span>
                     <?php echo esc_html($selected_aula->nome_aula); ?>
                 </h2>
                 <div class="aula-details">
                     <?php if (!empty($selected_aula->ubicazione)): ?>
-                        <span><span class="wp-icon wp-icon-location"></span> <?php echo esc_html($selected_aula->ubicazione); ?></span>
+                        <span><span class="dashicons dashicons-location"></span> <?php echo esc_html($selected_aula->ubicazione); ?></span>
                     <?php endif; ?>
-                    <span><span class="wp-icon wp-icon-users"></span> <?php printf(__('%d persone', 'prenotazione-aule-ssm'), $selected_aula->capienza); ?></span>
+                    <span><span class="dashicons dashicons-groups"></span> <?php printf(__('%d persone', 'prenotazione-aule-ssm'), $selected_aula->capienza); ?></span>
                     <span class="aula-status <?php echo esc_attr($selected_aula->stato); ?>">
                         <?php
                         switch ($selected_aula->stato) {

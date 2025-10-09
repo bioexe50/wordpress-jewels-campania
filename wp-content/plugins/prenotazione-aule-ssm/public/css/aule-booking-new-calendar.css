@@ -9,7 +9,7 @@
    VARIABILI CSS
    ======================================== */
 .aule-new-calendar-wrapper {
-    --primary-color: #0066ff;
+    --primary-color: #b64c3c;
     --primary-hover: #0052cc;
     --success-color: #00d084;
     --danger-color: #dc3545;
@@ -212,31 +212,6 @@
 .day-cell.empty {
     cursor: default;
     pointer-events: none;
-}
-
-.day-cell.disabled {
-    color: #d1d5db;
-    cursor: not-allowed;
-}
-
-.day-cell.available {
-    color: var(--primary-color);
-}
-
-.day-cell.available:hover {
-    background: #eff6ff;
-    transform: scale(1.05);
-}
-
-.day-cell.selected {
-    background: var(--primary-color);
-    color: white;
-    font-weight: 600;
-}
-
-.day-cell.today {
-    font-weight: 700;
-    border: 2px solid var(--primary-color);
 }
 
 .day-cell.has-slots::after {
@@ -512,7 +487,7 @@
 }
 
 .summary-date {
-    color: #0d6efd;
+    color: #b64c3c;
 }
 
 .summary-time {
@@ -737,4 +712,205 @@
     .slots-column {
         display: none !important;
     }
+}/* Enhanced Calendar Day States */
+
+/* Giorni passati - Non prenotabili */
+.day-cell.disabled {
+    color: #9ca3af !important;
+    background: #f3f4f6 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.day-cell.disabled:hover {
+    transform: none !important;
+    background: #f3f4f6 !important;
+}
+
+/* Giorni disponibili - Prenotabili */
+.day-cell.available {
+    color: #1f2937 !important;
+    background: #ffffff !important;
+    cursor: pointer !important;
+    border: 1px solid #e5e7eb !important;
+    transition: all 0.2s ease;
+}
+
+.day-cell.available:hover {
+    background: #fdf0ef !important;
+    border-color: #b64c3c !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(182, 76, 60, 0.15);
+}
+
+/* Oggi */
+.day-cell.today {
+    font-weight: 700 !important;
+    border: 2px solid #b64c3c !important;
+    background: #fff !important;
+}
+
+.day-cell.today.available {
+    box-shadow: 0 0 0 2px rgba(182, 76, 60, 0.2);
+}
+
+/* Giorni con slot selezionati */
+.day-cell.selected {
+    background: #b64c3c !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+/* Legenda calendario */
+.calendar-legend {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    background: #f9fafb;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.legend-box.disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.legend-box.available {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #1f2937;
+}
+
+.legend-box.today {
+    background: #fff;
+    border: 2px solid #b64c3c;
+    color: #1f2937;
+}
+
+.legend-box.selected {
+    background: #b64c3c;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .calendar-legend {
+        gap: 12px;
+        font-size: 12px;
+    }
+
+    .legend-box {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
+}
+
+/* Giorni completamente occupati */
+.day-cell.fully-booked {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    cursor: not-allowed !important;
+    border: 1px solid #fca5a5 !important;
+    opacity: 0.7;
+    position: relative;
+}
+
+.day-cell.fully-booked:hover {
+    transform: none !important;
+    background: #fee2e2 !important;
+    box-shadow: none !important;
+}
+
+.day-cell.fully-booked::after {
+    content: '✕';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 10px;
+    color: #991b1b;
+    font-weight: bold;
+}
+
+/* Aggiorna legenda */
+.legend-box.fully-booked {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+
+/* Giorni parzialmente occupati - hanno alcuni slot prenotati ma non tutti */
+.day-cell.partially-booked {
+    background: #fff3cd !important; /* Giallo chiaro */
+    position: relative;
+}
+
+.day-cell.partially-booked::before {
+    content: '•';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 18px;
+    color: #856404;
+    font-weight: bold;
+}
+
+.day-cell.partially-booked:hover {
+    background: #fff3cd !important;
+    border-color: #b64c3c !important;
+}
+
+/* Giorni completamente occupati - CLICCABILI per vedere le prenotazioni */
+.day-cell.fully-booked {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    cursor: pointer !important; /* Cliccabile! */
+    border: 1px solid #fca5a5 !important;
+    position: relative;
+}
+
+.day-cell.fully-booked:hover {
+    background: #fecaca !important; /* Rosso più scuro al hover */
+    border-color: #b64c3c !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(182, 76, 60, 0.2) !important;
+}
+
+.day-cell.fully-booked::after {
+    content: '✕';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 10px;
+    color: #991b1b;
+    font-weight: bold;
+}
+
+/* Aggiorna legenda */
+.legend-box.partially-booked {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
 }

@@ -56,12 +56,12 @@ if (!empty($aule)) {
 
 <div class="wrap">
     <h1 class="wp-heading-inline">
-        <span class="wp-icon wp-icon-building"></span>
+        <span class="dashicons dashicons-building"></span>
         <?php _e('Tutte le Aule', 'prenotazione-aule-ssm'); ?>
     </h1>
 
     <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-add-aula'); ?>" class="page-title-action">
-        <span class="wp-icon wp-icon-add"></span>
+        <span class="dashicons dashicons-plus-alt"></span>
         <?php _e('Aggiungi Nuova Aula', 'prenotazione-aule-ssm'); ?>
     </a>
 
@@ -150,11 +150,11 @@ if (!empty($aule)) {
         <?php if (empty($aule)): ?>
             <!-- Stato vuoto -->
             <div class="no-data">
-                <span class="wp-icon wp-icon-building" style="font-size: 3em; opacity: 0.3;"></span>
+                <span class="dashicons dashicons-building" style="font-size: 48px; opacity: 0.3;"></span>
                 <h3><?php _e('Nessuna aula trovata', 'prenotazione-aule-ssm'); ?></h3>
                 <p><?php _e('Nessuna aula corrisponde ai criteri di ricerca.', 'prenotazione-aule-ssm'); ?></p>
                 <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-add-aula'); ?>" class="button button-primary">
-                    <span class="wp-icon wp-icon-add"></span>
+                    <span class="dashicons dashicons-plus-alt"></span>
                     <?php _e('Crea la prima aula', 'prenotazione-aule-ssm'); ?>
                 </a>
             </div>
@@ -182,7 +182,7 @@ if (!empty($aule)) {
                                 <img src="<?php echo esc_url($immagine_principale[0]); ?>" alt="<?php echo esc_attr($aula->nome_aula); ?>">
                             <?php else: ?>
                                 <div class="aula-card-placeholder">
-                                    <span class="wp-icon wp-icon-building"></span>
+                                    <span class="dashicons dashicons-building"></span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -217,13 +217,13 @@ if (!empty($aule)) {
                             <!-- Meta informazioni -->
                             <div class="aula-card-meta">
                                 <span title="<?php _e('Capienza', 'prenotazione-aule-ssm'); ?>">
-                                    <span class="wp-icon wp-icon-users"></span>
+                                    <span class="dashicons dashicons-groups"></span>
                                     <?php printf(__('%d persone', 'prenotazione-aule-ssm'), $aula->capienza); ?>
                                 </span>
 
                                 <?php if (!empty($aula->ubicazione)): ?>
                                 <span title="<?php _e('Ubicazione', 'prenotazione-aule-ssm'); ?>">
-                                    <span class="wp-icon wp-icon-location"></span>
+                                    <span class="dashicons dashicons-location"></span>
                                     <?php echo esc_html($aula->ubicazione); ?>
                                 </span>
                                 <?php endif; ?>
@@ -234,14 +234,14 @@ if (!empty($aule)) {
                             <div class="aula-card-facilities">
                                 <?php
                                 $attrezzature_labels = array(
-                                    'proiettore' => '📺 ' . __('Proiettore', 'prenotazione-aule-ssm'),
-                                    'lavagna' => '📋 ' . __('Lavagna', 'prenotazione-aule-ssm'),
-                                    'pc' => '💻 ' . __('Computer', 'prenotazione-aule-ssm'),
-                                    'webcam' => '📹 ' . __('Webcam', 'prenotazione-aule-ssm'),
-                                    'microfono' => '🎤 ' . __('Microfono', 'prenotazione-aule-ssm'),
-                                    'wifi' => '📶 ' . __('Wi-Fi', 'prenotazione-aule-ssm'),
-                                    'condizionatore' => '❄️ ' . __('Aria Condizionata', 'prenotazione-aule-ssm'),
-                                    'stampante' => '🖨️ ' . __('Stampante', 'prenotazione-aule-ssm')
+                                    'proiettore' => '<span class="dashicons dashicons-desktop"></span> ' . __('Proiettore', 'prenotazione-aule-ssm'),
+                                    'lavagna' => '<span class="dashicons dashicons-clipboard"></span> ' . __('Lavagna', 'prenotazione-aule-ssm'),
+                                    'pc' => '<span class="dashicons dashicons-laptop"></span> ' . __('Computer', 'prenotazione-aule-ssm'),
+                                    'webcam' => '<span class="dashicons dashicons-video-alt3"></span> ' . __('Webcam', 'prenotazione-aule-ssm'),
+                                    'microfono' => '<span class="dashicons dashicons-microphone"></span> ' . __('Microfono', 'prenotazione-aule-ssm'),
+                                    'wifi' => '<span class="dashicons dashicons-wifi"></span> ' . __('Wi-Fi', 'prenotazione-aule-ssm'),
+                                    'condizionatore' => '<span class="dashicons dashicons-cloud"></span> ' . __('Aria Condizionata', 'prenotazione-aule-ssm'),
+                                    'stampante' => '<span class="dashicons dashicons-printer"></span> ' . __('Stampante', 'prenotazione-aule-ssm')
                                 );
 
                                 foreach ($attrezzature as $attrezzatura):
@@ -266,7 +266,7 @@ if (!empty($aule)) {
                                     <button type="button" class="button button-secondary copy-shortcode-btn"
                                             data-shortcode="[prenotazione_aule_ssm_calendar aula_id=&quot;<?php echo $aula->id; ?>&quot;]"
                                             data-aula-name="<?php echo esc_attr($aula->nome_aula); ?>">
-                                        📋 <?php _e('Copia', 'prenotazione-aule-ssm'); ?>
+                                        <span class="dashicons dashicons-clipboard"></span> <?php _e('Copia', 'prenotazione-aule-ssm'); ?>
                                     </button>
                                 </div>
                                 <small class="shortcode-help">
@@ -278,26 +278,26 @@ if (!empty($aule)) {
                             <div class="aula-card-actions">
                                 <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-add-aula&edit=1&id=' . $aula->id); ?>"
                                    class="button button-primary button-small">
-                                    <span class="wp-icon wp-icon-edit"></span>
+                                    <span class="dashicons dashicons-edit"></span>
                                     <?php _e('Modifica', 'prenotazione-aule-ssm'); ?>
                                 </a>
 
                                 <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-slot&aula_id=' . $aula->id); ?>"
                                    class="button button-secondary button-small">
-                                    <span class="wp-icon wp-icon-tools"></span>
+                                    <span class="dashicons dashicons-admin-tools"></span>
                                     <?php _e('Slot', 'prenotazione-aule-ssm'); ?>
                                 </a>
 
                                 <a href="<?php echo admin_url('admin.php?page=prenotazione-aule-ssm-prenotazioni&filter_aula_id=' . $aula->id); ?>"
                                    class="button button-secondary button-small">
-                                    📅 <?php _e('Prenotazioni', 'prenotazione-aule-ssm'); ?>
+                                    <span class="dashicons dashicons-calendar-alt"></span> <?php _e('Prenotazioni', 'prenotazione-aule-ssm'); ?>
                                 </a>
 
                                 <a href="<?php echo wp_nonce_url(admin_url('admin-post.php?action=prenotazione_aule_ssm_delete_aula&id=' . $aula->id), 'delete_aula_' . $aula->id); ?>"
                                    class="button button-secondary button-small delete-aula"
                                    data-aula-name="<?php echo esc_attr($aula->nome_aula); ?>"
                                    onclick="return confirm('<?php printf(esc_js(__('Sei sicuro di voler eliminare l\'aula \"%s\"? Tutte le prenotazioni associate verranno cancellate.', 'prenotazione-aule-ssm')), esc_js($aula->nome_aula)); ?>')">
-                                    <span class="wp-icon wp-icon-remove"></span>
+                                    <span class="dashicons dashicons-dismiss"></span>
                                     <?php _e('Elimina', 'prenotazione-aule-ssm'); ?>
                                 </a>
                             </div>
@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostra feedback positivo
     function showCopyFeedback(btn, aulaName) {
         const originalText = btn.innerHTML;
-        btn.innerHTML = '✅ Copiato!';
+        btn.innerHTML = '<span class="dashicons dashicons-yes"></span> Copiato!';
         btn.classList.add('copied');
         btn.disabled = true;
 
@@ -542,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostra errore
     function showCopyError(btn, aulaName) {
         const originalText = btn.innerHTML;
-        btn.innerHTML = '❌ Errore';
+        btn.innerHTML = '<span class="dashicons dashicons-no"></span> Errore';
         btn.style.background = '#dc3545';
         btn.style.borderColor = '#dc3545';
 

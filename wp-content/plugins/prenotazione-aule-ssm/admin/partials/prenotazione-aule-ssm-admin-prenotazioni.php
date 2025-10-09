@@ -206,7 +206,7 @@ foreach ($prenotazioni as $prenotazione) {
                                     <strong><?php echo esc_html($prenotazione->nome_aula); ?></strong>
                                     <?php if (!empty($prenotazione->ubicazione)): ?>
                                     <div class="aula-ubicazione">
-                                        <span class="wp-icon wp-icon-location"></span>
+                                        <span class="dashicons dashicons-location"></span>
                                         <?php echo esc_html($prenotazione->ubicazione); ?>
                                     </div>
                                     <?php endif; ?>

@@ -538,7 +538,7 @@
 
 .aule-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 20px;
     padding: 24px;
 }
@@ -636,6 +636,7 @@
 
 .aula-card-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-top: 15px;
     padding-top: 15px;
@@ -643,12 +644,24 @@
 }
 
 .aula-card-actions .button {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 90px;
     text-align: center;
-    padding: 8px 12px;
+    padding: 8px 10px;
     font-size: 12px;
     height: auto;
     line-height: 1.4;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.aula-card-actions .button .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
 }
 
 /* Gestione slot */
@@ -1021,61 +1034,71 @@
     }
 }
 
-/* WordPress native icons (per evitare CSP con Font Awesome) */
+/* WordPress Dashicons integration - sostituisce emoji e font custom */
 .wp-icon {
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     vertical-align: middle;
+    font-family: dashicons !important;
 }
 
+/* Mapping delle classi wp-icon-* ai Dashicons corrispondenti */
 .wp-icon-add::before {
-    content: "+";
-    font-weight: bold;
+    content: "\f502" !important; /* dashicons-plus-alt */
     color: var(--ab-primary);
-    font-size: 18px;
+    font-family: dashicons !important;
+    font-size: 20px;
 }
 
 .wp-icon-remove::before {
-    content: "×";
-    font-weight: bold;
+    content: "\f335" !important; /* dashicons-dismiss */
     color: var(--ab-danger);
-    font-size: 18px;
+    font-family: dashicons !important;
+    font-size: 20px;
 }
 
 .wp-icon-edit::before {
-    content: "✎";
+    content: "\f464" !important; /* dashicons-edit */
     color: var(--ab-primary);
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 .wp-icon-image::before {
-    content: "🖼";
-    font-size: 14px;
+    content: "\f128" !important; /* dashicons-format-image */
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 .wp-icon-building::before {
-    content: "🏢";
-    font-size: 14px;
+    content: "\f175" !important; /* dashicons-building */
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 .wp-icon-users::before {
-    content: "👥";
-    font-size: 14px;
+    content: "\f307" !important; /* dashicons-groups */
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 .wp-icon-location::before {
-    content: "📍";
-    font-size: 14px;
+    content: "\f230" !important; /* dashicons-location */
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 .wp-icon-tools::before {
-    content: "🔧";
-    font-size: 14px;
+    content: "\f108" !important; /* dashicons-admin-tools */
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 .wp-icon-save::before {
-    content: "💾";
-    font-size: 14px;
+    content: "\f316" !important; /* dashicons-database */
+    font-family: dashicons !important;
+    font-size: 18px;
 }
 
 /* Accessibilità */

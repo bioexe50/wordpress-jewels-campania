@@ -247,30 +247,57 @@ class Prenotazione_Aule_SSM_Public {
             return '<p class="prenotazione-aule-ssm-error">' . __('Aula non disponibile', 'prenotazione-aule-ssm') . '</p>';
         }
 
-        // Enqueue CSS e JS specifici per new_calendar
+        // Enqueue CSS base calendario
         wp_enqueue_style(
-            $this->plugin_name . '-new-calendar',
-            PRENOTAZIONE_AULE_SSM_PLUGIN_URL . 'public/css/prenotazione-aule-ssm-new-calendar.css',
+            $this->plugin_name . '-new-calendar-base',
+            PRENOTAZIONE_AULE_SSM_PLUGIN_URL . 'public/css/aule-booking-new-calendar.css',
             array(),
-            $this->version,
+            $this->version . '.' . time(),
             'all'
         );
 
+        // Enqueue CSS multi-slot
+        wp_enqueue_style(
+            $this->plugin_name . '-multi-slot',
+            PRENOTAZIONE_AULE_SSM_PLUGIN_URL . 'public/css/prenotazione-aule-ssm-multi-slot.css',
+            array($this->plugin_name . '-new-calendar-base'),
+            $this->version . '.' . time(),
+            'all'
+        );
+
+        // Enqueue Bootstrap 5 per modale
+        wp_enqueue_style(
+            'bootstrap-5-css',
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+            array(),
+            '5.3.0'
+        );
+
+        wp_enqueue_script(
+            'bootstrap-5-js',
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
+            array('jquery'),
+            '5.3.0',
+            true
+        );
+
+        // Enqueue JS calendario
         wp_enqueue_script(
             $this->plugin_name . '-new-calendar',
             PRENOTAZIONE_AULE_SSM_PLUGIN_URL . 'public/js/prenotazione-aule-ssm-new-calendar.js',
-            array('jquery'),
+            array('jquery', 'bootstrap-5-js'),
             $this->version,
             true
         );
 
-        // Localize script con variabile dedicata
+        // Localize script con variabile corretta
         wp_localize_script(
             $this->plugin_name . '-new-calendar',
-            'aulaBookingData',
+            'prenotazioneAuleSSMData',
             array(
-                'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('prenotazione_aule_ssm_public_nonce')
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('prenotazione_aule_ssm_public_nonce'),
+                'multiBookingNonce' => wp_create_nonce('prenotazione_aule_ssm_multi_booking')
             )
         );
 

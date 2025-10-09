@@ -1,0 +1,740 @@
+/**
+ * Stili per NEW_CALENDAR - Interfaccia stile Calendly
+ *
+ * @since 1.0.0
+ * @package WP_Prenotazione_Aule_SSM
+ */
+
+/* ========================================
+   VARIABILI CSS
+   ======================================== */
+.aule-new-calendar-wrapper {
+    --primary-color: #0066ff;
+    --primary-hover: #0052cc;
+    --success-color: #00d084;
+    --danger-color: #dc3545;
+    --light-bg: #fafbfc;
+    --border-color: #e5e7eb;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --transition: all 0.2s ease;
+}
+
+/* ========================================
+   RESET E BASE
+   ======================================== */
+.aule-new-calendar-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.5;
+    color: var(--text-primary);
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.aule-new-calendar-wrapper * {
+    box-sizing: border-box;
+}
+
+/* ========================================
+   HEADER AULA INFO
+   ======================================== */
+.aule-new-calendar-header {
+    margin-bottom: 2rem;
+}
+
+.aula-info-card {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--primary-color);
+}
+
+.aula-name {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.aula-icon {
+    font-size: 1.5rem;
+}
+
+.aula-description {
+    margin: 0 0 1rem 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.aula-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+}
+
+.aula-location,
+.aula-capacity {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.meta-icon {
+    font-size: 1rem;
+}
+
+/* ========================================
+   CONTAINER TWO-COLUMN
+   ======================================== */
+.aule-new-calendar-container {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.calendar-row {
+    display: flex;
+    min-height: 550px;
+}
+
+/* ========================================
+   COLONNA CALENDARIO (SINISTRA)
+   ======================================== */
+.calendar-column {
+    flex: 0 0 45%;
+    padding: 2rem;
+    border-right: 1px solid var(--border-color);
+    background: white;
+}
+
+.calendar-widget {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.month-year-display {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-nav {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-nav:hover {
+    background: var(--light-bg);
+    border-color: var(--primary-color);
+}
+
+.btn-nav:active {
+    transform: scale(0.95);
+}
+
+/* ========================================
+   GRIGLIA CALENDARIO
+   ======================================== */
+.calendar-grid {
+    flex: 1;
+}
+
+.weekdays-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.weekday-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.day-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.day-cell.empty {
+    cursor: default;
+    pointer-events: none;
+}
+
+.day-cell.disabled {
+    color: #d1d5db;
+    cursor: not-allowed;
+}
+
+.day-cell.available {
+    color: var(--primary-color);
+}
+
+.day-cell.available:hover {
+    background: #eff6ff;
+    transform: scale(1.05);
+}
+
+.day-cell.selected {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.day-cell.today {
+    font-weight: 700;
+    border: 2px solid var(--primary-color);
+}
+
+.day-cell.has-slots::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background: var(--success-color);
+    border-radius: 50%;
+}
+
+.day-cell.selected.has-slots::after {
+    background: white;
+}
+
+/* ========================================
+   LEGENDA CALENDARIO
+   ======================================== */
+.calendar-legend {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot-available {
+    background: var(--success-color);
+}
+
+.dot-selected {
+    background: var(--primary-color);
+}
+
+/* ========================================
+   COLONNA SLOT (DESTRA)
+   ======================================== */
+.slots-column {
+    flex: 0 0 55%;
+    padding: 2rem;
+    background: var(--light-bg);
+}
+
+.slots-widget {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.selected-date-header {
+    margin-bottom: 1.5rem;
+}
+
+.selected-date-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.selected-date-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.slots-container {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem;
+}
+
+.slots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ========================================
+   SLOT CARDS
+   ======================================== */
+.time-slot {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.time-slot.available {
+    border-color: var(--primary-color);
+}
+
+.time-slot.available:hover {
+    background: #eff6ff;
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+}
+
+.time-slot.occupied {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.time-slot.available::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--success-color);
+    border-radius: 50%;
+}
+
+.time-slot.occupied::before {
+    background: var(--text-secondary);
+}
+
+.slot-time {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.time-slot.occupied .slot-time {
+    color: var(--text-secondary);
+}
+
+.slot-status {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.time-slot.available .slot-status {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
+/* ========================================
+   EMPTY & LOADING STATES
+   ======================================== */
+.slots-empty-state,
+.slots-loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+}
+
+.empty-icon,
+.spinner-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.empty-message {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.spinner-icon {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   MODAL PRENOTAZIONE
+   ======================================== */
+.prenotazione-aule-ssm-modal .modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+}
+
+.prenotazione-aule-ssm-modal .modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.prenotazione-aule-ssm-modal .modal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-icon {
+    font-size: 1.5rem;
+}
+
+.prenotazione-aule-ssm-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.prenotazione-aule-ssm-modal .modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+/* ========================================
+   BOOKING SUMMARY
+   ======================================== */
+.booking-summary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.25rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border-left: 5px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.summary-item:not(:last-child) {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.summary-label {
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.summary-aula {
+    color: var(--primary-color);
+}
+
+.summary-date {
+    color: #0d6efd;
+}
+
+.summary-time {
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+/* ========================================
+   FORM STYLES
+   ======================================== */
+.booking-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.booking-form .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.booking-form .required {
+    color: var(--danger-color);
+}
+
+.booking-form .form-control {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.booking-form .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+.booking-form .form-control.is-invalid {
+    border-color: var(--danger-color);
+}
+
+.booking-form .form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.booking-form .invalid-feedback {
+    display: none;
+    color: var(--danger-color);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.booking-form .form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.booking-form .form-check {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start !important;
+    gap: 0 !important;
+    margin-bottom: 1rem !important;
+    padding-left: 0 !important;
+}
+
+.booking-form .form-check input[type="checkbox"].form-check-input {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    margin: 2px 10px 0 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    cursor: pointer !important;
+    accent-color: var(--primary-color) !important;
+    position: relative !important;
+    float: none !important;
+}
+
+.booking-form .form-check-label {
+    font-size: 0.9rem !important;
+    cursor: pointer !important;
+    line-height: 1.5 !important;
+    flex: 1 !important;
+    flex-shrink: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block !important;
+    width: auto !important;
+}
+
+.booking-form .form-check input[type="checkbox"].form-check-input:focus {
+    outline: 2px solid var(--primary-color) !important;
+    outline-offset: 2px !important;
+}
+
+.booking-form .form-check input[type="checkbox"].form-check-input.is-invalid {
+    outline: 2px solid var(--danger-color) !important;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+.btn-submit-booking {
+    min-width: 180px;
+}
+
+.btn-spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ========================================
+   ALERTS
+   ======================================== */
+.booking-error,
+.booking-success {
+    margin-top: 1rem;
+    padding: 0.875rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 992px) {
+    .calendar-row {
+        flex-direction: column;
+    }
+
+    .calendar-column {
+        flex: 1;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .slots-column {
+        flex: 1;
+    }
+
+    .aule-new-calendar-container {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .aule-new-calendar-wrapper {
+        margin: 1rem auto;
+    }
+
+    .aula-info-card {
+        padding: 1rem 1.5rem;
+    }
+
+    .aula-name {
+        font-size: 1.4rem;
+    }
+
+    .calendar-column,
+    .slots-column {
+        padding: 1.5rem 1rem;
+    }
+
+    .aula-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .day-cell {
+        font-size: 0.85rem;
+    }
+
+    .time-slot {
+        padding: 0.875rem 1rem;
+    }
+
+    .prenotazione-aule-ssm-modal .modal-dialog {
+        margin: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .weekday-label {
+        font-size: 0.7rem;
+    }
+
+    .day-cell {
+        font-size: 0.8rem;
+    }
+
+    .calendar-legend {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .booking-summary {
+        padding: 0.75rem;
+    }
+
+    .summary-item {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+    .btn-nav,
+    .modal,
+    .slots-column {
+        display: none !important;
+    }
+}

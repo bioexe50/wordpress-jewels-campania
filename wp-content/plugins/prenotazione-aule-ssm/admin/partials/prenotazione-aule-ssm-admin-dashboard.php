@@ -209,27 +209,76 @@ if (!defined('ABSPATH')) {
     </div>
 </div>
 
-<!-- Modal per gestione prenotazioni rapida -->
-<div class="modal fade" id="quickBookingModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal Conferma Approvazione -->
+<div class="modal fade" id="approveBookingModal" tabindex="-1" aria-labelledby="approveBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><?php _e('Gestisci Prenotazione', 'prenotazione-aule-ssm'); ?></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="approveBookingModalLabel">
+                    <span class="dashicons dashicons-yes-alt" style="color: white;"></span>
+                    <?php _e('Conferma Approvazione', 'prenotazione-aule-ssm'); ?>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="quickBookingForm">
-                    <input type="hidden" id="booking_id" name="booking_id">
-                    <div class="mb-3">
-                        <label for="admin_note" class="form-label"><?php _e('Note Admin', 'prenotazione-aule-ssm'); ?></label>
-                        <textarea class="form-control" id="admin_note" name="admin_note" rows="3"></textarea>
-                    </div>
-                </form>
+                <p><?php _e('Sei sicuro di voler approvare questa prenotazione?', 'prenotazione-aule-ssm'); ?></p>
+                <div class="alert alert-info">
+                    <strong><?php _e('Nota:', 'prenotazione-aule-ssm'); ?></strong>
+                    <?php _e('Verrà inviata un\'email di conferma al richiedente.', 'prenotazione-aule-ssm'); ?>
+                </div>
+                <div class="mb-3">
+                    <label for="approve-note" class="form-label"><?php _e('Note aggiuntive (opzionale):', 'prenotazione-aule-ssm'); ?></label>
+                    <textarea id="approve-note" class="form-control" rows="3"
+                              placeholder="<?php _e('Es: Si ricorda di portare documento identificativo', 'prenotazione-aule-ssm'); ?>"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Chiudi', 'prenotazione-aule-ssm'); ?></button>
-                <button type="button" class="btn btn-danger" id="rejectBookingBtn"><?php _e('Rifiuta', 'prenotazione-aule-ssm'); ?></button>
-                <button type="button" class="btn btn-success" id="approveBookingBtn"><?php _e('Approva', 'prenotazione-aule-ssm'); ?></button>
+                <button type="button" class="button button-secondary" data-bs-dismiss="modal">
+                    <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
+                </button>
+                <button type="button" class="button button-primary" id="confirmApproveBtn" style="background: #00a32a; border-color: #00a32a;">
+                    <span class="dashicons dashicons-yes-alt"></span>
+                    <?php _e('Approva Prenotazione', 'prenotazione-aule-ssm'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rifiuto Prenotazione -->
+<div class="modal fade" id="rejectBookingModal" tabindex="-1" aria-labelledby="rejectBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="rejectBookingModalLabel">
+                    <span class="dashicons dashicons-dismiss" style="color: white;"></span>
+                    <?php _e('Rifiuta Prenotazione', 'prenotazione-aule-ssm'); ?>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <strong><?php _e('Attenzione!', 'prenotazione-aule-ssm'); ?></strong>
+                    <?php _e('Il richiedente riceverà un\'email di notifica del rifiuto.', 'prenotazione-aule-ssm'); ?>
+                </div>
+                <div class="mb-3">
+                    <label for="reject-reason" class="form-label">
+                        <?php _e('Motivo del rifiuto:', 'prenotazione-aule-ssm'); ?>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <textarea id="reject-reason" class="form-control" rows="4" required
+                              placeholder="<?php _e('Es: Aula non disponibile per manutenzione straordinaria', 'prenotazione-aule-ssm'); ?>"></textarea>
+                    <small class="form-text text-muted"><?php _e('Questo messaggio sarà visibile al richiedente.', 'prenotazione-aule-ssm'); ?></small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-secondary" data-bs-dismiss="modal">
+                    <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
+                </button>
+                <button type="button" class="button button-primary" id="confirmRejectBtn" style="background: #d63638; border-color: #d63638;">
+                    <span class="dashicons dashicons-dismiss"></span>
+                    <?php _e('Conferma Rifiuto', 'prenotazione-aule-ssm'); ?>
+                </button>
             </div>
         </div>
     </div>
@@ -416,61 +465,212 @@ if (!defined('ABSPATH')) {
         grid-template-columns: 1fr;
     }
 }
+
+/* Modal Bootstrap overrides */
+.modal-header.bg-success,
+.modal-header.bg-danger {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.modal-title .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.modal-body .alert {
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.modal-body .alert-info {
+    background-color: #e8f4fd;
+    border-color: #72aee6;
+    color: #135e96;
+}
+
+.modal-body .alert-warning {
+    background-color: #fcf9e8;
+    border-color: #dba617;
+    color: #8a6116;
+}
+
+.modal-body .form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #1d2327;
+}
+
+.modal-body .form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-body .form-control:focus {
+    border-color: #2271b1;
+    outline: none;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+.modal-body .text-danger {
+    color: #d63638;
+}
+
+.modal-body .text-muted {
+    color: #646970;
+    font-size: 12px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    background: #f9f9f9;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.btn-close-white {
+    filter: brightness(0) invert(1);
+}
+
+.spinner-border {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: text-bottom;
+    border: 0.2em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+.spinner-border-sm {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-width: 0.15em;
+}
+
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
 </style>
 
 <script>
 jQuery(document).ready(function($) {
-    // Gestione approvazione rapida
+    var currentBookingId = null;
+
+    // Gestione approvazione - Mostra modal
     $('.approve-booking').on('click', function(e) {
         e.preventDefault();
-        var bookingId = $(this).data('id');
+        currentBookingId = $(this).data('id');
+        $('#approve-note').val('');
 
-        if (confirm(prenotazione_aule_ssm_admin_ajax.strings.confirm_approve)) {
-            $.ajax({
-                url: prenotazione_aule_ssm_admin_ajax.ajax_url,
-                method: 'POST',
-                data: {
-                    action: 'aule_approve_booking',
-                    booking_id: bookingId,
-                    note_admin: '',
-                    nonce: prenotazione_aule_ssm_admin_ajax.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        location.reload();
-                    } else {
-                        alert(response.data);
-                    }
-                }
-            });
-        }
+        // Mostra modal Bootstrap
+        var modal = new bootstrap.Modal(document.getElementById('approveBookingModal'));
+        modal.show();
     });
 
-    // Gestione rifiuto rapido
+    // Conferma approvazione dal modal
+    $('#confirmApproveBtn').on('click', function() {
+        var note = $('#approve-note').val().trim();
+        var $btn = $(this);
+
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status"></span> Approvazione...');
+
+        $.ajax({
+            url: prenotazione_aule_ssm_admin_ajax.ajax_url,
+            method: 'POST',
+            data: {
+                action: 'aule_approve_booking',
+                booking_id: currentBookingId,
+                note_admin: note,
+                nonce: prenotazione_aule_ssm_admin_ajax.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Errore: ' + response.data);
+                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-yes-alt"></span> Approva Prenotazione');
+                }
+            },
+            error: function() {
+                alert('Errore di comunicazione');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-yes-alt"></span> Approva Prenotazione');
+            }
+        });
+    });
+
+    // Gestione rifiuto - Mostra modal
     $('.reject-booking').on('click', function(e) {
         e.preventDefault();
-        var bookingId = $(this).data('id');
-        var note = prompt('Motivo del rifiuto (obbligatorio):');
+        currentBookingId = $(this).data('id');
+        $('#reject-reason').val('');
 
-        if (note && note.trim() !== '') {
-            $.ajax({
-                url: prenotazione_aule_ssm_admin_ajax.ajax_url,
-                method: 'POST',
-                data: {
-                    action: 'aule_reject_booking',
-                    booking_id: bookingId,
-                    note_admin: note,
-                    nonce: prenotazione_aule_ssm_admin_ajax.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        location.reload();
-                    } else {
-                        alert(response.data);
-                    }
-                }
-            });
+        // Mostra modal Bootstrap
+        var modal = new bootstrap.Modal(document.getElementById('rejectBookingModal'));
+        modal.show();
+    });
+
+    // Conferma rifiuto dal modal
+    $('#confirmRejectBtn').on('click', function() {
+        var reason = $('#reject-reason').val().trim();
+
+        if (!reason) {
+            alert('Il motivo del rifiuto è obbligatorio');
+            $('#reject-reason').focus();
+            return;
         }
+
+        var $btn = $(this);
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status"></span> Rifiuto...');
+
+        $.ajax({
+            url: prenotazione_aule_ssm_admin_ajax.ajax_url,
+            method: 'POST',
+            data: {
+                action: 'aule_reject_booking',
+                booking_id: currentBookingId,
+                note_admin: reason,
+                nonce: prenotazione_aule_ssm_admin_ajax.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Errore: ' + response.data);
+                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-dismiss"></span> Conferma Rifiuto');
+                }
+            },
+            error: function() {
+                alert('Errore di comunicazione');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-dismiss"></span> Conferma Rifiuto');
+            }
+        });
+    });
+
+    // Reset dei campi quando si chiudono i modali
+    $('#approveBookingModal, #rejectBookingModal').on('hidden.bs.modal', function() {
+        currentBookingId = null;
+        $('#approve-note, #reject-reason').val('');
     });
 });
 </script>

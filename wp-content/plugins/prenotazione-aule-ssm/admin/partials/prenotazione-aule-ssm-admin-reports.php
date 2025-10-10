@@ -16,8 +16,8 @@ if (!defined('WPINC')) {
 // Ottieni l'istanza del database
 global $wpdb;
 
-// Parametri per i filtri
-$periodo = isset($_GET['periodo']) ? sanitize_text_field($_GET['periodo']) : '30';
+// Parametri per i filtri - DEFAULT: Tutte le prenotazioni per vedere dati futuri
+$periodo = isset($_GET['periodo']) ? sanitize_text_field($_GET['periodo']) : 'all';
 $aula_id = isset($_GET['aula_id']) ? intval($_GET['aula_id']) : '';
 $stato = isset($_GET['stato']) ? sanitize_text_field($_GET['stato']) : '';
 
@@ -35,6 +35,16 @@ switch ($periodo) {
         break;
     case '365':
         $start_date = date('Y-m-d', strtotime('-1 year'));
+        break;
+    case 'future':
+        // Prossimi 30 giorni
+        $start_date = current_time('Y-m-d');
+        $end_date = date('Y-m-d', strtotime('+30 days'));
+        break;
+    case 'all':
+        // Tutte le prenotazioni (ultimi 2 anni + prossimi 1 anno)
+        $start_date = date('Y-m-d', strtotime('-2 years'));
+        $end_date = date('Y-m-d', strtotime('+1 year'));
         break;
     case 'custom':
         $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : date('Y-m-d', strtotime('-30 days'));
@@ -149,6 +159,8 @@ $aule = $wpdb->get_results("
                         <option value="30" <?php selected($periodo, '30'); ?>><?php _e('Ultimi 30 giorni', 'prenotazione-aule-ssm'); ?></option>
                         <option value="90" <?php selected($periodo, '90'); ?>><?php _e('Ultimi 3 mesi', 'prenotazione-aule-ssm'); ?></option>
                         <option value="365" <?php selected($periodo, '365'); ?>><?php _e('Ultimo anno', 'prenotazione-aule-ssm'); ?></option>
+                        <option value="future" <?php selected($periodo, 'future'); ?>><?php _e('📅 Prossimi 30 giorni (Future)', 'prenotazione-aule-ssm'); ?></option>
+                        <option value="all" <?php selected($periodo, 'all'); ?>><?php _e('🗓️ Tutte le prenotazioni', 'prenotazione-aule-ssm'); ?></option>
                         <option value="custom" <?php selected($periodo, 'custom'); ?>><?php _e('Periodo personalizzato', 'prenotazione-aule-ssm'); ?></option>
                     </select>
                 </div>
@@ -303,35 +315,15 @@ $aule = $wpdb->get_results("
         </div>
     </div>
 
-    <!-- Grafico Andamento Giornaliero -->
+    <!-- Grafico Andamento Giornaliero con Chart.js -->
     <?php if (!empty($daily_stats)): ?>
     <div style="background: #fff; padding: 20px; margin: 20px 0; border: 1px solid #ddd; border-radius: 8px;">
         <h3 style="margin-top: 0;">📈 <?php _e('Andamento Prenotazioni', 'prenotazione-aule-ssm'); ?></h3>
-        <div style="height: 300px; display: flex; align-items: end; gap: 3px; padding: 10px; background: #f9f9f9; border-radius: 5px; overflow-x: auto;">
-            <?php
-            $max_daily = max(array_map(function($day) { return $day->prenotazioni; }, $daily_stats));
-            foreach ($daily_stats as $day):
-                $height = $max_daily > 0 ? ($day->prenotazioni / $max_daily) * 250 : 0;
-            ?>
-            <div style="display: flex; flex-direction: column; align-items: center; min-width: 60px;">
-                <div style="background: linear-gradient(180deg, #0073aa, #46b450); width: 20px; height: <?php echo $height; ?>px; border-radius: 3px 3px 0 0; margin-bottom: 5px; position: relative;" title="<?php echo date_i18n('d/m/Y', strtotime($day->data_prenotazione)) . ': ' . $day->prenotazioni . ' prenotazioni, ' . $day->confermate . ' confermate'; ?>">
-                    <?php if ($day->prenotazioni > 0): ?>
-                    <span style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.75em; white-space: nowrap;">
-                        <?php echo $day->prenotazioni; ?>
-                    </span>
-                    <?php endif; ?>
-                </div>
-                <div style="font-size: 0.7em; color: #666; text-align: center; writing-mode: vertical-rl; text-orientation: mixed;">
-                    <?php echo date_i18n('d/m', strtotime($day->data_prenotazione)); ?>
-                </div>
-            </div>
-            <?php endforeach; ?>
+        <div style="position: relative; height: 350px; padding: 10px;">
+            <canvas id="trendsChart"></canvas>
         </div>
-        <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center;">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div style="width: 20px; height: 15px; background: linear-gradient(90deg, #0073aa, #46b450); border-radius: 3px;"></div>
-                <span style="font-size: 0.9em;"><?php _e('Prenotazioni per giorno', 'prenotazione-aule-ssm'); ?></span>
-            </div>
+        <div style="margin-top: 15px; text-align: center; font-size: 0.9em; color: #666;">
+            <?php printf(__('Visualizzazione interattiva di %d giorni', 'prenotazione-aule-ssm'), count($daily_stats)); ?>
         </div>
     </div>
     <?php endif; ?>
@@ -361,6 +353,73 @@ document.getElementById('periodo').addEventListener('change', function() {
         customDates.style.display = 'none';
     }
 });
+
+// Inizializza grafici Chart.js (se disponibile)
+<?php if (!empty($daily_stats) && count($daily_stats) > 0): ?>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Chart !== 'undefined') {
+        // Dati per il grafico
+        const dailyData = <?php echo json_encode(array_map(function($day) {
+            return array(
+                'date' => $day->data_prenotazione,
+                'total' => (int)$day->prenotazioni,
+                'confirmed' => (int)$day->confermate
+            );
+        }, $daily_stats)); ?>;
+
+        // Crea grafico andamento prenotazioni
+        const ctx = document.getElementById('trendsChart');
+        if (ctx) {
+            new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: dailyData.map(d => {
+                        const date = new Date(d.date);
+                        return date.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit'});
+                    }),
+                    datasets: [{
+                        label: '<?php _e('Totale Prenotazioni', 'prenotazione-aule-ssm'); ?>',
+                        data: dailyData.map(d => d.total),
+                        borderColor: '#0073aa',
+                        backgroundColor: 'rgba(0, 115, 170, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: '<?php _e('Confermate', 'prenotazione-aule-ssm'); ?>',
+                        data: dailyData.map(d => d.confirmed),
+                        borderColor: '#46b450',
+                        backgroundColor: 'rgba(70, 180, 80, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+});
+<?php endif; ?>
 
 // Funzione export CSV
 function exportReport() {

@@ -41,10 +41,11 @@
          * Bind degli eventi
          */
         bindEvents: function() {
-            // Gestione prenotazioni
-            $(document).on('click', '.approve-booking', this.handleApproveBooking);
-            $(document).on('click', '.reject-booking', this.handleRejectBooking);
-            $(document).on('click', '.delete-booking', this.handleDeleteBooking);
+            // Gestione prenotazioni - DISABILITATI per pagina prenotazioni (usa modali inline)
+            // Solo per altre pagine che potrebbero usarli
+            // $(document).on('click', '.approve-booking', this.handleApproveBooking);
+            // $(document).on('click', '.reject-booking', this.handleRejectBooking);
+            // $(document).on('click', '.delete-booking', this.handleDeleteBooking);
 
             // Gestione aule
             $(document).on('click', '.delete-aula', this.handleDeleteAula);

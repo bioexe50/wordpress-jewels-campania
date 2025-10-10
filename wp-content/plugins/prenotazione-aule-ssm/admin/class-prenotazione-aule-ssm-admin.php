@@ -103,6 +103,16 @@ class Prenotazione_Aule_SSM_Admin {
                 '6.1.8'
             );
         }
+
+        // Chart.js CSS per pagina report
+        if ($hook_suffix === 'gestione-aule_page_prenotazione-aule-ssm-reports') {
+            wp_enqueue_style(
+                'chartjs',
+                'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.css',
+                array(),
+                '4.4.0'
+            );
+        }
     }
 
     /**
@@ -138,6 +148,17 @@ class Prenotazione_Aule_SSM_Admin {
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
                 array(),
                 '5.3.0',
+                true
+            );
+        }
+
+        // Chart.js per pagina report
+        if ($hook_suffix === 'gestione-aule_page_prenotazione-aule-ssm-reports') {
+            wp_enqueue_script(
+                'chartjs',
+                'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+                array(),
+                '4.4.0',
                 true
             );
         }
@@ -403,6 +424,14 @@ class Prenotazione_Aule_SSM_Admin {
                 break;
             case '365':
                 $start_date = date('Y-m-d', strtotime('-1 year'));
+                break;
+            case 'future':
+                $start_date = current_time('Y-m-d');
+                $end_date = date('Y-m-d', strtotime('+30 days'));
+                break;
+            case 'all':
+                $start_date = date('Y-m-d', strtotime('-2 years'));
+                $end_date = date('Y-m-d', strtotime('+1 year'));
                 break;
             case 'custom':
                 $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : date('Y-m-d', strtotime('-30 days'));

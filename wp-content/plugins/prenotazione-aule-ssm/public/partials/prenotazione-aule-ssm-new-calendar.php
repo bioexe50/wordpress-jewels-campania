@@ -93,19 +93,15 @@ $show_legend = ($atts['show_legend'] === 'true');
                         </div>
                         <div class="legend-item">
                             <div class="legend-box partially-booked">15</div>
-                            <span><?php _e('Parzialmente occupato', 'prenotazione-aule-ssm'); ?></span>
+                            <span><?php _e('Parzialmente Occupato', 'prenotazione-aule-ssm'); ?></span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-box fully-booked">15</div>
-                            <span><?php _e('Tutto occupato', 'prenotazione-aule-ssm'); ?></span>
+                            <span><?php _e('Completo', 'prenotazione-aule-ssm'); ?></span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-box today">15</div>
                             <span><?php _e('Oggi', 'prenotazione-aule-ssm'); ?></span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-box selected">15</div>
-                            <span><?php _e('Con slot selezionati', 'prenotazione-aule-ssm'); ?></span>
                         </div>
                     </div>
                     <?php endif; ?>

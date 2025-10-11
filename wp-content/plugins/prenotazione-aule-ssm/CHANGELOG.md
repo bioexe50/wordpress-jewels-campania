@@ -1,5 +1,100 @@
 # CHANGELOG - Prenotazione Aule SSM
 
+## v2.1.2 (10 Ottobre 2025) - Shortcode Fix
+
+### 🐛 Bug Fixes
+
+#### Shortcode Errato nelle Schede Aula
+**Problema**: Lo shortcode mostrato nelle schede aula era quello vecchio (`prenotazione_aule_ssm_calendar`)  
+**Causa**: Template admin-aule.php usava shortcode legacy invece del nuovo calendario multi-slot  
+**Soluzione**: Aggiornato shortcode a `prenotazione_aule_ssm_new_calendar` con ID aula dinamico
+
+**File modificato**: `/admin/partials/prenotazione-aule-ssm-admin-aule.php` (righe 264, 267, 273)
+
+**Prima:**
+```
+[prenotazione_aule_ssm_calendar aula_id="2"]
+```
+
+**Dopo:**
+```
+[prenotazione_aule_ssm_new_calendar aula_id="2"]
+```
+
+**Impact**: ✅ Gli utenti ora copiano lo shortcode corretto con sistema multi-slot avanzato
+
+---
+
+## v2.1.1 (10 Ottobre 2025) - Critical Fix Release
+
+### 🔴 Critical Bug Fixes
+
+#### Errore Critico Durante Disinstallazione Plugin
+**Problema**: WordPress genera errore critico quando si tenta di disinstallare il plugin
+**Causa**: File `class-prenotazione-aule-ssm-uninstaller.php` mancante ma referenziato in `prenotazione-aule-ssm.php:78`
+**Soluzione**: Creato file uninstaller completo con gestione pulizia:
+- Eliminazione tabelle database
+- Rimozione opzioni WordPress
+- Pulizia capabilities personalizzati
+- Cancellazione transients
+- Rimozione eventi WP-Cron
+
+**File creato**: `/includes/class-prenotazione-aule-ssm-uninstaller.php` (6.5KB)
+
+**Funzionalità Uninstaller:**
+```php
+- drop_database_tables()          // Rimuove 4 tabelle plugin
+- delete_plugin_options()         // Cancella opzioni e site_options
+- remove_custom_capabilities()    // Pulisce capabilities da admin/editor
+- delete_plugin_transients()      // Elimina transients con prefisso plugin
+- clear_scheduled_events()        // Rimuove eventi cron schedulati
+```
+
+**Impact**: ✅ Plugin ora disinstallabile senza errori critici
+
+---
+
+## v2.1.0 (9 Ottobre 2025) - Major Update
+
+### ✨ Nuove Funzionalità
+
+#### Documentazione Email Placeholder Completa
+- Guida completa placeholder email (EMAIL_PLACEHOLDERS.md - 11KB)
+- Riferimento rapido stampabile (QUICK_REFERENCE_EMAIL_PLACEHOLDERS.md - 2.8KB)
+- 4 template email pronti all'uso (Conferma, Rifiuto, Admin, Reminder)
+- Documentazione formattazione HTML/CSS
+
+#### Sistema Reports Migliorato
+- Integrazione Chart.js 4.4.0 per grafici interattivi
+- Nuovi filtri temporali: "Prossimi 30 giorni" e "Tutte le prenotazioni"
+- Grafici trend giornalieri con tooltips
+- Export CSV con nuovi filtri
+
+#### Modali Bootstrap Professionali
+- Dashboard con modali Bootstrap 5 (sostituzione popup sistema)
+- Modali approvazione/rifiuto con note admin
+- Spinner animati durante AJAX
+- Design coerente su tutte le pagine admin
+
+### 🐛 Bug Fixes (v2.1.0)
+
+#### Reports Mostra Dati Zero
+**Problema**: Pagina reports mostrava tutti zero nonostante 17 prenotazioni in DB
+**Causa**: Filtro default "Ultimi 30 giorni" cercava nel passato, prenotazioni erano future
+**Soluzione**: Cambiato filtro default a "Tutte le prenotazioni", aggiunti filtri future/all
+
+#### Popup + Modal Duplicati
+**Problema**: Click su azioni mostrava sia popup browser che modal Bootstrap
+**Causa**: Handler JavaScript globali eseguiti prima di handler inline
+**Soluzione**: Disabilitati handler globali, usati solo handler inline per pagina
+
+#### Contatori Prenotazioni Non Aggiornati
+**Problema**: Contatori dashboard non riflettevano stato reale prenotazioni
+**Causa**: Mismatch stato singolare DB ('confermata') vs chiave plurale counter ('confermate')
+**Soluzione**: Aggiunta mappatura stato prima di incrementare contatori
+
+---
+
 ## v1.1.2 (Ottobre 2025) - Bug Fix Release
 
 ### 🐛 Bug Fixes

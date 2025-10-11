@@ -3,7 +3,7 @@
  * Plugin Name: Prenotazione Aule SSM
  * Plugin URI: https://ssm.example.com/prenotazione-aule-ssm
  * Description: Sistema di prenotazione aule per Scuola di Specializzazione Medica
- * Version: 2.1.0
+ * Version: 2.1.2
  * Author: SSM Developer
  * Author URI: https://ssm.example.com
  * License: GPL v2 or later
@@ -24,7 +24,7 @@ if (!defined("ABSPATH")) {
 }
 
 // Definisci costanti del plugin
-define("PRENOTAZIONE_AULE_SSM_VERSION", "2.1.0");
+define("PRENOTAZIONE_AULE_SSM_VERSION", "2.1.2");
 define("PRENOTAZIONE_AULE_SSM_PLUGIN_DIR", plugin_dir_path(__FILE__));
 define("PRENOTAZIONE_AULE_SSM_PLUGIN_URL", plugin_dir_url(__FILE__));
 define("PRENOTAZIONE_AULE_SSM_PLUGIN_FILE", __FILE__);

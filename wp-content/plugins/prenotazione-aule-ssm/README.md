@@ -111,7 +111,9 @@ Configurazioni globali SSM
 [prenotazione_aule_ssm_search]
 ```
 
-**Documentazione Completa:** Vedi [SHORTCODES.md](SHORTCODES.md)
+**Documentazione Completa:**
+- [SHORTCODES.md](SHORTCODES.md) - Lista completa shortcode
+- [EMAIL_PLACEHOLDERS.md](EMAIL_PLACEHOLDERS.md) - Guida placeholder email con esempi grafici
 
 ## Architettura Frontend
 
@@ -206,6 +208,19 @@ Endpoint base: `/wp-json/prenotazione-aule-ssm/v1/`
 
 GPL v2 or later
 
+## Documentazione Aggiuntiva
+
+Il plugin include documentazione completa:
+
+- 📘 **[README.md](README.md)** - Panoramica generale e caratteristiche
+- 📦 **[INSTALL_GUIDE.md](INSTALL_GUIDE.md)** - Guida installazione passo-passo
+- 📝 **[SHORTCODES.md](SHORTCODES.md)** - Lista completa shortcode disponibili
+- 📧 **[EMAIL_PLACEHOLDERS.md](EMAIL_PLACEHOLDERS.md)** - Guida placeholder email con esempi
+- 🔧 **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Problemi comuni e soluzioni
+- 📚 **[MULTI_SLOT_DOCUMENTATION.md](MULTI_SLOT_DOCUMENTATION.md)** - Sistema multi-slot
+- 🐛 **[FIXES_APPLIED.md](FIXES_APPLIED.md)** - Registro fix applicati
+- 📋 **[CHANGELOG.md](CHANGELOG.md)** - Cronologia modifiche
+
 ## Supporto
 
 Per problemi o richieste di funzionalità, contatta il team di sviluppo SSM.
@@ -213,5 +228,5 @@ Per problemi o richieste di funzionalità, contatta il team di sviluppo SSM.
 ---
 
 **Sviluppato per Scuole di Specializzazione Medica**
-**Versione Corrente:** 1.1.2
+**Versione Corrente:** 2.1.0
 **Ultimo Aggiornamento:** Ottobre 2025

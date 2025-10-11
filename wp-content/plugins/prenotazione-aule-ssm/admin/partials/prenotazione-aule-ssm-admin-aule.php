@@ -261,16 +261,16 @@ if (!empty($aule)) {
                             <div class="aula-shortcode-section">
                                 <label class="shortcode-label"><?php _e('Shortcode per questa aula:', 'prenotazione-aule-ssm'); ?></label>
                                 <div class="shortcode-container">
-                                    <input type="text" readonly value="[prenotazione_aule_ssm_calendar aula_id=&quot;<?php echo $aula->id; ?>&quot;]"
+                                    <input type="text" readonly value="[prenotazione_aule_ssm_new_calendar aula_id=&quot;<?php echo $aula->id; ?>&quot;]"
                                            class="shortcode-input" id="shortcode-<?php echo $aula->id; ?>">
                                     <button type="button" class="button button-secondary copy-shortcode-btn"
-                                            data-shortcode="[prenotazione_aule_ssm_calendar aula_id=&quot;<?php echo $aula->id; ?>&quot;]"
+                                            data-shortcode="[prenotazione_aule_ssm_new_calendar aula_id=&quot;<?php echo $aula->id; ?>&quot;]"
                                             data-aula-name="<?php echo esc_attr($aula->nome_aula); ?>">
                                         <span class="dashicons dashicons-clipboard"></span> <?php _e('Copia', 'prenotazione-aule-ssm'); ?>
                                     </button>
                                 </div>
                                 <small class="shortcode-help">
-                                    <?php _e('Copia e incolla questo shortcode in qualsiasi pagina o post per mostrare il calendario di prenotazione.', 'prenotazione-aule-ssm'); ?>
+                                    <?php _e('Copia e incolla questo shortcode in qualsiasi pagina o post per mostrare il calendario di prenotazione con selezione multi-slot.', 'prenotazione-aule-ssm'); ?>
                                 </small>
                             </div>
 

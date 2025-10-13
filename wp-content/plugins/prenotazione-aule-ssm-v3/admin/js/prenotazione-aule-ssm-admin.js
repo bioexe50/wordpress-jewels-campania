@@ -52,6 +52,9 @@
             $(document).on('change', '#aula_images', this.handleImageUpload);
             $(document).on('click', '.remove-image', this.handleRemoveImage);
 
+            // Gestione checkbox attrezzature
+            $(document).on('click', '.attrezzatura-item', this.handleAttrezzaturaToggle);
+
             // Generazione slot
             $(document).on('click', '.generate-slots', this.handleGenerateSlots);
             $(document).on('change', '.aula-selector', this.handleAulaChange);
@@ -540,6 +543,27 @@
         },
 
         /**
+         * Gestisce toggle checkbox attrezzature
+         */
+        handleAttrezzaturaToggle: function(e) {
+            // Non fare nulla se il click è direttamente sulla checkbox
+            if ($(e.target).is('input[type="checkbox"]')) {
+                return;
+            }
+
+            e.preventDefault();
+
+            var $item = $(this);
+            var $checkbox = $item.find('input[type="checkbox"]');
+
+            // Toggle checkbox
+            $checkbox.prop('checked', !$checkbox.prop('checked'));
+
+            // Toggle visual state
+            $item.toggleClass('selected', $checkbox.is(':checked'));
+        },
+
+        /**
          * Gestisce generazione slot
          */
         handleGenerateSlots: function(e) {
@@ -565,12 +589,12 @@
                     $button.prop('disabled', false).text('Genera Slot');
 
                     if (response.success) {
-                        AuleBookingAdmin.showNotice(response.data, 'success');
+                        AuleBookingAdmin.showNotice(response.data + ' - Ricaricamento pagina...', 'success');
 
-                        // Aggiorna lista slot
+                        // Ricarica pagina per mostrare slot (template PHP completo)
                         setTimeout(() => {
-                            AuleBookingAdmin.loadSlotsList($form.find('[name="aula_id"]').val());
-                        }, 1000);
+                            window.location.reload();
+                        }, 1500);
                     } else {
                         AuleBookingAdmin.showNotice(response.data, 'error');
                     }

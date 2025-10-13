@@ -707,6 +707,198 @@ class Prenotazione_Aule_SSM_Admin {
     }
 
     /**
+     * AJAX: Bulk operations su prenotazioni (approva/rifiuta/elimina multiple)
+     *
+     * @since 3.3.4
+     */
+    public function ajax_bulk_bookings() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $bulk_action = sanitize_text_field($_POST['bulk_action']);
+        $booking_ids = isset($_POST['booking_ids']) ? array_map('absint', $_POST['booking_ids']) : array();
+
+        if (empty($booking_ids)) {
+            wp_send_json_error(__('Nessuna prenotazione selezionata', 'prenotazione-aule-ssm'));
+        }
+
+        $success_count = 0;
+        $error_count = 0;
+        $email_handler = new Prenotazione_Aule_SSM_Email();
+
+        foreach ($booking_ids as $booking_id) {
+            $result = false;
+
+            switch ($bulk_action) {
+                case 'approve':
+                    $result = $this->database->update_prenotazione_stato($booking_id, 'confermata', get_current_user_id(), '');
+                    if ($result) {
+                        // Send confirmation email
+                        $email_handler->send_booking_confirmation($booking_id);
+                    }
+                    break;
+
+                case 'reject':
+                    $result = $this->database->update_prenotazione_stato($booking_id, 'rifiutata', get_current_user_id(), __('Rifiutata tramite operazione bulk', 'prenotazione-aule-ssm'));
+                    if ($result) {
+                        // Send rejection email
+                        $email_handler->send_booking_rejection($booking_id);
+                    }
+                    break;
+
+                case 'delete':
+                    $result = $this->database->update_prenotazione_stato($booking_id, 'cancellata', get_current_user_id());
+                    break;
+
+                default:
+                    wp_send_json_error(__('Azione non valida', 'prenotazione-aule-ssm'));
+            }
+
+            if ($result) {
+                $success_count++;
+            } else {
+                $error_count++;
+            }
+        }
+
+        if ($success_count > 0) {
+            $message = '';
+            switch ($bulk_action) {
+                case 'approve':
+                    $message = sprintf(__('%d prenotazioni approvate con successo', 'prenotazione-aule-ssm'), $success_count);
+                    break;
+                case 'reject':
+                    $message = sprintf(__('%d prenotazioni rifiutate con successo', 'prenotazione-aule-ssm'), $success_count);
+                    break;
+                case 'delete':
+                    $message = sprintf(__('%d prenotazioni eliminate con successo', 'prenotazione-aule-ssm'), $success_count);
+                    break;
+            }
+
+            if ($error_count > 0) {
+                $message .= sprintf(__(' (%d errori)', 'prenotazione-aule-ssm'), $error_count);
+            }
+
+            wp_send_json_success($message);
+        } else {
+            wp_send_json_error(__('Errore durante l\'operazione bulk', 'prenotazione-aule-ssm'));
+        }
+    }
+
+    /**
+     * AJAX: Ottieni dettagli prenotazione per modal
+     *
+     * @since 3.3.3
+     */
+    public function ajax_get_booking_details() {
+        check_ajax_referer('prenotazione_aule_ssm_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_prenotazione_aule_ssm')) {
+            wp_send_json_error(__('Non hai i permessi per eseguire questa azione', 'prenotazione-aule-ssm'));
+        }
+
+        $booking_id = absint($_POST['booking_id']);
+
+        if (!$booking_id) {
+            wp_send_json_error(__('ID prenotazione non valido', 'prenotazione-aule-ssm'));
+        }
+
+        $booking = $this->database->get_prenotazione_by_id($booking_id);
+
+        if (!$booking) {
+            wp_send_json_error(__('Prenotazione non trovata', 'prenotazione-aule-ssm'));
+        }
+
+        // Build HTML for modal content
+        $html = '<table class="table table-bordered">';
+        $html .= '<tbody>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Codice Prenotazione', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td><strong>' . esc_html($booking->codice_prenotazione) . '</strong></td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Richiedente', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td>' . esc_html($booking->nome_richiedente . ' ' . $booking->cognome_richiedente) . '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Email', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td><a href="mailto:' . esc_attr($booking->email_richiedente) . '">' . esc_html($booking->email_richiedente) . '</a></td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Aula', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td>' . esc_html($booking->nome_aula) . '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Data', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td>' . esc_html(date_i18n('d/m/Y', strtotime($booking->data_prenotazione))) . '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Orario', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td>' . esc_html(date('H:i', strtotime($booking->ora_inizio)) . ' - ' . date('H:i', strtotime($booking->ora_fine))) . '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Stato', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td>';
+        switch($booking->stato) {
+            case 'in_attesa':
+                $html .= '<span class="badge bg-warning text-dark">' . __('In Attesa', 'prenotazione-aule-ssm') . '</span>';
+                break;
+            case 'confermata':
+                $html .= '<span class="badge bg-success">' . __('Confermata', 'prenotazione-aule-ssm') . '</span>';
+                break;
+            case 'rifiutata':
+                $html .= '<span class="badge bg-danger">' . __('Rifiutata', 'prenotazione-aule-ssm') . '</span>';
+                break;
+            case 'cancellata':
+                $html .= '<span class="badge bg-secondary">' . __('Cancellata', 'prenotazione-aule-ssm') . '</span>';
+                break;
+        }
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        if (!empty($booking->motivo_prenotazione)) {
+            $html .= '<tr>';
+            $html .= '<th>' . __('Motivo', 'prenotazione-aule-ssm') . '</th>';
+            $html .= '<td>' . esc_html($booking->motivo_prenotazione) . '</td>';
+            $html .= '</tr>';
+        }
+
+        if (!empty($booking->note_admin)) {
+            $html .= '<tr>';
+            $html .= '<th>' . __('Note Admin', 'prenotazione-aule-ssm') . '</th>';
+            $html .= '<td>' . esc_html($booking->note_admin) . '</td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '<tr>';
+        $html .= '<th>' . __('Data Creazione', 'prenotazione-aule-ssm') . '</th>';
+        $html .= '<td>' . esc_html(date_i18n('d/m/Y H:i', strtotime($booking->created_at))) . '</td>';
+        $html .= '</tr>';
+
+        if (!empty($booking->updated_at)) {
+            $html .= '<tr>';
+            $html .= '<th>' . __('Ultima Modifica', 'prenotazione-aule-ssm') . '</th>';
+            $html .= '<td>' . esc_html(date_i18n('d/m/Y H:i', strtotime($booking->updated_at))) . '</td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody>';
+        $html .= '</table>';
+
+        wp_send_json_success($html);
+    }
+
+    /**
      * AJAX: Ottieni disponibilità per calendario
      *
      * @since 1.0.0
@@ -781,6 +973,7 @@ class Prenotazione_Aule_SSM_Admin {
         $settings_data = array(
             'conferma_automatica' => !empty($_POST['conferma_automatica']),
             'email_notifica_admin' => array_map('sanitize_email', explode(',', $_POST['email_notifica_admin'])),
+            'conserva_dati_disinstallazione' => !empty($_POST['conserva_dati_disinstallazione']),
             'template_email_conferma' => wp_kses_post($_POST['template_email_conferma']),
             'template_email_rifiuto' => wp_kses_post($_POST['template_email_rifiuto']),
             'template_email_admin' => wp_kses_post($_POST['template_email_admin']),

@@ -263,13 +263,13 @@ $giorni_settimana = array(
                 <div class="slots-calendar-header">
                     <h3><?php _e('Slot Configurati', 'prenotazione-aule-ssm'); ?></h3>
                     <div class="slot-actions-bulk">
-                        <select class="bulk-action-selector" disabled>
+                        <select class="bulk-action-selector">
                             <option value=""><?php _e('Azioni multiple', 'prenotazione-aule-ssm'); ?></option>
-                            <option value="delete"><?php _e('Elimina selezionati', 'prenotazione-aule-ssm'); ?></option>
-                            <option value="disable"><?php _e('Disabilita selezionati', 'prenotazione-aule-ssm'); ?></option>
                             <option value="enable"><?php _e('Abilita selezionati', 'prenotazione-aule-ssm'); ?></option>
+                            <option value="disable"><?php _e('Disabilita selezionati', 'prenotazione-aule-ssm'); ?></option>
+                            <option value="delete"><?php _e('Elimina selezionati', 'prenotazione-aule-ssm'); ?></option>
                         </select>
-                        <button class="button apply-bulk-action" disabled><?php _e('Applica', 'prenotazione-aule-ssm'); ?></button>
+                        <button class="button apply-bulk-action"><?php _e('Applica', 'prenotazione-aule-ssm'); ?></button>
                     </div>
                 </div>
 
@@ -856,8 +856,12 @@ jQuery(document).ready(function($) {
             data: formData,
             success: function(response) {
                 if (response.success) {
-                    AuleBookingAdmin.showNotice(response.data, 'success');
-                    location.reload();
+                    AuleBookingAdmin.showNotice(response.data + ' - Ricaricamento pagina...', 'success');
+                    // Force reload con delay maggiore per garantire che il DB abbia finito
+                    setTimeout(function() {
+                        // Forza reload completo senza cache
+                        window.location.replace(location.protocol + '//' + location.host + location.pathname + '?page=prenotazione-aule-ssm-slot&aula_id=<?php echo $selected_aula_id; ?>&updated=slots_generated&_=' + Date.now());
+                    }, 1500);
                 } else {
                     AuleBookingAdmin.showNotice('Errore: ' + response.data, 'error');
                 }
@@ -903,30 +907,53 @@ jQuery(document).ready(function($) {
             return;
         }
 
-        // Prepara messaggio modal
+        // Prepara messaggio conferma
         var actionText = {
             'enable': 'abilitare',
             'disable': 'disabilitare',
             'delete': 'eliminare definitivamente'
         };
 
-        var message = 'Vuoi ' + actionText[action] + ' gli slot selezionati?';
-        var countText = $checked.length + ' slot selezionati';
+        var message = 'Vuoi ' + actionText[action] + ' ' + $checked.length + ' slot selezionati?';
 
         if (action === 'delete') {
-            countText += ' - Questa azione è irreversibile!';
+            message += '\n\n⚠️ Questa azione è IRREVERSIBILE!';
         }
 
-        $('#bulkActionMessage').text(message);
-        $('#bulkActionCount').text(countText);
-        $('#confirmBulkBtn').data('action', action);
-        $('#confirmBulkBtn').data('slot-ids', $checked.map(function() {
-            return $(this).val();
-        }).get());
+        if (!confirm(message)) {
+            return;
+        }
 
-        // Mostra modal
-        var modal = new bootstrap.Modal(document.getElementById('bulkActionModal'));
-        modal.show();
+        // Raccogli ID slot selezionati
+        var slotIds = $checked.map(function() {
+            return $(this).val();
+        }).get();
+
+        // Esegui bulk action via AJAX
+        $.ajax({
+            url: ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'aule_bulk_slots',
+                nonce: '<?php echo wp_create_nonce('prenotazione_aule_ssm_admin_nonce'); ?>',
+                bulk_action: action,
+                slot_ids: slotIds
+            },
+            success: function(response) {
+                if (response.success) {
+                    AuleBookingAdmin.showNotice(response.data, 'success');
+                    // Reload page
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    AuleBookingAdmin.showNotice('Errore: ' + response.data, 'error');
+                }
+            },
+            error: function() {
+                AuleBookingAdmin.showNotice('Errore di comunicazione con il server', 'error');
+            }
+        });
     });
 
     // Azioni singole sui slot gestite dal file JS esterno (prenotazione-aule-ssm-admin.js)

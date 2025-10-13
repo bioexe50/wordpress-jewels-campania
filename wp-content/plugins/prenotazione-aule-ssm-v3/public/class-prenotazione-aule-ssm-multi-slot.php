@@ -149,7 +149,32 @@ class Prenotazione_Aule_SSM_Multi_Slot {
                     throw new Exception('Lo slot ' . $slot['time'] . ' e gia prenotato');
                 }
 
-                $ora_fine_timestamp = strtotime($slot['time']) + (30 * 60);
+                // FIX: Recupera la durata reale dello slot dal database invece di usare 30 minuti hardcoded
+                $table_slot = $wpdb->prefix . 'prenotazione_aule_ssm_slot_disponibilita';
+                $timestamp = strtotime($slot['date']);
+                $giorno_settimana = date('N', $timestamp);
+
+                $durata_slot = $wpdb->get_var($wpdb->prepare(
+                    "SELECT durata_slot_minuti FROM $table_slot
+                    WHERE aula_id = %d
+                    AND giorno_settimana = %d
+                    AND ora_inizio = %s
+                    AND attivo = 1
+                    AND (data_inizio_validita <= %s AND (data_fine_validita IS NULL OR data_fine_validita >= %s))
+                    LIMIT 1",
+                    $aula_id,
+                    $giorno_settimana,
+                    $slot['time'] . ':00',
+                    $slot['date'],
+                    $slot['date']
+                ));
+
+                // Se non trova la durata, usa 60 minuti come default
+                if (!$durata_slot) {
+                    $durata_slot = 60;
+                }
+
+                $ora_fine_timestamp = strtotime($slot['time']) + ($durata_slot * 60);
                 $ora_fine = date('H:i:s', $ora_fine_timestamp);
 
                 $inserted = $wpdb->insert(

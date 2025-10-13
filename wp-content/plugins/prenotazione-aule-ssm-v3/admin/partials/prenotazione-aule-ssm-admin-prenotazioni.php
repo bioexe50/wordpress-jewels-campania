@@ -164,11 +164,23 @@ foreach ($prenotazioni as $prenotazione) {
                 <p><?php _e('Non ci sono prenotazioni che corrispondono ai criteri di ricerca.', 'prenotazione-aule-ssm'); ?></p>
             </div>
         <?php else: ?>
-            <!-- Contatore risultati -->
+            <!-- Contatore risultati e Azioni Bulk -->
             <div class="prenotazioni-results-info">
                 <span class="prenotazioni-count">
                     <?php printf(__('Mostrando %d prenotazioni', 'prenotazione-aule-ssm'), count($prenotazioni)); ?>
                 </span>
+                <div class="bulk-actions-container">
+                    <select class="bulk-action-selector" disabled>
+                        <option value=""><?php _e('Azioni multiple', 'prenotazione-aule-ssm'); ?></option>
+                        <option value="approve"><?php _e('✅ Approva selezionate', 'prenotazione-aule-ssm'); ?></option>
+                        <option value="reject"><?php _e('❌ Rifiuta selezionate', 'prenotazione-aule-ssm'); ?></option>
+                        <option value="delete"><?php _e('🗑️ Elimina selezionate', 'prenotazione-aule-ssm'); ?></option>
+                    </select>
+                    <button class="button apply-bulk-action" disabled><?php _e('Applica', 'prenotazione-aule-ssm'); ?></button>
+                    <span class="selected-count" style="margin-left: 10px; color: #646970; font-size: 13px; display: none;">
+                        <span class="count-number">0</span> <?php _e('selezionate', 'prenotazione-aule-ssm'); ?>
+                    </span>
+                </div>
             </div>
 
             <!-- Lista Prenotazioni -->
@@ -176,6 +188,9 @@ foreach ($prenotazioni as $prenotazione) {
                 <table class="wp-list-table widefat fixed striped prenotazioni-table">
                     <thead>
                         <tr>
+                            <th class="check-column">
+                                <input type="checkbox" class="select-all-bookings" title="<?php _e('Seleziona tutte', 'prenotazione-aule-ssm'); ?>">
+                            </th>
                             <th class="column-codice"><?php _e('Codice', 'prenotazione-aule-ssm'); ?></th>
                             <th class="column-richiedente"><?php _e('Richiedente', 'prenotazione-aule-ssm'); ?></th>
                             <th class="column-aula"><?php _e('Aula', 'prenotazione-aule-ssm'); ?></th>
@@ -186,7 +201,10 @@ foreach ($prenotazioni as $prenotazione) {
                     </thead>
                     <tbody>
                         <?php foreach ($prenotazioni as $prenotazione): ?>
-                            <tr class="prenotazione-row" data-id="<?php echo $prenotazione->id; ?>">
+                            <tr class="prenotazione-row" data-id="<?php echo $prenotazione->id; ?>" data-stato="<?php echo esc_attr($prenotazione->stato); ?>">
+                                <td class="check-column">
+                                    <input type="checkbox" class="select-booking" value="<?php echo $prenotazione->id; ?>">
+                                </td>
                                 <td class="column-codice">
                                     <strong><?php echo esc_html($prenotazione->codice_prenotazione ?: '#' . $prenotazione->id); ?></strong>
                                     <div class="row-actions">
@@ -231,8 +249,12 @@ foreach ($prenotazioni as $prenotazione) {
                                         🕐 <?php echo date('H:i', strtotime($prenotazione->ora_inizio)); ?> -
                                         <?php echo date('H:i', strtotime($prenotazione->ora_fine)); ?>
                                         <?php
-                                        $durata = (strtotime($prenotazione->ora_fine) - strtotime($prenotazione->ora_inizio)) / 60;
-                                        printf('(%d min)', $durata);
+                                        // Calcola durata combinando data + ora per strtotime corretto
+                                        $data_base = $prenotazione->data_prenotazione;
+                                        $timestamp_inizio = strtotime($data_base . ' ' . $prenotazione->ora_inizio);
+                                        $timestamp_fine = strtotime($data_base . ' ' . $prenotazione->ora_fine);
+                                        $durata_minuti = ($timestamp_fine - $timestamp_inizio) / 60;
+                                        printf('(%d min)', $durata_minuti);
                                         ?>
                                     </div>
                                 </td>
@@ -277,6 +299,20 @@ foreach ($prenotazioni as $prenotazione) {
                                                     data-id="<?php echo $prenotazione->id; ?>"
                                                     title="<?php _e('Rifiuta prenotazione', 'prenotazione-aule-ssm'); ?>">
                                                 ❌ <?php _e('Rifiuta', 'prenotazione-aule-ssm'); ?>
+                                            </button>
+                                        <?php elseif ($prenotazione->stato === 'confermata'): ?>
+                                            <!-- Permetti revoca approvazione -->
+                                            <button class="button button-small reject-booking"
+                                                    data-id="<?php echo $prenotazione->id; ?>"
+                                                    title="<?php _e('Revoca approvazione e rifiuta', 'prenotazione-aule-ssm'); ?>">
+                                                ❌ <?php _e('Revoca', 'prenotazione-aule-ssm'); ?>
+                                            </button>
+                                        <?php elseif ($prenotazione->stato === 'rifiutata'): ?>
+                                            <!-- Permetti riapprovazione -->
+                                            <button class="button button-small approve-booking"
+                                                    data-id="<?php echo $prenotazione->id; ?>"
+                                                    title="<?php _e('Riapprova prenotazione', 'prenotazione-aule-ssm'); ?>">
+                                                ✅ <?php _e('Riapprova', 'prenotazione-aule-ssm'); ?>
                                             </button>
                                         <?php endif; ?>
 
@@ -504,11 +540,42 @@ foreach ($prenotazioni as $prenotazione) {
 }
 
 .prenotazioni-results-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 0;
     font-size: 14px;
     color: #646970;
     border-bottom: 1px solid #e0e0e0;
     margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bulk-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bulk-action-selector {
+    padding: 6px 10px;
+    border: 1px solid #ccd0d4;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.check-column {
+    width: 40px;
+    text-align: center;
+    padding: 8px !important;
+}
+
+.check-column input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
 }
 
 .prenotazioni-table-container {
@@ -920,6 +987,129 @@ jQuery(document).ready(function($) {
     $('#approveBookingModal, #rejectBookingModal, #deleteBookingModal').on('hidden.bs.modal', function() {
         currentBookingId = null;
         $('#approve-note, #reject-reason').val('');
+    });
+
+    // ========== BULK ACTIONS ==========
+
+    console.log('Bulk actions script loaded');
+
+    // Select All checkbox (with event delegation)
+    $(document).on('change', '.select-all-bookings', function() {
+        console.log('Select all clicked');
+        var checked = $(this).is(':checked');
+        $('.select-booking').prop('checked', checked);
+        updateBulkActionsUI();
+    });
+
+    // Individual checkbox (with event delegation)
+    $(document).on('change', '.select-booking', function() {
+        console.log('Individual checkbox clicked');
+        updateBulkActionsUI();
+
+        // Update "select all" checkbox state
+        var allChecked = $('.select-booking').length === $('.select-booking:checked').length;
+        $('.select-all-bookings').prop('checked', allChecked);
+    });
+
+    // Update bulk actions UI based on selections
+    function updateBulkActionsUI() {
+        var selectedCount = $('.select-booking:checked').length;
+        console.log('updateBulkActionsUI called, selectedCount:', selectedCount);
+
+        var $bulkSelector = $('.bulk-action-selector');
+        var $applyButton = $('.apply-bulk-action');
+        var $selectedCount = $('.selected-count');
+
+        console.log('Found elements:', {
+            bulkSelector: $bulkSelector.length,
+            applyButton: $applyButton.length,
+            selectedCountSpan: $selectedCount.length
+        });
+
+        if (selectedCount > 0) {
+            console.log('Enabling bulk actions UI');
+            $bulkSelector.prop('disabled', false);
+            $applyButton.prop('disabled', false);
+            $selectedCount.show().find('.count-number').text(selectedCount);
+        } else {
+            console.log('Disabling bulk actions UI');
+            $bulkSelector.prop('disabled', true);
+            $applyButton.prop('disabled', true);
+            $selectedCount.hide();
+        }
+    }
+
+    // Apply bulk action
+    $('.apply-bulk-action').on('click', function() {
+        var action = $('.bulk-action-selector').val();
+        var $checked = $('.select-booking:checked');
+
+        if (!action) {
+            alert('<?php echo esc_js(__('Seleziona un azione da eseguire', 'prenotazione-aule-ssm')); ?>');
+            return;
+        }
+
+        if ($checked.length === 0) {
+            alert('<?php echo esc_js(__('Seleziona almeno una prenotazione', 'prenotazione-aule-ssm')); ?>');
+            return;
+        }
+
+        var bookingIds = [];
+        $checked.each(function() {
+            bookingIds.push($(this).val());
+        });
+
+        // Confirmation messages
+        var confirmMessage = '';
+        var actionLabel = '';
+
+        switch(action) {
+            case 'approve':
+                confirmMessage = '<?php echo esc_js(__('Sei sicuro di voler approvare {count} prenotazioni selezionate?', 'prenotazione-aule-ssm')); ?>';
+                actionLabel = '<?php echo esc_js(__('Approvazione...', 'prenotazione-aule-ssm')); ?>';
+                break;
+            case 'reject':
+                confirmMessage = '<?php echo esc_js(__('Sei sicuro di voler rifiutare {count} prenotazioni selezionate?', 'prenotazione-aule-ssm')); ?>';
+                actionLabel = '<?php echo esc_js(__('Rifiuto...', 'prenotazione-aule-ssm')); ?>';
+                break;
+            case 'delete':
+                confirmMessage = '<?php echo esc_js(__('ATTENZIONE: Sei sicuro di voler eliminare definitivamente {count} prenotazioni? Questa azione è irreversibile!', 'prenotazione-aule-ssm')); ?>';
+                actionLabel = '<?php echo esc_js(__('Eliminazione...', 'prenotazione-aule-ssm')); ?>';
+                break;
+        }
+
+        confirmMessage = confirmMessage.replace('{count}', bookingIds.length);
+
+        if (!confirm(confirmMessage)) {
+            return;
+        }
+
+        // Disable UI during operation
+        var $btn = $('.apply-bulk-action');
+        $btn.prop('disabled', true).text(actionLabel);
+
+        $.ajax({
+            url: ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'aule_bulk_bookings',
+                bulk_action: action,
+                booking_ids: bookingIds,
+                nonce: '<?php echo wp_create_nonce('prenotazione_aule_ssm_admin_nonce'); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('<?php echo esc_js(__('Errore:', 'prenotazione-aule-ssm')); ?> ' + response.data);
+                    $btn.prop('disabled', false).text('<?php echo esc_js(__('Applica', 'prenotazione-aule-ssm')); ?>');
+                }
+            },
+            error: function() {
+                alert('<?php echo esc_js(__('Errore di comunicazione', 'prenotazione-aule-ssm')); ?>');
+                $btn.prop('disabled', false).text('<?php echo esc_js(__('Applica', 'prenotazione-aule-ssm')); ?>');
+            }
+        });
     });
 });
 </script>

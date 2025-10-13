@@ -3,7 +3,7 @@
  * Plugin Name: Prenotazione Aule SSM
  * Plugin URI: https://github.com/yourusername/prenotazione-aule-ssm
  * Description: Sistema completo di gestione prenotazioni aule per istituzioni educative. Include calendario, multi-booking, notifiche email e dashboard amministrativa.
- * Version: 3.1.1
+ * Version: 3.3.3
  * Author: SSM Developer Team
  * Author URI: https://yourdomain.com
  * License: GPL v2 or later
@@ -15,7 +15,7 @@
  * Network: false
  *
  * @package Prenotazione_Aule_SSM
- * @version 3.1.1
+ * @version 3.3.3
  * @since 1.0.0
  */
 
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
 /**
  * Definisci costanti del plugin
  */
-define('PRENOTAZIONE_AULE_SSM_VERSION', '3.1.1');
+define('PRENOTAZIONE_AULE_SSM_VERSION', '3.3.3');
 define('PRENOTAZIONE_AULE_SSM_DB_VERSION', '3.0');
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -61,7 +61,7 @@ if (!headers_sent()) {
         "default-src 'self'",
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net data: blob:",
         "style-src 'self' 'unsafe-inline' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com fonts.googleapis.com data:",
-        "img-src 'self' data: https: http: cdn.jsdelivr.net",
+        "img-src 'self' data: https: http: cdn.jsdelivr.net blob:",
         "font-src 'self' data: https: http: cdnjs.cloudflare.com fonts.gstatic.com",
         "connect-src 'self' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net",
         "worker-src 'self' blob:",
@@ -83,7 +83,7 @@ add_action('send_headers', function() {
         $csp = "default-src 'self'; ";
         $csp .= "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net data: blob:; ";
         $csp .= "style-src 'self' 'unsafe-inline' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com fonts.googleapis.com data:; ";
-        $csp .= "img-src 'self' data: https: http:; ";
+        $csp .= "img-src 'self' data: https: http: cdn.jsdelivr.net blob:; ";
         $csp .= "font-src 'self' data: https: http: cdnjs.cloudflare.com fonts.gstatic.com; ";
         $csp .= "connect-src 'self' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net; ";
         $csp .= "worker-src 'self' blob:; ";
@@ -97,11 +97,11 @@ add_action('send_headers', function() {
 
 // LAYER 3: Meta tag HTML
 add_action('wp_head', function() {
-    echo '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net data: blob:; style-src \'self\' \'unsafe-inline\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com; font-src \'self\' data: https: http: cdnjs.cloudflare.com; connect-src \'self\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net; object-src \'none\'">' . "\n";
+    echo '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net data: blob:; style-src \'self\' \'unsafe-inline\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com fonts.googleapis.com data:; img-src \'self\' data: https: http: cdn.jsdelivr.net blob:; font-src \'self\' data: https: http: cdnjs.cloudflare.com fonts.gstatic.com; connect-src \'self\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net; object-src \'none\'">' . "\n";
 }, 1);
 
 add_action('admin_head', function() {
-    echo '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net data: blob:; style-src \'self\' \'unsafe-inline\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com; font-src \'self\' data: https: http: cdnjs.cloudflare.com; connect-src \'self\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net; object-src \'none\'">' . "\n";
+    echo '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net data: blob:; style-src \'self\' \'unsafe-inline\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com fonts.googleapis.com data:; img-src \'self\' data: https: http: cdn.jsdelivr.net blob:; font-src \'self\' data: https: http: cdnjs.cloudflare.com fonts.gstatic.com; connect-src \'self\' https: http: cdn.jsdelivr.net cdnjs.cloudflare.com *.jsdelivr.net; object-src \'none\'">' . "\n";
 }, 1);
 
 /**

@@ -419,8 +419,27 @@
 }
 
 .attrezzatura-item input[type="checkbox"] {
-    width: auto;
+    width: 18px;
+    height: 18px;
     margin: 0;
+    cursor: pointer;
+    accent-color: var(--ab-primary);
+    flex-shrink: 0;
+}
+
+.attrezzatura-item input[type="checkbox"]:checked {
+    background-color: var(--ab-primary);
+    border-color: var(--ab-primary);
+}
+
+.attrezzatura-item.selected {
+    background: var(--ab-primary);
+    color: white;
+    border-color: var(--ab-primary);
+}
+
+.attrezzatura-item.selected input[type="checkbox"] {
+    accent-color: white;
 }
 
 .attrezzatura-item label {
@@ -428,6 +447,21 @@
     cursor: pointer;
     font-weight: 500;
     font-size: 13px;
+    flex: 1;
+}
+
+/* Checkbox generiche nei pannelli admin - FIX VISIBILITÀ */
+input[type="checkbox"].select-day-slots,
+input[type="checkbox"].select-slot {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--ab-primary);
+    flex-shrink: 0;
+    display: inline-block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 /* Immagini aula */

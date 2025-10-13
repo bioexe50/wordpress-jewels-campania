@@ -147,6 +147,8 @@ class Prenotazione_Aule_SSM {
         $this->loader->add_action('wp_ajax_aule_reject_booking', $plugin_admin, 'ajax_reject_booking');
         $this->loader->add_action('wp_ajax_aule_generate_slots', $plugin_admin, 'ajax_generate_slots');
         $this->loader->add_action('wp_ajax_aule_delete_booking', $plugin_admin, 'ajax_delete_booking');
+        $this->loader->add_action('wp_ajax_aule_bulk_bookings', $plugin_admin, 'ajax_bulk_bookings');
+        $this->loader->add_action('wp_ajax_aule_get_booking_details', $plugin_admin, 'ajax_get_booking_details');
         $this->loader->add_action('wp_ajax_aule_get_availability', $plugin_admin, 'ajax_get_availability');
 
         // AJAX handlers per gestione slot

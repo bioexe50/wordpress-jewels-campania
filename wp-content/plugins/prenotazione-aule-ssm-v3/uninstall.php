@@ -33,6 +33,31 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
     error_log('[Prenotazione Aule SSM] uninstall.php - starting database cleanup');
 }
 
+// VERIFICA SE L'UTENTE VUOLE CONSERVARE I DATI
+$table_impostazioni = $wpdb->prefix . 'prenotazione_aule_ssm_impostazioni';
+$conserva_dati = $wpdb->get_var($wpdb->prepare(
+    "SELECT conserva_dati_disinstallazione FROM {$table_impostazioni} WHERE id = %d",
+    1
+));
+
+if ($conserva_dati == 1) {
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log('[Prenotazione Aule SSM] uninstall.php - Conservazione dati abilitata, SKIP eliminazione database');
+    }
+
+    // Elimina solo le opzioni WordPress, ma mantiene tutti i dati
+    delete_option('prenotazione_aule_ssm_version');
+    delete_option('prenotazione_aule_ssm_db_version');
+    delete_option('prenotazione_aule_ssm_installed');
+    delete_option('prenotazione_aule_ssm_installed_date');
+
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log('[Prenotazione Aule SSM] uninstall.php - Completato (dati conservati)');
+    }
+
+    return; // ESCE SENZA ELIMINARE NULLA
+}
+
 // 1. ELIMINA FOREIGN KEYS
 $table_slot = $wpdb->prefix . 'prenotazione_aule_ssm_slot_disponibilita';
 $table_prenotazioni = $wpdb->prefix . 'prenotazione_aule_ssm_prenotazioni';

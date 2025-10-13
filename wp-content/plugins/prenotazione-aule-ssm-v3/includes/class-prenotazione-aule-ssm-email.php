@@ -277,6 +277,7 @@ class Prenotazione_Aule_SSM_Email {
         $placeholders = array(
             '{nome_richiedente}' => $booking->nome_richiedente,
             '{cognome_richiedente}' => $booking->cognome_richiedente,
+            '{email_richiedente}' => $booking->email_richiedente, // AGGIUNTO - mancava!
             '{nome_aula}' => $booking->nome_aula ?? '',
             '{ubicazione}' => $booking->ubicazione ?? '',
             '{data_prenotazione}' => date_i18n('l, j F Y', strtotime($booking->data_prenotazione)),

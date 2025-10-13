@@ -17,6 +17,7 @@ if (!defined('ABSPATH')) {
 $default_settings = array(
     'conferma_automatica' => 0,
     'email_notifica_admin' => array(),
+    'conserva_dati_disinstallazione' => 1, // DEFAULT: CONSERVA DATI (più sicuro)
     'template_email_conferma' => __('La tua prenotazione è stata confermata!\n\nDettagli:\nAula: {nome_aula}\nData: {data_prenotazione}\nOrario: {ora_inizio} - {ora_fine}\nCodice: {codice_prenotazione}\n\nGrazie!', 'prenotazione-aule-ssm'),
     'template_email_rifiuto' => __('La tua prenotazione è stata rifiutata.\n\nMotivo: {note_admin}\n\nDettagli:\nAula: {nome_aula}\nData: {data_prenotazione}\nOrario: {ora_inizio} - {ora_fine}\n\nPuoi richiedere una nuova prenotazione.', 'prenotazione-aule-ssm'),
     'template_email_admin' => __('Nuova prenotazione ricevuta!\n\nRichiedente: {nome_richiedente} {cognome_richiedente}\nEmail: {email_richiedente}\nAula: {nome_aula}\nData: {data_prenotazione}\nOrario: {ora_inizio} - {ora_fine}\nMotivo: {motivo_prenotazione}\n\nApprova/Rifiuta dalla dashboard admin.', 'prenotazione-aule-ssm'),
@@ -129,6 +130,32 @@ if ($settings) {
                                 <?php _e('Email che riceveranno notifica quando un utente prenota un\'aula (separate da virgola).', 'prenotazione-aule-ssm'); ?><br>
                                 <strong><?php _e('Esempio pratico:', 'prenotazione-aule-ssm'); ?></strong> segreteria@istituto.it, portineria@istituto.it, direzione@istituto.it<br>
                                 <em><?php _e('Quando uno studente prenota, TUTTE queste email ricevono notifica con link per approvare/rifiutare.', 'prenotazione-aule-ssm'); ?></em>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <label for="conserva_dati_disinstallazione"><?php _e('Conserva Dati', 'prenotazione-aule-ssm'); ?></label>
+                        </th>
+                        <td>
+                            <label for="conserva_dati_disinstallazione">
+                                <input type="checkbox"
+                                       id="conserva_dati_disinstallazione"
+                                       name="conserva_dati_disinstallazione"
+                                       value="1"
+                                       <?php checked($default_settings['conserva_dati_disinstallazione'], 1); ?>>
+                                <?php _e('Conserva tutti i dati quando il plugin viene disinstallato', 'prenotazione-aule-ssm'); ?>
+                            </label>
+                            <p class="description">
+                                <strong style="color: #00a32a;"><?php _e('✅ ABILITATO DI DEFAULT (Comportamento sicuro):', 'prenotazione-aule-ssm'); ?></strong><br>
+                                <?php _e('Se abilitato, aule, prenotazioni, slot e impostazioni NON verranno eliminati alla disinstallazione del plugin.', 'prenotazione-aule-ssm'); ?><br>
+                                <?php _e('Utile se vuoi reinstallare il plugin in futuro mantenendo tutti i dati esistenti.', 'prenotazione-aule-ssm'); ?><br><br>
+                                <strong style="color: #d63638;"><?php _e('⚠️ IMPORTANTE:', 'prenotazione-aule-ssm'); ?></strong>
+                                <?php _e('Per eliminare COMPLETAMENTE tutti i dati quando disinstalli:', 'prenotazione-aule-ssm'); ?><br>
+                                <strong>1.</strong> <?php _e('DISABILITA questa opzione', 'prenotazione-aule-ssm'); ?><br>
+                                <strong>2.</strong> <?php _e('Salva le impostazioni', 'prenotazione-aule-ssm'); ?><br>
+                                <strong>3.</strong> <?php _e('Disinstalla il plugin', 'prenotazione-aule-ssm'); ?>
                             </p>
                         </td>
                     </tr>
@@ -643,6 +670,11 @@ if ($settings) {
 
 <script>
 jQuery(document).ready(function($) {
+    // FIX: Disabilita il controllo "unsaved changes" di WordPress
+    // che si attiva erroneamente anche senza modifiche reali
+    $(window).off('beforeunload.edit-post');
+    window.onbeforeunload = null;
+
     // Gestione navigazione tab
     $('.nav-tab').on('click', function(e) {
         e.preventDefault();
@@ -833,19 +865,6 @@ jQuery(document).ready(function($) {
     function isValidEmail(email) {
         var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
-    }
-
-    // Auto-save draft (ogni 30 secondi)
-    setInterval(function() {
-        var formData = $('.settings-form').serialize();
-        localStorage.setItem('prenotazione_aule_ssm_settings_draft', formData);
-    }, 30000);
-
-    // Ripristina draft se presente
-    var draft = localStorage.getItem('prenotazione_aule_ssm_settings_draft');
-    if (draft && confirm('<?php esc_js(_e('Ripristinare le modifiche non salvate?', 'prenotazione-aule-ssm')); ?>')) {
-        // Ripristina draft
-        console.log('Draft disponibile:', draft);
     }
 });
 </script>

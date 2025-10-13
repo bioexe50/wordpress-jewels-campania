@@ -1,0 +1,249 @@
+/**
+ * Stili per Lista Aule
+ * @package Prenotazione_Aule_SSM
+ * @since 2.1.2
+ */
+
+/* Container principale */
+.pas-aule-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Grid aule */
+.pas-aule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .pas-aule-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card singola aula */
+.pas-aula-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.pas-aula-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+/* Immagine aula */
+.pas-aula-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.pas-aula-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Contenuto card */
+.pas-aula-content {
+    padding: 20px;
+}
+
+/* Header aula */
+.pas-aula-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.pas-aula-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.pas-aula-title .dashicons {
+    color: #0073aa;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+/* Badge stato */
+.pas-badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.pas-badge-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.pas-badge-maintenance {
+    background: #fed7aa;
+    color: #9a3412;
+}
+
+.pas-badge-inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* Descrizione */
+.pas-aula-description {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+/* Info aula */
+.pas-aula-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.pas-info-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #475569;
+    font-size: 14px;
+}
+
+.pas-info-item .dashicons {
+    color: #64748b;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Attrezzature */
+.pas-aula-facilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.pas-facility-tag {
+    background: #e8f4fd;
+    color: #0073aa;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pas-facility-tag .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* Azioni */
+.pas-aula-actions {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.pas-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.pas-btn-primary {
+    background: #0073aa;
+    color: #ffffff;
+}
+
+.pas-btn-primary:hover {
+    background: #005a87;
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 115, 170, 0.3);
+}
+
+.pas-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Stato non disponibile */
+.pas-aula-non_disponibile {
+    opacity: 0.6;
+}
+
+.pas-aula-non_disponibile .pas-aula-content {
+    filter: grayscale(50%);
+}
+
+/* Messaggio vuoto */
+.pas-no-aule {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+}
+
+.pas-no-aule p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Responsività */
+@media (max-width: 480px) {
+    .pas-aula-content {
+        padding: 16px;
+    }
+    
+    .pas-aula-title {
+        font-size: 18px;
+    }
+    
+    .pas-aula-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

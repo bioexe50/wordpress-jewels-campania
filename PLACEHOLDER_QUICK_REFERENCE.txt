@@ -1,0 +1,143 @@
+═══════════════════════════════════════════════════════════════
+    📧 PLACEHOLDER EMAIL - RIFERIMENTO RAPIDO
+═══════════════════════════════════════════════════════════════
+
+🧑 DATI RICHIEDENTE:
+───────────────────
+{nome_richiedente}           Nome (es. Mario)
+{cognome_richiedente}        Cognome (es. Rossi)
+{email_richiedente}          Email (solo admin)
+
+🏢 DATI AULA:
+─────────────
+{nome_aula}                  Nome aula (es. Aula Magna)
+{ubicazione}                 Ubicazione (es. Piano 2)
+{capienza}                   Capienza (es. 50 persone)
+{attrezzature}               Lista attrezzature
+
+📅 DATI PRENOTAZIONE:
+────────────────────
+{data_prenotazione}          Data formattata IT
+{ora_inizio}                 Orario inizio (HH:mm)
+{ora_fine}                   Orario fine (HH:mm)
+{motivo}                     Motivo prenotazione
+{stato_prenotazione}         Stato (Confermata/In Attesa/Rifiutata)
+{codice_prenotazione}        Codice univoco (BK2025...)
+{note_admin}                 Note amministratore
+{data_creazione}             Data/ora creazione
+
+📅 MULTI-SLOT:
+─────────────
+{numero_slot}                Numero slot prenotati (es. 3)
+{gruppo_prenotazione}        UUID gruppo
+{elenco_slot}                Lista formattata slot
+
+🌐 SISTEMA:
+──────────
+{sito_nome}                  Nome sito WordPress
+{sito_url}                   URL homepage
+{link_gestione}              Link admin (solo admin)
+{link_cancella}              Link cancellazione
+{link_calendario}            URL calendario pubblico
+
+
+═══════════════════════════════════════════════════════════════
+    🧭 NAVIGAZIONE TRA AULE - IMPLEMENTAZIONE
+═══════════════════════════════════════════════════════════════
+
+1️⃣  DROPDOWN MENU:
+─────────────────
+<select onchange="window.location.href=this.value">
+    <option value="?aula_id=1">🏢 Aula 1</option>
+    <option value="?aula_id=2" selected>🏢 Aula 2</option>
+</select>
+
+
+2️⃣  BREADCRUMB:
+──────────────
+🏠 Home » 📚 Aule » 🏢 Aula 2
+
+
+3️⃣  PREV/NEXT:
+─────────────
+[← Aula 1] [Aula 2 di 5] [Aula 3 →]
+
+
+4️⃣  SIDEBAR:
+───────────
+Altre Aule:
+• Aula 1 (Attiva)
+• Aula 2 (Attiva) ← Corrente
+• Aula 3 (Manutenzione)
+
+
+5️⃣  QUICK BUTTONS:
+─────────────────
+[Aula 1] [Aula 2] [Aula 3]
+
+
+═══════════════════════════════════════════════════════════════
+    📧 TEMPLATE EMAIL PRONTI
+═══════════════════════════════════════════════════════════════
+
+CONFERMA:
+─────────
+Gentile {nome_richiedente},
+La tua prenotazione è stata CONFERMATA!
+
+📅 {data_prenotazione}
+🕒 {ora_inizio} - {ora_fine}
+🏢 {nome_aula}
+📍 {ubicazione}
+🔑 Codice: {codice_prenotazione}
+
+Note: {note_admin}
+
+
+RIFIUTO:
+────────
+Gentile {nome_richiedente},
+La tua prenotazione è stata RIFIUTATA.
+
+Motivo: {note_admin}
+
+📅 Data richiesta: {data_prenotazione}
+🏢 Aula: {nome_aula}
+
+
+REMINDER (24h):
+──────────────
+🔔 PROMEMORIA: Domani hai prenotato:
+
+📅 {data_prenotazione}
+🕒 {ora_inizio} - {ora_fine}  
+🏢 {nome_aula}
+
+
+MULTI-SLOT:
+──────────
+Hai prenotato {numero_slot} slot:
+
+{elenco_slot}
+
+🔑 Codice Gruppo: {gruppo_prenotazione}
+
+
+═══════════════════════════════════════════════════════════════
+    🎨 CLASSI CSS DISPONIBILI
+═══════════════════════════════════════════════════════════════
+
+<div class="booking-details">
+    Box grigio con bordo blu per info importanti
+</div>
+
+<a href="#" class="button">
+    Pulsante blu WordPress cliccabile
+</a>
+
+
+═══════════════════════════════════════════════════════════════
+Per documentazione completa:
+→ EMAIL_PLACEHOLDERS.md
+→ PLACEHOLDER_NAVIGATION_GUIDE.md
+═══════════════════════════════════════════════════════════════

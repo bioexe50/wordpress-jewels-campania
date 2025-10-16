@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Diagnostico Mappa Aziende Campania</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        #diagnostic { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        #map { height: 600px; border: 2px solid #333; border-radius: 4px; background: #e0e0e0; }
+        .status { padding: 10px; margin: 5px 0; border-radius: 4px; }
+        .ok { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🗺️ Test Diagnostico Mappa Aziende Campania</h1>
+
+    <div id="diagnostic">
+        <h2>📊 Status Check</h2>
+        <div id="status-container"></div>
+
+        <h3>📍 Dati Aziende</h3>
+        <pre id="data-preview"></pre>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+    <script>
+        const statusContainer = document.getElementById('status-container');
+        const dataPreview = document.getElementById('data-preview');
+
+        function addStatus(message, type = 'ok') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            statusContainer.appendChild(div);
+        }
+
+        // Test 1: Leaflet caricato
+        if (typeof L !== 'undefined') {
+            addStatus('✅ Leaflet caricato correttamente (versione: ' + L.version + ')', 'ok');
+        } else {
+            addStatus('❌ Leaflet NON caricato!', 'error');
+        }
+
+        // Test 2: MarkerCluster caricato
+        if (typeof L !== 'undefined' && L.markerClusterGroup) {
+            addStatus('✅ MarkerCluster caricato', 'ok');
+        } else {
+            addStatus('❌ MarkerCluster NON caricato!', 'error');
+        }
+
+        // Dati di test (le 5 aziende dal database)
+        const testData = [
+            {
+                id: 1,
+                ragione_sociale: "Mitilflegrea soc. coop.",
+                citta: "Bacoli",
+                provincia: "NA",
+                latitude: 40.8347160,
+                longitude: 14.0631040
+            },
+            {
+                id: 2,
+                ragione_sociale: "Du.Wo. Srl",
+                citta: "Nocera Inferiore",
+                provincia: "SA",
+                latitude: 40.7445470,
+                longitude: 14.6388900
+            },
+            {
+                id: 3,
+                ragione_sociale: "Echinoidea srl",
+                citta: "Procida",
+                provincia: "NA",
+                latitude: 40.7657950,
+                longitude: 14.0264550
+            },
+            {
+                id: 5,
+                ragione_sociale: "Consorzio produzione Molluschi Regione Campania",
+                citta: "Napoli",
+                provincia: "NA",
+                latitude: 40.8485750,
+                longitude: 14.2754120
+            },
+            {
+                id: 6,
+                ragione_sociale: "La Marea soc.coop.",
+                citta: "Bacoli",
+                provincia: "NA",
+                latitude: 40.8347160,
+                longitude: 14.0631040
+            }
+        ];
+
+        addStatus(`✅ ${testData.length} aziende pronte per il test`, 'ok');
+        dataPreview.textContent = JSON.stringify(testData, null, 2);
+
+        // Test 3: Inizializza mappa
+        try {
+            const map = L.map('map').setView([40.8518, 14.2681], 9);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            addStatus('✅ Mappa inizializzata correttamente', 'ok');
+
+            // Test 4: Aggiungi marker cluster
+            const markers = L.markerClusterGroup();
+
+            testData.forEach(company => {
+                const marker = L.marker([company.latitude, company.longitude]);
+                marker.bindPopup(`
+                    <strong>${company.ragione_sociale}</strong><br>
+                    ${company.citta} (${company.provincia})<br>
+                    Coordinate: [${company.latitude}, ${company.longitude}]
+                `);
+                markers.addLayer(marker);
+            });
+
+            map.addLayer(markers);
+            addStatus(`✅ ${testData.length} marker aggiunti alla mappa`, 'ok');
+
+            // Zoom sui marker
+            const bounds = L.latLngBounds(testData.map(c => [c.latitude, c.longitude]));
+            map.fitBounds(bounds, { padding: [50, 50] });
+
+            addStatus('✅ Zoom automatico sui marker completato', 'ok');
+
+        } catch (error) {
+            addStatus('❌ ERRORE durante inizializzazione mappa: ' + error.message, 'error');
+            console.error('Errore mappa:', error);
+        }
+
+        // Test 5: Console log
+        console.log('Test diagnostico completato');
+        console.log('Dati aziende:', testData);
+    </script>
+</body>
+</html>

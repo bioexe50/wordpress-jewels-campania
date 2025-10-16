@@ -1028,16 +1028,21 @@ class Prenotazione_Aule_SSM_Admin {
         check_admin_referer('prenotazione_aule_ssm_settings_nonce');
 
         $settings_data = array(
-            'conferma_automatica' => !empty($_POST['conferma_automatica']),
+            'conferma_automatica' => !empty($_POST['conferma_automatica']) ? 1 : 0,
             'email_notifica_admin' => array_map('sanitize_email', explode(',', $_POST['email_notifica_admin'])),
-            'conserva_dati_disinstallazione' => !empty($_POST['conserva_dati_disinstallazione']),
+            'conserva_dati_disinstallazione' => !empty($_POST['conserva_dati_disinstallazione']) ? 1 : 0,
+            // v3.3.9 - Controlli email
+            'abilita_email_conferma' => !empty($_POST['abilita_email_conferma']) ? 1 : 0,
+            'abilita_email_rifiuto' => !empty($_POST['abilita_email_rifiuto']) ? 1 : 0,
+            'abilita_email_admin' => !empty($_POST['abilita_email_admin']) ? 1 : 0,
+            'abilita_email_reminder' => !empty($_POST['abilita_email_reminder']) ? 1 : 0,
             'template_email_conferma' => wp_kses_post($_POST['template_email_conferma']),
             'template_email_rifiuto' => wp_kses_post($_POST['template_email_rifiuto']),
             'template_email_admin' => wp_kses_post($_POST['template_email_admin']),
             'giorni_prenotazione_futura_max' => absint($_POST['giorni_prenotazione_futura_max']),
             'ore_anticipo_prenotazione_min' => absint($_POST['ore_anticipo_prenotazione_min']),
             'max_prenotazioni_per_utente_giorno' => absint($_POST['max_prenotazioni_per_utente_giorno']),
-            'abilita_recaptcha' => !empty($_POST['abilita_recaptcha']),
+            'abilita_recaptcha' => !empty($_POST['abilita_recaptcha']) ? 1 : 0,
             'recaptcha_site_key' => sanitize_text_field($_POST['recaptcha_site_key']),
             'recaptcha_secret_key' => sanitize_text_field($_POST['recaptcha_secret_key']),
             'colore_slot_libero' => sanitize_text_field($_POST['colore_slot_libero']),

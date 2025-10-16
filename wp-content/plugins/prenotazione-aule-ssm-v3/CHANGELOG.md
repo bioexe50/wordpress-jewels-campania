@@ -1,3 +1,77 @@
+## [3.3.11] - 2025-10-16
+
+### 🐛 FIX CRITICI - Conserva Dati e Disinstallazione
+
+#### Problema 1: Checkbox "Conserva Dati" Non Si Deseleziona
+**Segnalazione Utente**: "nel pannello impostazioni quando tolgo il flag a conserva i dati e poi salvo la pagina si ricarica ed il flag torna selezionato"
+
+**Causa**: Il salvataggio dei checkbox usava `!empty($_POST['field'])` che **non gestisce correttamente** i checkbox deselezionati (quando deselezionati, il campo NON viene inviato nel POST).
+
+**Fix**: Cambiato a `!empty($_POST['field']) ? 1 : 0` per salvare esplicitamente `0` quando deselezionato.
+
+#### Problema 2: Disinstallazione Non Cancella i Dati
+**Segnalazione Utente**: "quando si disinstalla non si cancellano prenotazioni slot aule ecc come dovrebbe in realta fare"
+
+**Causa**: Lo stesso problema del salvataggio impediva di salvare `0` (elimina dati), quindi rimaneva sempre `1` (conserva dati).
+
+### ✅ FIX IMPLEMENTATO
+
+**File**: `admin/class-prenotazione-aule-ssm-admin.php` (metodo `save_settings()`, righe 1031-1050)
+
+**PRIMA** (Salvataggio errato):
+```php
+$settings_data = array(
+    'conferma_automatica' => !empty($_POST['conferma_automatica']),  // ❌ bool
+    'conserva_dati_disinstallazione' => !empty($_POST['conserva_dati_disinstallazione']),  // ❌ bool
+    'abilita_recaptcha' => !empty($_POST['abilita_recaptcha']),  // ❌ bool
+    // Mancavano le nuove opzioni email!
+);
+```
+
+**DOPO** (Salvataggio corretto):
+```php
+$settings_data = array(
+    'conferma_automatica' => !empty($_POST['conferma_automatica']) ? 1 : 0,  // ✅ int
+    'conserva_dati_disinstallazione' => !empty($_POST['conserva_dati_disinstallazione']) ? 1 : 0,  // ✅ int
+    // ✅ v3.3.9 - Aggiunte opzioni email
+    'abilita_email_conferma' => !empty($_POST['abilita_email_conferma']) ? 1 : 0,
+    'abilita_email_rifiuto' => !empty($_POST['abilita_email_rifiuto']) ? 1 : 0,
+    'abilita_email_admin' => !empty($_POST['abilita_email_admin']) ? 1 : 0,
+    'abilita_email_reminder' => !empty($_POST['abilita_email_reminder']) ? 1 : 0,
+    'abilita_recaptcha' => !empty($_POST['abilita_recaptcha']) ? 1 : 0,  // ✅ int
+);
+```
+
+### 📊 Risultato
+
+**PRIMA**:
+- ❌ Checkbox "Conserva Dati" sempre checked (non si poteva deselezionare)
+- ❌ Disinstallazione NON cancellava mai i dati (perché sempre `1`)
+- ❌ Opzioni email v3.3.9 NON venivano salvate
+
+**DOPO**:
+- ✅ Checkbox "Conserva Dati" funziona correttamente (si può deselezionare)
+- ✅ Disinstallazione rispetta la scelta: `1` = conserva, `0` = elimina tutto
+- ✅ Opzioni email v3.3.9 vengono salvate correttamente
+
+### 🧪 Test Completo Disinstallazione
+
+Per verificare che funzioni:
+
+**Test 1: Conserva Dati (default)**
+1. Impostazioni → **Lascia checkbox "Conserva Dati" SELEZIONATO**
+2. Salva → ✅ Rimane selezionato
+3. Disinstalla plugin → ✅ Tabelle database CONSERVATE
+4. Reinstalla → ✅ Tutti i dati ancora presenti
+
+**Test 2: Elimina Dati**
+1. Impostazioni → **DESELEZIONA checkbox "Conserva Dati"**
+2. Salva → ✅ Rimane deselezionato (FIXED!)
+3. Disinstalla plugin → ✅ Tabelle database ELIMINATE
+4. Reinstalla → ✅ Database pulito, nessun dato vecchio
+
+---
+
 ## [3.3.10] - 2025-10-16
 
 ### 🐛 FIX - Colori Personalizzati Non Applicati nel Frontend

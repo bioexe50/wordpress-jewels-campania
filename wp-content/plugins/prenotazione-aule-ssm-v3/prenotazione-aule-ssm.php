@@ -3,7 +3,7 @@
  * Plugin Name: Prenotazione Aule SSM
  * Plugin URI: https://github.com/yourusername/prenotazione-aule-ssm
  * Description: Sistema completo di gestione prenotazioni aule per istituzioni educative. Include calendario, multi-booking, notifiche email e dashboard amministrativa.
- * Version: 3.3.10
+ * Version: 3.3.11
  * Author: SSM Developer Team
  * Author URI: https://yourdomain.com
  * License: GPL v2 or later
@@ -15,7 +15,7 @@
  * Network: false
  *
  * @package Prenotazione_Aule_SSM
- * @version 3.3.10
+ * @version 3.3.11
  * @since 1.0.0
  */
 
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
 /**
  * Definisci costanti del plugin
  */
-define('PRENOTAZIONE_AULE_SSM_VERSION', '3.3.10');
+define('PRENOTAZIONE_AULE_SSM_VERSION', '3.3.11');
 define('PRENOTAZIONE_AULE_SSM_DB_VERSION', '3.0');
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_URL', plugin_dir_url(__FILE__));

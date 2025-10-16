@@ -47,7 +47,7 @@ a:hover{
 * ---------------------------------------*/
 .thsn-title-bar-content,
 .thsn-title-bar-wrapper{
-	min-height: 200px;
+	min-height: 40px;
 }
 .thsn-color-globalcolor,
 .thsn-globalcolor,

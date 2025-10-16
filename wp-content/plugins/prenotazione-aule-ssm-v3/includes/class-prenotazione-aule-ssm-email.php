@@ -63,6 +63,13 @@ class Prenotazione_Aule_SSM_Email {
         }
 
         $settings = $this->database->get_impostazioni();
+
+        // ✅ v3.3.9 - Controlla se email conferma è abilitata
+        if (isset($settings->abilita_email_conferma) && $settings->abilita_email_conferma == 0) {
+            error_log('[Aule Booking Email] Email conferma DISABILITATA nelle impostazioni - Booking ID: ' . $booking_id);
+            return true; // Return true perché è un comportamento voluto, non un errore
+        }
+
         $template = !empty($settings->template_email_conferma) ? $settings->template_email_conferma : $this->get_default_confirmation_template();
 
         $subject = sprintf(__('[%s] Prenotazione Confermata - %s', 'prenotazione-aule-ssm'), get_bloginfo('name'), $booking->nome_aula);
@@ -98,6 +105,13 @@ class Prenotazione_Aule_SSM_Email {
         }
 
         $settings = $this->database->get_impostazioni();
+
+        // ✅ v3.3.9 - Controlla se email rifiuto è abilitata
+        if (isset($settings->abilita_email_rifiuto) && $settings->abilita_email_rifiuto == 0) {
+            error_log('[Aule Booking Email] Email rifiuto DISABILITATA nelle impostazioni - Booking ID: ' . $booking_id);
+            return true; // Return true perché è un comportamento voluto, non un errore
+        }
+
         $template = !empty($settings->template_email_rifiuto) ? $settings->template_email_rifiuto : $this->get_default_rejection_template();
 
         $subject = sprintf(__('[%s] Prenotazione Rifiutata - %s', 'prenotazione-aule-ssm'), get_bloginfo('name'), $booking->nome_aula);
@@ -133,6 +147,12 @@ class Prenotazione_Aule_SSM_Email {
         }
 
         $settings = $this->database->get_impostazioni();
+
+        // ✅ v3.3.9 - Controlla se email notifica admin è abilitata
+        if (isset($settings->abilita_email_admin) && $settings->abilita_email_admin == 0) {
+            error_log('[Aule Booking Email] Email notifica admin DISABILITATA nelle impostazioni - Booking ID: ' . $booking_id);
+            return true; // Return true perché è un comportamento voluto, non un errore
+        }
 
         // Ottieni email admin
         $admin_emails = array();
@@ -186,6 +206,14 @@ class Prenotazione_Aule_SSM_Email {
 
         if (!$booking || $booking->stato !== 'confermata') {
             return false;
+        }
+
+        $settings = $this->database->get_impostazioni();
+
+        // ✅ v3.3.9 - Controlla se email reminder è abilitata
+        if (isset($settings->abilita_email_reminder) && $settings->abilita_email_reminder == 0) {
+            error_log('[Aule Booking Email] Email reminder DISABILITATA nelle impostazioni - Booking ID: ' . $booking_id);
+            return true; // Return true perché è un comportamento voluto, non un errore
         }
 
         $subject = sprintf(__('[%s] Promemoria Prenotazione - %s', 'prenotazione-aule-ssm'), get_bloginfo('name'), $booking->nome_aula);

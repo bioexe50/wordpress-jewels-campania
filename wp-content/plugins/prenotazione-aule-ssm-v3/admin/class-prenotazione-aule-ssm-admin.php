@@ -274,6 +274,16 @@ class Prenotazione_Aule_SSM_Admin {
             array($this, 'display_settings_page')
         );
 
+        // Sottomenu Personalizzazione Grafica
+        add_submenu_page(
+            'prenotazione-aule-ssm',
+            __('🎨 Personalizzazione', 'prenotazione-aule-ssm'),
+            __('🎨 Personalizzazione', 'prenotazione-aule-ssm'),
+            'manage_prenotazione_aule_ssm',
+            'prenotazione-aule-ssm-customization',
+            array($this, 'display_customization_page')
+        );
+
         // Sottomenu Report
         add_submenu_page(
             'prenotazione-aule-ssm',
@@ -378,6 +388,53 @@ class Prenotazione_Aule_SSM_Admin {
     public function display_settings_page() {
         $settings = $this->database->get_impostazioni();
         include_once PRENOTAZIONE_AULE_SSM_PLUGIN_DIR . 'admin/partials/prenotazione-aule-ssm-admin-settings.php';
+    }
+
+    /**
+     * Mostra la pagina personalizzazione grafica
+     *
+     * @since 3.3.5
+     */
+    public function display_customization_page() {
+        $customization = $this->get_customization_settings();
+        include_once PRENOTAZIONE_AULE_SSM_PLUGIN_DIR . 'admin/partials/prenotazione-aule-ssm-admin-customization.php';
+    }
+
+    /**
+     * Ottieni impostazioni personalizzazione (con defaults)
+     *
+     * @since 3.3.5
+     * @return array
+     */
+    private function get_customization_settings() {
+        $defaults = array(
+            // Colori
+            'primary_color' => '#2271b1',
+            'secondary_color' => '#72aee6',
+            'success_color' => '#28a745',
+            'warning_color' => '#ffc107',
+            'danger_color' => '#dc3545',
+            'light_color' => '#f8f9fa',
+            'dark_color' => '#1d2327',
+            'border_color' => '#ddd',
+
+            // Typography
+            'font_family' => 'system',
+            'font_size_base' => '16',
+
+            // Layout
+            'border_radius' => '6',
+            'shadow_intensity' => '100',
+            'spacing_base' => '16',
+
+            // Advanced
+            'custom_css' => '',
+            'use_animations' => true
+        );
+
+        $saved = get_option('prenotazione_aule_ssm_customization', array());
+
+        return wp_parse_args($saved, $defaults);
     }
 
     /**

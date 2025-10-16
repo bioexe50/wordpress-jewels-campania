@@ -60,10 +60,10 @@ $show_legend = ($atts['show_legend'] === 'true');
                             <!-- Popolato da JavaScript -->
                         </h3>
                         <div class="nav-buttons">
-                            <button type="button" class="btn-nav btn-prev-month" aria-label="<?php _e('Mese precedente', 'prenotazione-aule-ssm'); ?>">
+                            <button type="button" class="pas-btn-nav pas-btn-prev-month" aria-label="<?php _e('Mese precedente', 'prenotazione-aule-ssm'); ?>">
                                 <span aria-hidden="true">‹</span>
                             </button>
-                            <button type="button" class="btn-nav btn-next-month" aria-label="<?php _e('Mese successivo', 'prenotazione-aule-ssm'); ?>">
+                            <button type="button" class="pas-btn-nav pas-btn-next-month" aria-label="<?php _e('Mese successivo', 'prenotazione-aule-ssm'); ?>">
                                 <span aria-hidden="true">›</span>
                             </button>
                         </div>
@@ -117,7 +117,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                             <span class="dashicons dashicons-calendar-alt"></span>
                             <?php _e('Slot Selezionati', 'prenotazione-aule-ssm'); ?>
                         </h3>
-                        <button type="button" class="btn-clear-all" title="<?php _e('Rimuovi tutti', 'prenotazione-aule-ssm'); ?>">
+                        <button type="button" class="pas-btn-clear-all" title="<?php _e('Rimuovi tutti', 'prenotazione-aule-ssm'); ?>">
                             <span class="dashicons dashicons-dismiss"></span>
                         </button>
                     </div>
@@ -136,28 +136,28 @@ $show_legend = ($atts['show_legend'] === 'true');
                             <label for="multi_nome" class="form-label">
                                 <?php _e('Nome', 'prenotazione-aule-ssm'); ?> <span class="required">*</span>
                             </label>
-                            <input type="text" class="form-control" id="multi_nome" name="nome_richiedente" required minlength="2">
+                            <input type="text" class="pas-form-control" id="multi_nome" name="nome_richiedente" required minlength="2">
                         </div>
 
                         <div class="form-group">
                             <label for="multi_cognome" class="form-label">
                                 <?php _e('Cognome', 'prenotazione-aule-ssm'); ?> <span class="required">*</span>
                             </label>
-                            <input type="text" class="form-control" id="multi_cognome" name="cognome_richiedente" required minlength="2">
+                            <input type="text" class="pas-form-control" id="multi_cognome" name="cognome_richiedente" required minlength="2">
                         </div>
 
                         <div class="form-group">
                             <label for="multi_email" class="form-label">
                                 <?php _e('Email', 'prenotazione-aule-ssm'); ?> <span class="required">*</span>
                             </label>
-                            <input type="email" class="form-control" id="multi_email" name="email_richiedente" required>
+                            <input type="email" class="pas-form-control" id="multi_email" name="email_richiedente" required>
                         </div>
 
                         <div class="form-group">
                             <label for="multi_motivo" class="form-label">
                                 <?php _e('Motivo della prenotazione', 'prenotazione-aule-ssm'); ?> <span class="required">*</span>
                             </label>
-                            <textarea class="form-control" id="multi_motivo" name="motivo_prenotazione" rows="3" required minlength="10" placeholder="<?php _e('Descrivi brevemente il motivo della prenotazione...', 'prenotazione-aule-ssm'); ?>"></textarea>
+                            <textarea class="pas-form-control" id="multi_motivo" name="motivo_prenotazione" rows="3" required minlength="10" placeholder="<?php _e('Descrivi brevemente il motivo della prenotazione...', 'prenotazione-aule-ssm'); ?>"></textarea>
                         </div>
 
                         <div class="form-check mb-3">
@@ -167,19 +167,19 @@ $show_legend = ($atts['show_legend'] === 'true');
                             </label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block btn-submit-multi-booking">
-                            <span class="btn-text">
+                        <button type="submit" class="pas-btn pas-btn-primary pas-btn-block pas-btn-submit-multi-booking">
+                            <span class="pas-btn-text">
                                 <span class="dashicons dashicons-yes"></span>
                                 <?php _e('Prenota tutti gli slot', 'prenotazione-aule-ssm'); ?>
                             </span>
-                            <span class="btn-spinner" style="display: none;">
+                            <span class="pas-btn-spinner" style="display: none;">
                                 <span class="spinner-border spinner-border-sm"></span>
                                 <?php _e('Invio...', 'prenotazione-aule-ssm'); ?>
                             </span>
                         </button>
 
-                        <div class="alert alert-danger mt-3" style="display: none;"></div>
-                        <div class="alert alert-success mt-3" style="display: none;"></div>
+                        <div class="pas-alert pas-alert-danger mt-3" style="display: none;"></div>
+                        <div class="pas-alert pas-alert-success mt-3" style="display: none;"></div>
                     </form>
                 </div>
 
@@ -205,7 +205,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                     <span class="dashicons dashicons-calendar-alt"></span>
                     <?php _e('Seleziona Slot', 'prenotazione-aule-ssm'); ?>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php _e('Chiudi', 'prenotazione-aule-ssm'); ?>"></button>
+                <button type="button" class="pas-btn-close" data-bs-dismiss="modal" aria-label="<?php _e('Chiudi', 'prenotazione-aule-ssm'); ?>"></button>
             </div>
 
             <div class="modal-body">
@@ -233,17 +233,17 @@ $show_legend = ($atts['show_legend'] === 'true');
 
                 <!-- Counter Slot Selezionati -->
                 <div class="modal-selected-count mt-3" style="display: none;">
-                    <div class="alert alert-info">
+                    <div class="pas-alert pas-alert-info">
                         <strong id="modalSlotCount">0</strong> <?php _e('slot selezionati', 'prenotazione-aule-ssm'); ?>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="pas-btn pas-btn-secondary" data-bs-dismiss="modal">
                     <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
                 </button>
-                <button type="button" class="btn btn-primary btn-confirm-slots" id="confirmSlotsBtn" disabled>
+                <button type="button" class="pas-btn pas-btn-primary pas-btn-confirm-slots" id="confirmSlotsBtn" disabled>
                     <span class="dashicons dashicons-yes"></span>
                     <?php _e('Conferma selezione', 'prenotazione-aule-ssm'); ?>
                 </button>

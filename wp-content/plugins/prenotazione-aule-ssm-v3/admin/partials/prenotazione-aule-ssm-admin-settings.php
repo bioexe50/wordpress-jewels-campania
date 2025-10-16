@@ -18,6 +18,11 @@ $default_settings = array(
     'conferma_automatica' => 0,
     'email_notifica_admin' => array(),
     'conserva_dati_disinstallazione' => 1, // DEFAULT: CONSERVA DATI (più sicuro)
+    // ✅ v3.3.9 - Controllo invio email
+    'abilita_email_conferma' => 1, // DEFAULT: Email conferma ABILITATA
+    'abilita_email_rifiuto' => 1, // DEFAULT: Email rifiuto ABILITATA
+    'abilita_email_admin' => 1, // DEFAULT: Email notifica admin ABILITATA
+    'abilita_email_reminder' => 1, // DEFAULT: Email reminder ABILITATA
     'template_email_conferma' => __('La tua prenotazione è stata confermata!\n\nDettagli:\nAula: {nome_aula}\nData: {data_prenotazione}\nOrario: {ora_inizio} - {ora_fine}\nCodice: {codice_prenotazione}\n\nGrazie!', 'prenotazione-aule-ssm'),
     'template_email_rifiuto' => __('La tua prenotazione è stata rifiutata.\n\nMotivo: {note_admin}\n\nDettagli:\nAula: {nome_aula}\nData: {data_prenotazione}\nOrario: {ora_inizio} - {ora_fine}\n\nPuoi richiedere una nuova prenotazione.', 'prenotazione-aule-ssm'),
     'template_email_admin' => __('Nuova prenotazione ricevuta!\n\nRichiedente: {nome_richiedente} {cognome_richiedente}\nEmail: {email_richiedente}\nAula: {nome_aula}\nData: {data_prenotazione}\nOrario: {ora_inizio} - {ora_fine}\nMotivo: {motivo_prenotazione}\n\nApprova/Rifiuta dalla dashboard admin.', 'prenotazione-aule-ssm'),
@@ -139,24 +144,46 @@ if ($settings) {
                             <label for="conserva_dati_disinstallazione"><?php _e('Conserva Dati', 'prenotazione-aule-ssm'); ?></label>
                         </th>
                         <td>
-                            <label for="conserva_dati_disinstallazione">
-                                <input type="checkbox"
-                                       id="conserva_dati_disinstallazione"
-                                       name="conserva_dati_disinstallazione"
-                                       value="1"
-                                       <?php checked($default_settings['conserva_dati_disinstallazione'], 1); ?>>
-                                <?php _e('Conserva tutti i dati quando il plugin viene disinstallato', 'prenotazione-aule-ssm'); ?>
-                            </label>
-                            <p class="description">
-                                <strong style="color: #00a32a;"><?php _e('✅ ABILITATO DI DEFAULT (Comportamento sicuro):', 'prenotazione-aule-ssm'); ?></strong><br>
-                                <?php _e('Se abilitato, aule, prenotazioni, slot e impostazioni NON verranno eliminati alla disinstallazione del plugin.', 'prenotazione-aule-ssm'); ?><br>
-                                <?php _e('Utile se vuoi reinstallare il plugin in futuro mantenendo tutti i dati esistenti.', 'prenotazione-aule-ssm'); ?><br><br>
-                                <strong style="color: #d63638;"><?php _e('⚠️ IMPORTANTE:', 'prenotazione-aule-ssm'); ?></strong>
-                                <?php _e('Per eliminare COMPLETAMENTE tutti i dati quando disinstalli:', 'prenotazione-aule-ssm'); ?><br>
-                                <strong>1.</strong> <?php _e('DISABILITA questa opzione', 'prenotazione-aule-ssm'); ?><br>
-                                <strong>2.</strong> <?php _e('Salva le impostazioni', 'prenotazione-aule-ssm'); ?><br>
-                                <strong>3.</strong> <?php _e('Disinstalla il plugin', 'prenotazione-aule-ssm'); ?>
-                            </p>
+                            <div class="pas-conserva-dati-wrapper">
+                                <label for="conserva_dati_disinstallazione">
+                                    <input type="checkbox"
+                                           id="conserva_dati_disinstallazione"
+                                           name="conserva_dati_disinstallazione"
+                                           value="1"
+                                           <?php checked($default_settings['conserva_dati_disinstallazione'], 1); ?>>
+                                    <?php _e('Conserva tutti i dati quando il plugin viene disinstallato', 'prenotazione-aule-ssm'); ?>
+                                </label>
+
+                                <!-- Avviso dinamico status corrente -->
+                                <div class="pas-conserva-status-box" id="pas-conserva-status">
+                                    <?php if ($default_settings['conserva_dati_disinstallazione']): ?>
+                                        <div class="notice notice-success inline" style="margin: 15px 0; padding: 10px;">
+                                            <p><strong>✅ STATO ATTUALE: I tuoi dati SARANNO CONSERVATI alla disinstallazione</strong></p>
+                                            <p style="margin: 5px 0 0 0; font-size: 13px;">
+                                                <?php _e('Il messaggio di conferma disinstallazione di WordPress è generico, ma i tuoi dati (aule, prenotazioni, slot) NON verranno eliminati.', 'prenotazione-aule-ssm'); ?>
+                                            </p>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="notice notice-warning inline" style="margin: 15px 0; padding: 10px;">
+                                            <p><strong>⚠️ STATO ATTUALE: I tuoi dati VERRANNO ELIMINATI alla disinstallazione</strong></p>
+                                            <p style="margin: 5px 0 0 0; font-size: 13px;">
+                                                <?php _e('Tutte le aule, prenotazioni, slot e impostazioni verranno CANCELLATI PERMANENTEMENTE.', 'prenotazione-aule-ssm'); ?>
+                                            </p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <p class="description">
+                                    <strong style="color: #00a32a;"><?php _e('✅ ABILITATO DI DEFAULT (Comportamento sicuro):', 'prenotazione-aule-ssm'); ?></strong><br>
+                                    <?php _e('Se abilitato, aule, prenotazioni, slot e impostazioni NON verranno eliminati alla disinstallazione del plugin.', 'prenotazione-aule-ssm'); ?><br>
+                                    <?php _e('Utile se vuoi reinstallare il plugin in futuro mantenendo tutti i dati esistenti.', 'prenotazione-aule-ssm'); ?><br><br>
+                                    <strong style="color: #d63638;"><?php _e('⚠️ IMPORTANTE:', 'prenotazione-aule-ssm'); ?></strong>
+                                    <?php _e('Per eliminare COMPLETAMENTE tutti i dati quando disinstalli:', 'prenotazione-aule-ssm'); ?><br>
+                                    <strong>1.</strong> <?php _e('DISABILITA questa opzione', 'prenotazione-aule-ssm'); ?><br>
+                                    <strong>2.</strong> <?php _e('Salva le impostazioni', 'prenotazione-aule-ssm'); ?><br>
+                                    <strong>3.</strong> <?php _e('Disinstalla il plugin', 'prenotazione-aule-ssm'); ?>
+                                </p>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -234,6 +261,102 @@ if ($settings) {
 
         <!-- Tab Email -->
         <div id="email-settings" class="tab-content" style="display: none;">
+            <div class="settings-section">
+                <h2><?php _e('Controllo Invio Email', 'prenotazione-aule-ssm'); ?></h2>
+                <p class="description">
+                    <?php _e('Abilita o disabilita l\'invio automatico delle email di notifica. Utile per ambienti di test o per gestione manuale.', 'prenotazione-aule-ssm'); ?>
+                </p>
+
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <?php _e('Email Conferma Prenotazione', 'prenotazione-aule-ssm'); ?>
+                        </th>
+                        <td>
+                            <label for="abilita_email_conferma">
+                                <input type="checkbox"
+                                       id="abilita_email_conferma"
+                                       name="abilita_email_conferma"
+                                       value="1"
+                                       <?php checked(isset($default_settings['abilita_email_conferma']) ? $default_settings['abilita_email_conferma'] : 1, 1); ?>>
+                                <?php _e('Invia email all\'utente quando la prenotazione viene confermata', 'prenotazione-aule-ssm'); ?>
+                            </label>
+                            <p class="description">
+                                <strong>✅ <?php _e('Abilitato di default', 'prenotazione-aule-ssm'); ?></strong><br>
+                                <?php _e('Quando admin approva → Email automatica all\'utente con dettagli prenotazione', 'prenotazione-aule-ssm'); ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <?php _e('Email Rifiuto Prenotazione', 'prenotazione-aule-ssm'); ?>
+                        </th>
+                        <td>
+                            <label for="abilita_email_rifiuto">
+                                <input type="checkbox"
+                                       id="abilita_email_rifiuto"
+                                       name="abilita_email_rifiuto"
+                                       value="1"
+                                       <?php checked(isset($default_settings['abilita_email_rifiuto']) ? $default_settings['abilita_email_rifiuto'] : 1, 1); ?>>
+                                <?php _e('Invia email all\'utente quando la prenotazione viene rifiutata', 'prenotazione-aule-ssm'); ?>
+                            </label>
+                            <p class="description">
+                                <strong>✅ <?php _e('Abilitato di default', 'prenotazione-aule-ssm'); ?></strong><br>
+                                <?php _e('Quando admin rifiuta → Email automatica all\'utente con motivo rifiuto', 'prenotazione-aule-ssm'); ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <?php _e('Email Notifica Amministratori', 'prenotazione-aule-ssm'); ?>
+                        </th>
+                        <td>
+                            <label for="abilita_email_admin">
+                                <input type="checkbox"
+                                       id="abilita_email_admin"
+                                       name="abilita_email_admin"
+                                       value="1"
+                                       <?php checked(isset($default_settings['abilita_email_admin']) ? $default_settings['abilita_email_admin'] : 1, 1); ?>>
+                                <?php _e('Invia email agli admin quando arriva una nuova prenotazione', 'prenotazione-aule-ssm'); ?>
+                            </label>
+                            <p class="description">
+                                <strong>✅ <?php _e('Abilitato di default', 'prenotazione-aule-ssm'); ?></strong><br>
+                                <?php _e('Quando utente prenota → Email SUBITO a tutti gli admin configurati nel tab Generale', 'prenotazione-aule-ssm'); ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <?php _e('Email Reminder Prenotazione', 'prenotazione-aule-ssm'); ?>
+                        </th>
+                        <td>
+                            <label for="abilita_email_reminder">
+                                <input type="checkbox"
+                                       id="abilita_email_reminder"
+                                       name="abilita_email_reminder"
+                                       value="1"
+                                       <?php checked(isset($default_settings['abilita_email_reminder']) ? $default_settings['abilita_email_reminder'] : 1, 1); ?>>
+                                <?php _e('Invia promemoria automatico all\'utente il giorno prima della prenotazione', 'prenotazione-aule-ssm'); ?>
+                            </label>
+                            <p class="description">
+                                <strong>✅ <?php _e('Abilitato di default', 'prenotazione-aule-ssm'); ?></strong><br>
+                                <?php _e('Sistema invia automaticamente reminder 24h prima della prenotazione confermata', 'prenotazione-aule-ssm'); ?>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="notice notice-info inline" style="margin: 20px 0;">
+                    <p>
+                        <strong>💡 <?php _e('Suggerimento:', 'prenotazione-aule-ssm'); ?></strong>
+                        <?php _e('In ambiente di test puoi disabilitare tutte le email per evitare invii indesiderati. In produzione tieni tutto abilitato per notifiche automatiche.', 'prenotazione-aule-ssm'); ?>
+                    </p>
+                </div>
+            </div>
+
             <div class="settings-section">
                 <h2><?php _e('Template Email', 'prenotazione-aule-ssm'); ?></h2>
                 <p class="description">

@@ -43,10 +43,10 @@
          */
         bindEvents: function() {
             // Event delegation per elementi dinamici
-            $(document).on('click', '.btn-book-aula', this.handleBookingClick);
+            $(document).on('click', '.pas-btn-book-aula', this.handleBookingClick);
             $(document).on('submit', '.booking-form', this.handleBookingSubmit);
-            $(document).on('click', '.btn-search', this.handleSearch);
-            $(document).on('click', '.btn-reset', this.handleReset);
+            $(document).on('click', '.pas-btn-search', this.handleSearch);
+            $(document).on('click', '.pas-btn-reset', this.handleReset);
 
             // Validazione form in tempo reale
             $(document).on('input change', '.booking-form input, .booking-form textarea', this.validateField);
@@ -212,7 +212,7 @@
             // Reset del form
             $modal.find('form')[0].reset();
             $modal.find('.is-invalid').removeClass('is-invalid');
-            $modal.find('.alert').hide();
+            $modal.find('.pas-alert').hide();
         },
 
         /**
@@ -495,11 +495,11 @@
             $form.find('input, textarea, select').prop('disabled', loading);
 
             if (loading) {
-                $submitBtn.find('.btn-text').hide();
-                $submitBtn.find('.btn-spinner').show();
+                $submitBtn.find('.pas-btn-text').hide();
+                $submitBtn.find('.pas-btn-spinner').show();
             } else {
-                $submitBtn.find('.btn-text').show();
-                $submitBtn.find('.btn-spinner').hide();
+                $submitBtn.find('.pas-btn-text').show();
+                $submitBtn.find('.pas-btn-spinner').hide();
             }
         },
 
@@ -507,15 +507,15 @@
          * Mostra messaggio di successo nel form
          */
         showFormSuccess: function($form, message) {
-            var $alert = $form.find('.alert-success');
+            var $alert = $form.find('.pas-alert-success');
 
             if ($alert.length === 0) {
-                $alert = $('<div class="alert alert-success"></div>');
+                $alert = $('<div class="pas-alert pas-alert-success"></div>');
                 $form.prepend($alert);
             }
 
             $alert.html(message).show();
-            $form.find('.alert-danger').hide();
+            $form.find('.pas-alert-danger').hide();
 
             // Scroll al messaggio
             $alert[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
@@ -525,15 +525,15 @@
          * Mostra messaggio di errore nel form
          */
         showFormError: function($form, message) {
-            var $alert = $form.find('.alert-danger');
+            var $alert = $form.find('.pas-alert-danger');
 
             if ($alert.length === 0) {
-                $alert = $('<div class="alert alert-danger"></div>');
+                $alert = $('<div class="pas-alert pas-alert-danger"></div>');
                 $form.prepend($alert);
             }
 
             $alert.html(message).show();
-            $form.find('.alert-success').hide();
+            $form.find('.pas-alert-success').hide();
 
             // Scroll al messaggio
             $alert[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
@@ -701,7 +701,7 @@
          * Mostra messaggio di errore globale
          */
         showError: function(message) {
-            this.showInfoModal('Errore', `<div class="alert alert-danger">${message}</div>`);
+            this.showInfoModal('Errore', `<div class="pas-alert pas-alert-danger">${message}</div>`);
         },
 
         /**

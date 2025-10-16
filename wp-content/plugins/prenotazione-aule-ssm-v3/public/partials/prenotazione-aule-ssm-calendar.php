@@ -115,7 +115,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                     <i class="fas fa-calendar-plus"></i>
                     <?php _e('Prenota Aula', 'prenotazione-aule-ssm'); ?>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="pas-btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <!-- Riepilogo slot selezionato -->
@@ -150,7 +150,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                                 <label for="nome_richiedente" class="form-label">
                                     <?php _e('Nome *', 'prenotazione-aule-ssm'); ?>
                                 </label>
-                                <input type="text" class="form-control" id="nome_richiedente" name="nome_richiedente" required minlength="2">
+                                <input type="text" class="pas-form-control" id="nome_richiedente" name="nome_richiedente" required minlength="2">
                                 <div class="invalid-feedback">
                                     <?php _e('Il nome deve contenere almeno 2 caratteri', 'prenotazione-aule-ssm'); ?>
                                 </div>
@@ -161,7 +161,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                                 <label for="cognome_richiedente" class="form-label">
                                     <?php _e('Cognome *', 'prenotazione-aule-ssm'); ?>
                                 </label>
-                                <input type="text" class="form-control" id="cognome_richiedente" name="cognome_richiedente" required minlength="2">
+                                <input type="text" class="pas-form-control" id="cognome_richiedente" name="cognome_richiedente" required minlength="2">
                                 <div class="invalid-feedback">
                                     <?php _e('Il cognome deve contenere almeno 2 caratteri', 'prenotazione-aule-ssm'); ?>
                                 </div>
@@ -173,7 +173,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                         <label for="email_richiedente" class="form-label">
                             <?php _e('Email *', 'prenotazione-aule-ssm'); ?>
                         </label>
-                        <input type="email" class="form-control" id="email_richiedente" name="email_richiedente" required>
+                        <input type="email" class="pas-form-control" id="email_richiedente" name="email_richiedente" required>
                         <div class="invalid-feedback">
                             <?php _e('Inserisci un indirizzo email valido', 'prenotazione-aule-ssm'); ?>
                         </div>
@@ -183,7 +183,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                         <label for="motivo_prenotazione" class="form-label">
                             <?php _e('Motivo della prenotazione *', 'prenotazione-aule-ssm'); ?>
                         </label>
-                        <textarea class="form-control" id="motivo_prenotazione" name="motivo_prenotazione" rows="3" required minlength="10" placeholder="<?php _e('Descrivi brevemente il motivo della prenotazione...', 'prenotazione-aule-ssm'); ?>"></textarea>
+                        <textarea class="pas-form-control" id="motivo_prenotazione" name="motivo_prenotazione" rows="3" required minlength="10" placeholder="<?php _e('Descrivi brevemente il motivo della prenotazione...', 'prenotazione-aule-ssm'); ?>"></textarea>
                         <div class="invalid-feedback">
                             <?php _e('Il motivo deve contenere almeno 10 caratteri', 'prenotazione-aule-ssm'); ?>
                         </div>
@@ -206,17 +206,17 @@ $show_legend = ($atts['show_legend'] === 'true');
                     </div>
 
                     <!-- Messaggi di errore/successo -->
-                    <div class="alert alert-danger" id="bookingError" style="display: none;"></div>
-                    <div class="alert alert-success" id="bookingSuccess" style="display: none;"></div>
+                    <div class="pas-alert pas-alert-danger" id="bookingError" style="display: none;"></div>
+                    <div class="pas-alert pas-alert-success" id="bookingSuccess" style="display: none;"></div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="pas-btn pas-btn-secondary" data-bs-dismiss="modal">
                     <?php _e('Annulla', 'prenotazione-aule-ssm'); ?>
                 </button>
-                <button type="button" class="btn btn-primary" id="submitBooking">
-                    <span class="btn-text"><?php _e('Invia Prenotazione', 'prenotazione-aule-ssm'); ?></span>
-                    <span class="btn-spinner" style="display: none;">
+                <button type="button" class="pas-btn pas-btn-primary" id="submitBooking">
+                    <span class="pas-btn-text"><?php _e('Invia Prenotazione', 'prenotazione-aule-ssm'); ?></span>
+                    <span class="pas-btn-spinner" style="display: none;">
                         <i class="fas fa-spinner fa-spin"></i>
                         <?php _e('Invio...', 'prenotazione-aule-ssm'); ?>
                     </span>
@@ -236,7 +236,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                     <i class="fas fa-info-circle"></i>
                     <?php _e('Dettagli Prenotazione', 'prenotazione-aule-ssm'); ?>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="pas-btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div id="booking-details-content">
@@ -244,7 +244,7 @@ $show_legend = ($atts['show_legend'] === 'true');
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="pas-btn pas-btn-secondary" data-bs-dismiss="modal">
                     <?php _e('Chiudi', 'prenotazione-aule-ssm'); ?>
                 </button>
             </div>

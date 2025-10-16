@@ -141,6 +141,7 @@ class Prenotazione_Aule_SSM_Activator {
             colore_slot_libero varchar(7) DEFAULT '#28a745',
             colore_slot_occupato varchar(7) DEFAULT '#dc3545',
             colore_slot_attesa varchar(7) DEFAULT '#ffc107',
+            conserva_dati_disinstallazione tinyint(1) DEFAULT 1 COMMENT 'Se 1, conserva i dati alla disinstallazione',
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
@@ -168,6 +169,7 @@ class Prenotazione_Aule_SSM_Activator {
     private static function update_database_schema() {
         global $wpdb;
         $table_prenotazioni = $wpdb->prefix . 'prenotazione_aule_ssm_prenotazioni';
+        $table_impostazioni = $wpdb->prefix . 'prenotazione_aule_ssm_impostazioni';
 
         // Verifica se la colonna gruppo_prenotazione esiste
         $column_exists = $wpdb->get_results("SHOW COLUMNS FROM $table_prenotazioni LIKE 'gruppo_prenotazione'");
@@ -176,6 +178,14 @@ class Prenotazione_Aule_SSM_Activator {
             // Aggiungi colonna gruppo_prenotazione
             $wpdb->query("ALTER TABLE $table_prenotazioni ADD COLUMN gruppo_prenotazione varchar(50) DEFAULT NULL AFTER codice_prenotazione");
             $wpdb->query("ALTER TABLE $table_prenotazioni ADD KEY idx_gruppo_prenotazione (gruppo_prenotazione)");
+        }
+
+        // v3.3.5 - Verifica se la colonna conserva_dati_disinstallazione esiste
+        $conserva_exists = $wpdb->get_results("SHOW COLUMNS FROM $table_impostazioni LIKE 'conserva_dati_disinstallazione'");
+
+        if (empty($conserva_exists)) {
+            // Aggiungi colonna conserva_dati_disinstallazione
+            $wpdb->query("ALTER TABLE $table_impostazioni ADD COLUMN conserva_dati_disinstallazione tinyint(1) DEFAULT 1 COMMENT 'Se 1, conserva i dati alla disinstallazione' AFTER colore_slot_attesa");
         }
     }
 

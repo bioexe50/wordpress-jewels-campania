@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
                     <i class="fas fa-calendar-check"></i>
                     <span id="modal-date-title"></span>
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close pas-btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             
             <div class="modal-body">
@@ -57,7 +57,7 @@ if (!defined('ABSPATH')) {
 
                 <!-- Riepilogo slot selezionati -->
                 <div class="selected-slots-summary mt-4" id="selected-slots-summary" style="display: none;">
-                    <div class="alert alert-info">
+                    <div class="pas-alert pas-alert-info">
                         <h6 class="fw-bold mb-2">
                             <i class="fas fa-check-circle"></i>
                             Slot selezionati:
@@ -81,38 +81,38 @@ if (!defined('ABSPATH')) {
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="cognome_richiedente" class="form-label">Cognome *</label>
-                                <input type="text" class="form-control" id="cognome_richiedente" name="cognome_richiedente" required>
+                                <input type="text" class="pas-form-control" id="cognome_richiedente" name="cognome_richiedente" required>
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="nome_richiedente" class="form-label">Nome *</label>
-                                <input type="text" class="form-control" id="nome_richiedente" name="nome_richiedente" required>
+                                <input type="text" class="pas-form-control" id="nome_richiedente" name="nome_richiedente" required>
                             </div>
 
                             <div class="col-md-12">
                                 <label for="email_richiedente" class="form-label">Email *</label>
-                                <input type="email" class="form-control" id="email_richiedente" name="email_richiedente" required>
+                                <input type="email" class="pas-form-control" id="email_richiedente" name="email_richiedente" required>
                             </div>
 
                             <div class="col-md-12">
                                 <label for="motivo_prenotazione" class="form-label">Motivo prenotazione *</label>
-                                <textarea class="form-control" id="motivo_prenotazione" name="motivo_prenotazione" rows="3" required></textarea>
+                                <textarea class="pas-form-control" id="motivo_prenotazione" name="motivo_prenotazione" rows="3" required></textarea>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="telefono_richiedente" class="form-label">Telefono</label>
-                                <input type="tel" class="form-control" id="telefono_richiedente" name="telefono_richiedente">
+                                <input type="tel" class="pas-form-control" id="telefono_richiedente" name="telefono_richiedente">
                             </div>
 
                             <div class="col-md-6">
                                 <label for="numero_partecipanti" class="form-label">Numero partecipanti</label>
-                                <input type="number" class="form-control" id="numero_partecipanti" name="numero_partecipanti" min="1" max="<?php echo esc_attr($aula->capienza ?? 50); ?>">
+                                <input type="number" class="pas-form-control" id="numero_partecipanti" name="numero_partecipanti" min="1" max="<?php echo esc_attr($aula->capienza ?? 50); ?>">
                             </div>
                         </div>
 
                         <div class="mt-4 text-end">
-                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Annulla</button>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="button" class="pas-btn pas-btn-secondary me-2" data-bs-dismiss="modal">Annulla</button>
+                            <button type="submit" class="pas-btn pas-btn-primary">
                                 <i class="fas fa-save"></i>
                                 Conferma Prenotazione
                             </button>
@@ -128,14 +128,14 @@ if (!defined('ABSPATH')) {
                 </div>
 
                 <!-- Messaggio successo -->
-                <div class="alert alert-success" id="booking-success-message" style="display: none;">
+                <div class="pas-alert pas-alert-success" id="booking-success-message" style="display: none;">
                     <i class="fas fa-check-circle"></i>
                     <strong>Prenotazione confermata!</strong>
                     <p class="mb-0">La tua prenotazione è stata registrata con successo.</p>
                 </div>
 
                 <!-- Messaggio errore -->
-                <div class="alert alert-danger" id="booking-error-message" style="display: none;">
+                <div class="pas-alert pas-alert-danger" id="booking-error-message" style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     <strong>Errore!</strong>
                     <p class="mb-0" id="booking-error-text"></p>

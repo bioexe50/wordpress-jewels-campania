@@ -853,7 +853,7 @@ input[type="checkbox"].select-slot {
     padding: 30px;
 }
 
-.form-control:focus {
+.pas-form-control:focus {
     border-color: var(--ab-primary);
     box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.1);
 }
@@ -1159,7 +1159,7 @@ input[type="checkbox"].select-slot {
 
 /* Focus management */
 .button:focus,
-.form-control:focus,
+.pas-form-control:focus,
 .aula-card:focus,
 .quick-link-card:focus {
     outline: 2px solid var(--ab-primary);

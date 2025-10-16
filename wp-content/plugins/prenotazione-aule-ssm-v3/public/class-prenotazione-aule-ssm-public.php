@@ -91,6 +91,148 @@ class Prenotazione_Aule_SSM_Public {
             array(),
             '6.1.8'
         );
+
+        // Inject custom CSS variables from customization settings
+        $this->inject_custom_css();
+    }
+
+    /**
+     * Inietta CSS personalizzato con variabili custom
+     *
+     * @since 3.3.5
+     */
+    private function inject_custom_css() {
+        $customization = get_option('prenotazione_aule_ssm_customization', array());
+
+        // Se non ci sono personalizzazioni, usa i defaults
+        if (empty($customization)) {
+            return;
+        }
+
+        // Genera CSS con !important per isolamento completo
+        $custom_css = "
+/* Prenotazione Aule SSM - Custom Colors (Isolated) */
+.prenotazione-aule-ssm-wrapper,
+.aule-new-calendar-wrapper,
+.prenotazione-aule-ssm-modal {
+    --primary-color: " . esc_attr($customization['primary_color'] ?? '#2271b1') . " !important;
+    --secondary-color: " . esc_attr($customization['secondary_color'] ?? '#72aee6') . " !important;
+    --success-color: " . esc_attr($customization['success_color'] ?? '#28a745') . " !important;
+    --warning-color: " . esc_attr($customization['warning_color'] ?? '#ffc107') . " !important;
+    --danger-color: " . esc_attr($customization['danger_color'] ?? '#dc3545') . " !important;
+    --light-color: " . esc_attr($customization['light_color'] ?? '#f8f9fa') . " !important;
+    --dark-color: " . esc_attr($customization['dark_color'] ?? '#1d2327') . " !important;
+    --border-color: " . esc_attr($customization['border_color'] ?? '#ddd') . " !important;
+}
+
+/* Force color application with high specificity */
+.prenotazione-aule-ssm-wrapper .pas-btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-btn-secondary {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-btn-success {
+    background-color: var(--success-color) !important;
+    border-color: var(--success-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-btn-warning {
+    background-color: var(--warning-color) !important;
+    border-color: var(--warning-color) !important;
+    color: #212529 !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-btn-danger {
+    background-color: var(--danger-color) !important;
+    border-color: var(--danger-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-alert-success {
+    background-color: rgba(" . $this->hex_to_rgb($customization['success_color'] ?? '#28a745') . ", 0.1) !important;
+    color: var(--success-color) !important;
+    border-left: 4px solid var(--success-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-alert-warning {
+    background-color: rgba(" . $this->hex_to_rgb($customization['warning_color'] ?? '#ffc107') . ", 0.1) !important;
+    color: #856404 !important;
+    border-left: 4px solid var(--warning-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-alert-danger {
+    background-color: rgba(" . $this->hex_to_rgb($customization['danger_color'] ?? '#dc3545') . ", 0.1) !important;
+    color: var(--danger-color) !important;
+    border-left: 4px solid var(--danger-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .pas-alert-info {
+    background-color: rgba(" . $this->hex_to_rgb($customization['secondary_color'] ?? '#72aee6') . ", 0.1) !important;
+    color: var(--secondary-color) !important;
+    border-left: 4px solid var(--secondary-color) !important;
+}
+
+.prenotazione-aule-ssm-wrapper .aula-card,
+.prenotazione-aule-ssm-wrapper .booking-form,
+.prenotazione-aule-ssm-wrapper .slot-card {
+    border-color: var(--border-color) !important;
+}
+
+/* NEW CALENDAR - Apply colors to modal buttons */
+.aule-new-calendar-wrapper .pas-btn-primary,
+.prenotazione-aule-ssm-modal .pas-btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.aule-new-calendar-wrapper .pas-btn-secondary,
+.prenotazione-aule-ssm-modal .pas-btn-secondary {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+.aule-new-calendar-wrapper .pas-btn-success,
+.prenotazione-aule-ssm-modal .pas-btn-success {
+    background-color: var(--success-color) !important;
+    border-color: var(--success-color) !important;
+}
+
+.aule-new-calendar-wrapper .pas-btn-warning,
+.prenotazione-aule-ssm-modal .pas-btn-warning {
+    background-color: var(--warning-color) !important;
+    border-color: var(--warning-color) !important;
+}
+
+.aule-new-calendar-wrapper .pas-btn-danger,
+.prenotazione-aule-ssm-modal .pas-btn-danger {
+    background-color: var(--danger-color) !important;
+    border-color: var(--danger-color) !important;
+}
+";
+
+        wp_add_inline_style($this->plugin_name . '-public', $custom_css);
+    }
+
+    /**
+     * Converte HEX in RGB
+     *
+     * @since 3.3.5
+     * @param string $hex
+     * @return string
+     */
+    private function hex_to_rgb($hex) {
+        $hex = ltrim($hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        return "$r, $g, $b";
     }
 
     /**

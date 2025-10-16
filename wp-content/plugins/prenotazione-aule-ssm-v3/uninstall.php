@@ -35,10 +35,22 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
 
 // VERIFICA SE L'UTENTE VUOLE CONSERVARE I DATI
 $table_impostazioni = $wpdb->prefix . 'prenotazione_aule_ssm_impostazioni';
-$conserva_dati = $wpdb->get_var($wpdb->prepare(
-    "SELECT conserva_dati_disinstallazione FROM {$table_impostazioni} WHERE id = %d",
-    1
-));
+
+// Verifica se la tabella impostazioni esiste e ha la colonna
+$table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$table_impostazioni}'");
+$conserva_dati = 0;
+
+if ($table_exists) {
+    // Verifica se la colonna esiste
+    $column_exists = $wpdb->get_var("SHOW COLUMNS FROM {$table_impostazioni} LIKE 'conserva_dati_disinstallazione'");
+
+    if ($column_exists) {
+        $conserva_dati = $wpdb->get_var($wpdb->prepare(
+            "SELECT conserva_dati_disinstallazione FROM {$table_impostazioni} WHERE id = %d",
+            1
+        ));
+    }
+}
 
 if ($conserva_dati == 1) {
     if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -50,6 +62,7 @@ if ($conserva_dati == 1) {
     delete_option('prenotazione_aule_ssm_db_version');
     delete_option('prenotazione_aule_ssm_installed');
     delete_option('prenotazione_aule_ssm_installed_date');
+    delete_option('prenotazione_aule_ssm_customization');
 
     if (defined('WP_DEBUG') && WP_DEBUG) {
         error_log('[Prenotazione Aule SSM] uninstall.php - Completato (dati conservati)');
@@ -106,6 +119,7 @@ delete_option('prenotazione_aule_ssm_installed_date');
 delete_option('prenotazione_aule_ssm_email_settings');
 delete_option('prenotazione_aule_ssm_smtp_settings');
 delete_option('prenotazione_aule_ssm_cache_settings');
+delete_option('prenotazione_aule_ssm_customization'); // v3.3.5 - Colori personalizzati
 
 // Log completamento
 if (defined('WP_DEBUG') && WP_DEBUG) {

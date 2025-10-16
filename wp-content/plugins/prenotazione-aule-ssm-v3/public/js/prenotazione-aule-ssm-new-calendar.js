@@ -39,7 +39,7 @@
      */
     function bindEvents() {
         // Navigazione mesi
-        $(document).on('click', '.btn-prev-month', function() {
+        $(document).on('click', '.pas-btn-prev-month', function() {
             Calendar.currentMonth--;
             if (Calendar.currentMonth < 0) {
                 Calendar.currentMonth = 11;
@@ -49,7 +49,7 @@
             preloadMonthBookings();
         });
 
-        $(document).on('click', '.btn-next-month', function() {
+        $(document).on('click', '.pas-btn-next-month', function() {
             Calendar.currentMonth++;
             if (Calendar.currentMonth > 11) {
                 Calendar.currentMonth = 0;
@@ -86,7 +86,7 @@
         });
 
         // Rimuovi tutti gli slot
-        $(document).on('click', '.btn-clear-all', function() {
+        $(document).on('click', '.pas-btn-clear-all', function() {
             clearAllSlots();
         });
 
@@ -484,9 +484,9 @@
             return;
         }
 
-        const $submitBtn = $form.find('.btn-submit-multi-booking');
-        const $btnText = $submitBtn.find('.btn-text');
-        const $btnSpinner = $submitBtn.find('.btn-spinner');
+        const $submitBtn = $form.find('.pas-btn-submit-multi-booking');
+        const $btnText = $submitBtn.find('.pas-btn-text');
+        const $btnSpinner = $submitBtn.find('.pas-btn-spinner');
 
         $submitBtn.prop('disabled', true);
         $btnText.hide();
@@ -544,7 +544,7 @@
      * Mostra errore nel form
      */
     function showFormError(message) {
-        const $alert = $('#multiSlotBookingForm .alert-danger');
+        const $alert = $('#multiSlotBookingForm .pas-alert-danger');
         $alert.text(message).show();
         setTimeout(() => $alert.fadeOut(), 5000);
     }
@@ -553,7 +553,7 @@
      * Mostra successo nel form
      */
     function showFormSuccess(message) {
-        const $alert = $('#multiSlotBookingForm .alert-success');
+        const $alert = $('#multiSlotBookingForm .pas-alert-success');
         $alert.text(message).show();
         setTimeout(() => $alert.fadeOut(), 5000);
     }

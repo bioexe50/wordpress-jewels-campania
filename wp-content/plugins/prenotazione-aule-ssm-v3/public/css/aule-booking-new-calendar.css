@@ -143,7 +143,7 @@
     gap: 0.5rem;
 }
 
-.btn-nav {
+.pas-btn-nav {
     width: 36px;
     height: 36px;
     border: 1px solid var(--border-color);
@@ -158,12 +158,12 @@
     justify-content: center;
 }
 
-.btn-nav:hover {
+.pas-btn-nav:hover {
     background: var(--light-bg);
     border-color: var(--primary-color);
 }
 
-.btn-nav:active {
+.pas-btn-nav:active {
     transform: scale(0.95);
 }
 
@@ -445,6 +445,35 @@
     padding: 1rem 1.5rem;
 }
 
+.prenotazione-aule-ssm-modal .pas-btn-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--text-secondary);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.prenotazione-aule-ssm-modal .pas-btn-close:hover {
+    opacity: 1;
+    background: var(--light-bg);
+    color: var(--text-primary);
+}
+
+.prenotazione-aule-ssm-modal .pas-btn-close::before {
+    content: '×';
+    font-size: 2rem;
+    font-weight: 300;
+}
+
 /* ========================================
    BOOKING SUMMARY
    ======================================== */
@@ -514,7 +543,7 @@
     color: var(--danger-color);
 }
 
-.booking-form .form-control {
+.booking-form .pas-form-control {
     width: 100%;
     padding: 0.625rem 0.875rem;
     font-size: 0.95rem;
@@ -523,17 +552,17 @@
     transition: var(--transition);
 }
 
-.booking-form .form-control:focus {
+.booking-form .pas-form-control:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
 }
 
-.booking-form .form-control.is-invalid {
+.booking-form .pas-form-control.is-invalid {
     border-color: var(--danger-color);
 }
 
-.booking-form .form-control.is-invalid:focus {
+.booking-form .pas-form-control.is-invalid:focus {
     box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
 }
 
@@ -544,7 +573,7 @@
     margin-top: 0.25rem;
 }
 
-.booking-form .form-control.is-invalid ~ .invalid-feedback {
+.booking-form .pas-form-control.is-invalid ~ .invalid-feedback {
     display: block;
 }
 
@@ -599,11 +628,11 @@
 /* ========================================
    BUTTONS
    ======================================== */
-.btn-submit-booking {
+.pas-btn-submit-booking {
     min-width: 180px;
 }
 
-.btn-spinner {
+.pas-btn-spinner {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -707,7 +736,7 @@
    PRINT STYLES
    ======================================== */
 @media print {
-    .btn-nav,
+    .pas-btn-nav,
     .modal,
     .slots-column {
         display: none !important;

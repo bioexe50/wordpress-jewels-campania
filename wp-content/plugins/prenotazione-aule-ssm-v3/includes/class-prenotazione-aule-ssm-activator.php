@@ -142,6 +142,10 @@ class Prenotazione_Aule_SSM_Activator {
             colore_slot_occupato varchar(7) DEFAULT '#dc3545',
             colore_slot_attesa varchar(7) DEFAULT '#ffc107',
             conserva_dati_disinstallazione tinyint(1) DEFAULT 1 COMMENT 'Se 1, conserva i dati alla disinstallazione',
+            abilita_email_conferma tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email di conferma',
+            abilita_email_rifiuto tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email di rifiuto',
+            abilita_email_admin tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email notifica admin',
+            abilita_email_reminder tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email reminder',
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
             updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
@@ -186,6 +190,21 @@ class Prenotazione_Aule_SSM_Activator {
         if (empty($conserva_exists)) {
             // Aggiungi colonna conserva_dati_disinstallazione
             $wpdb->query("ALTER TABLE $table_impostazioni ADD COLUMN conserva_dati_disinstallazione tinyint(1) DEFAULT 1 COMMENT 'Se 1, conserva i dati alla disinstallazione' AFTER colore_slot_attesa");
+        }
+
+        // v3.3.13 - Aggiungi colonne controlli email se mancanti
+        $email_columns = array(
+            'abilita_email_conferma' => "ALTER TABLE $table_impostazioni ADD COLUMN abilita_email_conferma tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email di conferma' AFTER conserva_dati_disinstallazione",
+            'abilita_email_rifiuto' => "ALTER TABLE $table_impostazioni ADD COLUMN abilita_email_rifiuto tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email di rifiuto' AFTER abilita_email_conferma",
+            'abilita_email_admin' => "ALTER TABLE $table_impostazioni ADD COLUMN abilita_email_admin tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email notifica admin' AFTER abilita_email_rifiuto",
+            'abilita_email_reminder' => "ALTER TABLE $table_impostazioni ADD COLUMN abilita_email_reminder tinyint(1) DEFAULT 1 COMMENT 'Abilita invio email reminder' AFTER abilita_email_admin"
+        );
+
+        foreach ($email_columns as $column_name => $alter_query) {
+            $column_check = $wpdb->get_results("SHOW COLUMNS FROM $table_impostazioni LIKE '$column_name'");
+            if (empty($column_check)) {
+                $wpdb->query($alter_query);
+            }
         }
     }
 

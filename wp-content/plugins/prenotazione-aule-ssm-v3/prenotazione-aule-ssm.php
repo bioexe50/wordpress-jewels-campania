@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Prenotazione Aule SSM
- * Plugin URI: https://github.com/yourusername/prenotazione-aule-ssm
+ * Plugin URI: https://raffaelevitulano.com
  * Description: Sistema completo di gestione prenotazioni aule per istituzioni educative. Include calendario, multi-booking, notifiche email e dashboard amministrativa.
- * Version: 3.3.11
- * Author: SSM Developer Team
- * Author URI: https://yourdomain.com
+ * Version: 3.4.2
+ * Author: Benny e Raffa
+ * Author URI: https://raffaelevitulano.com
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: prenotazione-aule-ssm
@@ -15,7 +15,7 @@
  * Network: false
  *
  * @package Prenotazione_Aule_SSM
- * @version 3.3.11
+ * @version 3.4.2
  * @since 1.0.0
  */
 
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
 /**
  * Definisci costanti del plugin
  */
-define('PRENOTAZIONE_AULE_SSM_VERSION', '3.3.11');
+define('PRENOTAZIONE_AULE_SSM_VERSION', '3.4.2');
 define('PRENOTAZIONE_AULE_SSM_DB_VERSION', '3.0');
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -168,6 +168,14 @@ require PRENOTAZIONE_AULE_SSM_PLUGIN_DIR . 'includes/class-prenotazione-aule-ssm
 require_once PRENOTAZIONE_AULE_SSM_PLUGIN_DIR . 'public/class-prenotazione-aule-ssm-multi-slot.php';
 
 /**
+ * Carica sistema auto-aggiornamento
+ *
+ * @since 3.4.0
+ */
+require_once PRENOTAZIONE_AULE_SSM_PLUGIN_DIR . 'includes/class-prenotazione-aule-ssm-updater.php';
+require_once PRENOTAZIONE_AULE_SSM_PLUGIN_DIR . 'includes/class-prenotazione-aule-ssm-update-endpoint.php';
+
+/**
  * Inizializza ed esegue il plugin
  *
  * @since 1.0.0
@@ -177,6 +185,34 @@ function run_prenotazione_aule_ssm() {
     $plugin->run();
 }
 
+/**
+ * Inizializza sistema auto-aggiornamento
+ *
+ * @since 3.4.0
+ */
+function init_prenotazione_aule_ssm_updater() {
+    // URL del sito che ospita gli aggiornamenti
+    // Cambia questo URL con il tuo sito di produzione
+    $update_server_url = 'https://raffaelevitulano.com';
+
+    // Inizializza updater (controlla aggiornamenti da sito remoto)
+    // IMPORTANTE: Usare GLOBALS per evitare garbage collection
+    $GLOBALS['prenotazione_aule_ssm_updater'] = new Prenotazione_Aule_SSM_Updater(
+        PRENOTAZIONE_AULE_SSM_PLUGIN_FILE,
+        $update_server_url
+    );
+
+    // Inizializza endpoint (fornisce info aggiornamenti AD altri siti)
+    // URL download: modifica con il percorso reale dove caricherai i file ZIP
+    $download_url = $update_server_url . '/downloads/prenotazione-aule-ssm-v' . PRENOTAZIONE_AULE_SSM_VERSION . '.zip';
+
+    // IMPORTANTE: Usare GLOBALS per evitare garbage collection
+    $GLOBALS['prenotazione_aule_ssm_update_endpoint'] = new Prenotazione_Aule_SSM_Update_Endpoint($download_url);
+}
+
 // Esegui il plugin dopo che WordPress è stato caricato
 add_action('plugins_loaded', 'run_prenotazione_aule_ssm');
+
+// Inizializza auto-aggiornamento
+add_action('plugins_loaded', 'init_prenotazione_aule_ssm_updater');
 

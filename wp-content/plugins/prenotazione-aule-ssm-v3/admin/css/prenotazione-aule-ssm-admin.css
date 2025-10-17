@@ -1061,133 +1061,323 @@ input[type="checkbox"].select-slot {
     }
 }
 
-/* Dark mode support */
+/* ========================================
+   FORCE LIGHT MODE - Mantieni sempre aspetto normale
+   ======================================== */
+
+/* Disabilita il dark mode del browser per il plugin */
+.prenotazione-aule-ssm-admin,
+.prenotazione-aule-ssm-stat-card,
+.prenotazione-aule-ssm-dashboard-section,
+.aula-form-container,
+.wp-admin #wpbody-content {
+    color-scheme: light !important;
+}
+
+/* Override completo dark mode - Forza colori chiari SEMPRE */
 @media (prefers-color-scheme: dark) {
-    .wp-admin .prenotazione-aule-ssm-stat-card,
-    .wp-admin .prenotazione-aule-ssm-dashboard-section,
-    .wp-admin .aula-form-container {
-        background: #1d2327;
-        border-color: #3c434a;
-        color: #f0f0f1;
-    }
-
-    .wp-admin .section-header {
-        background: #2c3338;
-        border-color: #3c434a;
-    }
-}
-
-/* WordPress Dashicons integration - sostituisce emoji e font custom */
-.wp-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    font-family: dashicons !important;
-}
-
-/* Mapping delle classi wp-icon-* ai Dashicons corrispondenti */
-.wp-icon-add::before {
-    content: "\f502" !important; /* dashicons-plus-alt */
-    color: var(--ab-primary);
-    font-family: dashicons !important;
-    font-size: 20px;
-}
-
-.wp-icon-remove::before {
-    content: "\f335" !important; /* dashicons-dismiss */
-    color: var(--ab-danger);
-    font-family: dashicons !important;
-    font-size: 20px;
-}
-
-.wp-icon-edit::before {
-    content: "\f464" !important; /* dashicons-edit */
-    color: var(--ab-primary);
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-.wp-icon-image::before {
-    content: "\f128" !important; /* dashicons-format-image */
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-.wp-icon-building::before {
-    content: "\f175" !important; /* dashicons-building */
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-.wp-icon-users::before {
-    content: "\f307" !important; /* dashicons-groups */
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-.wp-icon-location::before {
-    content: "\f230" !important; /* dashicons-location */
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-.wp-icon-tools::before {
-    content: "\f108" !important; /* dashicons-admin-tools */
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-.wp-icon-save::before {
-    content: "\f316" !important; /* dashicons-database */
-    font-family: dashicons !important;
-    font-size: 18px;
-}
-
-/* Accessibilità */
-.screen-reader-text {
-    position: absolute !important;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* Focus management */
-.button:focus,
-.pas-form-control:focus,
-.aula-card:focus,
-.quick-link-card:focus {
-    outline: 2px solid var(--ab-primary);
-    outline-offset: 2px;
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-    :root {
-        --ab-primary: #0000ff;
-        --ab-success: #008000;
-        --ab-danger: #ff0000;
-        --ab-warning: #ff8000;
-        --ab-border: #000;
-    }
-
+    /* Reset completo - mantieni lo schema chiaro originale */
     .prenotazione-aule-ssm-stat-card,
-    .aula-card,
-    .slot-generator {
-        border: 2px solid #000;
+    .prenotazione-aule-ssm-dashboard-section,
+    .aula-form-container,
+    .quick-link-card,
+    .postbox,
+    .stuffbox {
+        background: #fff !important;
+        border-color: #dcdcde !important;
+        color: #1d2327 !important;
     }
-}
-/* Fix Dashicons rendering in facility tags */
-.facility-tag .dashicons:before {
-    font-family: dashicons !important;
-    font-style: normal !important;
-    font-weight: normal !important;
-    line-height: 1 !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
+
+    /* Mantieni header con sfondo chiaro */
+    .section-header,
+    .aule-list-header,
+    .aula-form-header {
+        background: #fafafa !important;
+        border-color: #dcdcde !important;
+        color: #1d2327 !important;
+    }
+    
+    .section-header h2,
+    .aule-list-header h2,
+    .aula-form-header h2 {
+        color: #1d2327 !important;
+    }
+
+    /* Mantieni testo stat cards chiaro */
+    .stat-content h3,
+    .stat-content p {
+        color: #1d2327 !important;
+    }
+    
+    .stat-content p {
+        color: #646970 !important;
+    }
+
+    /* Tabelle - mantieni schema chiaro */
+    .wp-list-table,
+    .widefat {
+        background: #fff !important;
+        border-color: #c3c4c7 !important;
+    }
+
+    .wp-list-table th,
+    .wp-list-table td,
+    .widefat thead th,
+    .widefat thead td,
+    .widefat tbody th,
+    .widefat tbody td {
+        background: #fff !important;
+        color: #1d2327 !important;
+        border-color: #c3c4c7 !important;
+    }
+
+    .wp-list-table thead th,
+    .wp-list-table tfoot th,
+    .widefat thead th {
+        background: #f9f9f9 !important;
+        color: #1d2327 !important;
+    }
+
+    .wp-list-table tbody tr:nth-child(even),
+    .widefat tbody tr:nth-child(even) {
+        background: #f9f9f9 !important;
+    }
+
+    .wp-list-table tbody tr:hover,
+    .widefat tbody tr:hover th,
+    .widefat tbody tr:hover td {
+        background: #f0f0f1 !important;
+    }
+
+    .striped > tbody > :nth-child(odd),
+    ul.striped > :nth-child(odd) {
+        background: #fff !important;
+    }
+
+    /* Form Elements - mantieni schema chiaro */
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="url"],
+    textarea,
+    select,
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        background: #fff !important;
+        border-color: #c3c4c7 !important;
+        color: #1d2327 !important;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        background: #fff !important;
+        border-color: #2271b1 !important;
+        color: #1d2327 !important;
+    }
+
+    /* Bottoni - mantieni schema chiaro */
+    .button,
+    .button-secondary {
+        background: #f0f0f1 !important;
+        border-color: #c3c4c7 !important;
+        color: #2c3338 !important;
+    }
+
+    .button:hover,
+    .button-secondary:hover {
+        background: #fff !important;
+        border-color: #2271b1 !important;
+        color: #1d2327 !important;
+    }
+
+    .button-primary {
+        background: #2271b1 !important;
+        border-color: #2271b1 !important;
+        color: #fff !important;
+    }
+
+    .button-primary:hover {
+        background: #135e96 !important;
+        border-color: #135e96 !important;
+    }
+
+    /* Link Rapidi - mantieni schema chiaro */
+    .quick-link-card h3 {
+        color: #1d2327 !important;
+    }
+
+    .quick-link-card p {
+        color: #646970 !important;
+    }
+
+    .quick-link-card:hover {
+        background: #f8f9fa !important;
+    }
+
+    /* Notices - mantieni schema chiaro */
+    .notice {
+        background: #fff !important;
+        color: #1d2327 !important;
+    }
+
+    .notice-success {
+        background: #edfaef !important;
+        border-left-color: #00a32a !important;
+    }
+
+    .notice-warning {
+        background: #fcf9e8 !important;
+        border-left-color: #dba617 !important;
+    }
+
+    .notice-error {
+        background: #fcf0f1 !important;
+        border-left-color: #d63638 !important;
+    }
+
+    /* Meta boxes e pannelli - mantieni schema chiaro */
+    #poststuff h2,
+    #poststuff h3,
+    .inside label {
+        color: #1d2327 !important;
+    }
+
+    .postbox .hndle,
+    .stuffbox .hndle {
+        background: #f0f0f1 !important;
+        color: #1d2327 !important;
+        border-color: #c3c4c7 !important;
+    }
+
+    .postbox .inside,
+    .stuffbox .inside {
+        color: #1d2327 !important;
+    }
+
+    /* Prenotazioni Recenti - mantieni schema chiaro */
+    #prenotazioni-recenti-section {
+        background: #fff !important;
+        border-color: #dcdcde !important;
+    }
+
+    #prenotazioni-recenti-section h2 {
+        color: #1d2327 !important;
+        border-color: #dcdcde !important;
+    }
+
+    /* Help text - mantieni schema chiaro */
+    .description,
+    .help-text {
+        color: #646970 !important;
+    }
+
+    /* Link - mantieni schema chiaro */
+    a {
+        color: #2271b1 !important;
+    }
+
+    a:hover {
+        color: #135e96 !important;
+    }
+
+    .row-actions a {
+        color: #2271b1 !important;
+    }
+
+    .row-actions .delete a {
+        color: #d63638 !important;
+    }
+
+    /* Prenotazioni in attesa box - mantieni schema chiaro */
+    .prenotazioni-in-attesa-box {
+        background: #fff !important;
+        border-color: #dcdcde !important;
+    }
+
+    .prenotazioni-in-attesa-box h3 {
+        color: #1d2327 !important;
+    }
+
+    /* Dashboard widgets - mantieni schema chiaro */
+    .wp-core-ui .button-link {
+        color: #2271b1 !important;
+    }
+
+    /* Tab navigation - mantieni schema chiaro */
+    .nav-tab {
+        background: #f0f0f1 !important;
+        border-color: #c3c4c7 !important;
+        color: #2c3338 !important;
+    }
+
+    .nav-tab-active {
+        background: #fff !important;
+        border-bottom-color: #fff !important;
+        color: #1d2327 !important;
+    }
+
+    .nav-tab:hover {
+        background: #fff !important;
+        color: #1d2327 !important;
+    }
+
+    /* Aula cards - mantieni schema chiaro */
+    .aula-card {
+        background: #fff !important;
+        border-color: #dcdcde !important;
+    }
+
+    .aula-card-title {
+        color: #1d2327 !important;
+    }
+
+    .aula-card-meta {
+        color: #646970 !important;
+    }
+
+    /* Slot generator - mantieni schema chiaro */
+    .slot-generator {
+        background: #fff !important;
+        border-color: #dcdcde !important;
+    }
+
+    .slot-generator-body {
+        background: #fff !important;
+    }
+
+    .giorno-item {
+        background: #f8f9fa !important;
+        border-color: #dcdcde !important;
+        color: #1d2327 !important;
+    }
+
+    .giorno-item:hover {
+        background: #e9ecef !important;
+    }
+
+    .slot-item {
+        background: #fff !important;
+        border-color: #dcdcde !important;
+        color: #1d2327 !important;
+    }
+
+    .slots-list {
+        background: #f8f9fa !important;
+        border-color: #dcdcde !important;
+    }
+
+    /* No data state - mantieni schema chiaro */
+    .no-data {
+        background: #f8f9fa !important;
+        border-color: #c3c4c7 !important;
+        color: #646970 !important;
+    }
+
+    .no-data h3 {
+        color: #1d2327 !important;
+    }
 }

@@ -568,6 +568,12 @@ class Prenotazione_Aule_SSM_Database {
         $impostazioni_data = array(
             'conferma_automatica' => !empty($data['conferma_automatica']) ? 1 : 0,
             'email_notifica_admin' => maybe_serialize($data['email_notifica_admin']),
+            'conserva_dati_disinstallazione' => isset($data['conserva_dati_disinstallazione']) ? absint($data['conserva_dati_disinstallazione']) : 1,
+            // v3.3.9 - Controlli email
+            'abilita_email_conferma' => isset($data['abilita_email_conferma']) ? absint($data['abilita_email_conferma']) : 1,
+            'abilita_email_rifiuto' => isset($data['abilita_email_rifiuto']) ? absint($data['abilita_email_rifiuto']) : 1,
+            'abilita_email_admin' => isset($data['abilita_email_admin']) ? absint($data['abilita_email_admin']) : 1,
+            'abilita_email_reminder' => isset($data['abilita_email_reminder']) ? absint($data['abilita_email_reminder']) : 1,
             'template_email_conferma' => wp_kses_post($data['template_email_conferma']),
             'template_email_rifiuto' => wp_kses_post($data['template_email_rifiuto']),
             'template_email_admin' => wp_kses_post($data['template_email_admin']),
@@ -583,7 +589,7 @@ class Prenotazione_Aule_SSM_Database {
             'updated_at' => current_time('mysql')
         );
 
-        $format = array('%d', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s');
+        $format = array('%d', '%s', '%d', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s');
 
         return $this->wpdb->update(
             $this->table_impostazioni,

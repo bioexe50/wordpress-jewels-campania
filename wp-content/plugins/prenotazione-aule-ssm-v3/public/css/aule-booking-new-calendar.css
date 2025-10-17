@@ -943,3 +943,37 @@
     border: 1px solid #ffc107;
     color: #856404;
 }
+
+/* ============================================
+   FIX: Modal Backdrop Z-Index Issue
+   Problema: Bootstrap modal-backdrop copre il calendario
+   Data fix: 2025-10-16
+   ============================================ */
+
+/* Riduci z-index del backdrop per permettere interazione */
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+/* Assicura che il modal sia SOPRA il backdrop */
+.prenotazione-aule-ssm-modal,
+.modal.fade.show {
+    z-index: 1055 !important;
+}
+
+/* Calendario deve essere accessibile sopra il backdrop */
+.aule-new-calendar-wrapper,
+.aule-new-calendar-container {
+    position: relative;
+    z-index: 1060 !important;
+}
+
+/* Form slot selection sopra tutto */
+#slotSelectionModal {
+    z-index: 1070 !important;
+}
+
+/* Alternativa: rimuovi backdrop completamente quando il calendario è attivo */
+body.modal-open .modal-backdrop.fade.show {
+    opacity: 0.3 !important;  /* Meno invadente */
+}

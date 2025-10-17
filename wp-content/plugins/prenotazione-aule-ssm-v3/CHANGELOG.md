@@ -1,3 +1,20 @@
+## [3.4.3] - 2025-10-16
+
+### Fixed
+- **Modal Backdrop Z-Index**: Risolto problema modal-backdrop di Bootstrap che copriva il calendario
+- **UI Interaction**: Ora è possibile cliccare e selezionare gli slot anche quando il modal è aperto
+- **Z-Index Hierarchy**: Calendario (z-index: 1060) > Modal (1055) > Backdrop (1040)
+
+### Technical Details
+- Aggiunto fix CSS in `aule-booking-new-calendar.css`
+- Bootstrap modal-backdrop non blocca più l'interazione con il calendario
+- Backdrop ridotto a opacità 30% quando modal aperto
+
+### Files Modified
+- `public/css/aule-booking-new-calendar.css`: +28 righe fix z-index
+
+---
+
 ## [3.4.2] - 2025-10-16
 
 ### Fixed

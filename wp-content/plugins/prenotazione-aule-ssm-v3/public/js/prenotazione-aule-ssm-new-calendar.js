@@ -576,3 +576,188 @@
     });
 
 })(jQuery);
+
+/**
+ * ============================================
+ * FIX: Modal Backdrop Removal
+ * Rimuove backdrop Bootstrap che copre il calendario
+ * Data: 2025-10-17
+ * ============================================
+ */
+(function($) {
+    'use strict';
+    
+    // Rimuovi backdrop quando Bootstrap lo crea
+    const removeBackdrop = function() {
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+            console.log('[Prenotazione Aule] Backdrop rimosso');
+        }
+        // Rimuovi anche la classe modal-open dal body
+        $('body').removeClass('modal-open');
+    };
+    
+    // Observer per catturare backdrop appena viene creato
+    const backdropObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1 && node.classList.contains('modal-backdrop')) {
+                    console.log('[Prenotazione Aule] Backdrop rilevato - rimozione immediata');
+                    node.remove();
+                }
+            });
+        });
+    });
+    
+    // Avvia observer quando DOM è pronto
+    $(document).ready(function() {
+        backdropObserver.observe(document.body, {
+            childList: true,
+            subtree: false
+        });
+        
+        console.log('[Prenotazione Aule] Backdrop observer attivo');
+    });
+    
+    // Backup: rimuovi backdrop anche agli eventi modal
+    $(document).on('shown.bs.modal show.bs.modal', '.modal', removeBackdrop);
+    
+    // Rimuovi backdrop ogni 100ms (fallback aggressivo)
+    setInterval(removeBackdrop, 100);
+    
+})(jQuery);
+/**
+ * Custom Backdrop Manager
+ * Gestisce backdrop personalizzato per focus visivo
+ * senza bloccare l'interazione con il pannello
+ */
+(function($) {
+    'use strict';
+    
+    const CustomBackdrop = {
+        
+        backdrop: null,
+        isActive: false,
+        
+        /**
+         * Inizializza il backdrop personalizzato
+         */
+        init: function() {
+            // Crea elemento backdrop se non esiste
+            if (!this.backdrop) {
+                this.backdrop = $('<div>', {
+                    class: 'prenotazione-backdrop-custom',
+                    id: 'prenotazione-custom-backdrop'
+                });
+                
+                // Aggiungi al body
+                $('body').append(this.backdrop);
+                
+                console.log('[Custom Backdrop] Backdrop personalizzato inizializzato');
+            }
+            
+            // Bind eventi
+            this.bindEvents();
+        },
+        
+        /**
+         * Mostra il backdrop
+         */
+        show: function(style = 'default') {
+            if (this.isActive) return;
+            
+            // Rimuovi stili precedenti
+            this.backdrop.removeClass('pattern gradient');
+            
+            // Applica stile
+            if (style === 'pattern') {
+                this.backdrop.addClass('pattern');
+            } else if (style === 'gradient') {
+                this.backdrop.addClass('gradient');
+            }
+            
+            // Mostra con animazione
+            this.backdrop.addClass('active entering');
+            $('body').addClass('has-prenotazione-backdrop');
+            
+            this.isActive = true;
+            
+            console.log('[Custom Backdrop] Backdrop mostrato con stile:', style);
+            
+            // Rimuovi classe entering dopo animazione
+            setTimeout(() => {
+                this.backdrop.removeClass('entering');
+            }, 300);
+        },
+        
+        /**
+         * Nascondi il backdrop
+         */
+        hide: function() {
+            if (!this.isActive) return;
+            
+            this.backdrop.removeClass('active');
+            $('body').removeClass('has-prenotazione-backdrop');
+            
+            this.isActive = false;
+            
+            console.log('[Custom Backdrop] Backdrop nascosto');
+        },
+        
+        /**
+         * Toggle backdrop
+         */
+        toggle: function(style = 'default') {
+            if (this.isActive) {
+                this.hide();
+            } else {
+                this.show(style);
+            }
+        },
+        
+        /**
+         * Bind eventi per mostrare/nascondere automaticamente
+         */
+        bindEvents: function() {
+            const self = this;
+            
+            // Mostra quando si apre il pannello slot
+            $(document).on('click', '.day-cell:not(.disabled)', function() {
+                // Aspetta che il pannello si apra
+                setTimeout(function() {
+                    if ($('.multi-slot-selection-panel').is(':visible') || 
+                        $('#multiSlotModal').hasClass('show')) {
+                        self.show('gradient'); // Usa stile gradient
+                    }
+                }, 100);
+            });
+            
+            // Nascondi quando si chiude il pannello
+            $(document).on('click', '.close-multi-slot, .cancel-booking', function() {
+                self.hide();
+            });
+            
+            // Nascondi quando si conferma la prenotazione
+            $(document).on('submit', '.multi-slot-form', function() {
+                self.hide();
+            });
+            
+            // Nascondi con tasto ESC
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape' && self.isActive) {
+                    self.hide();
+                }
+            });
+        }
+    };
+    
+    // Inizializza quando DOM è pronto
+    $(document).ready(function() {
+        CustomBackdrop.init();
+    });
+    
+    // Esporta per uso manuale (opzionale)
+    window.PrenotazioneBackdrop = CustomBackdrop;
+    
+})(jQuery);

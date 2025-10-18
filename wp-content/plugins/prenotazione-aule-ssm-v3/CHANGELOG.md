@@ -1,3 +1,59 @@
+## [3.4.5] - 2025-10-18
+
+### Added
+- **Custom Backdrop**: Backdrop personalizzato per focus visivo sul pannello selezione slot
+- **Non-Blocking Design**: Backdrop oscura lo sfondo ma NON blocca l'interazione con il pannello
+- **Effetto Blur**: Backdrop con blur (3px) e gradiente radiale elegante
+- **Auto Show/Hide**: Backdrop appare automaticamente quando si apre il pannello slot
+- **ESC Key Support**: Chiusura backdrop con tasto ESC
+- **Animazioni**: Transizioni fluide fade-in/fade-out (300ms)
+
+### Features
+- Backdrop con `pointer-events: none` - permette click attraverso
+- Pannello slot con z-index 1060 (sopra backdrop)
+- 3 stili disponibili: default, gradient, pattern
+- Focus visivo con box-shadow e transform sul pannello
+- Gestione automatica eventi apertura/chiusura pannello
+
+### Technical Details
+- CSS: ~100 righe in `aule-booking-new-calendar.css`
+- JavaScript: CustomBackdrop manager in `prenotazione-aule-ssm-new-calendar.js`
+- Esportato globalmente come `window.PrenotazioneBackdrop` per uso manuale
+
+### Usage
+```javascript
+// Mostra backdrop manualmente
+PrenotazioneBackdrop.show('gradient');
+
+// Nascondi backdrop
+PrenotazioneBackdrop.hide();
+
+// Toggle
+PrenotazioneBackdrop.toggle();
+```
+
+---
+
+## [3.4.4] - 2025-10-17
+
+### Fixed
+- **Modal Backdrop Removal**: Aggiunto fix JavaScript per rimuovere completamente il backdrop
+- **MutationObserver**: Rilevamento e rimozione automatica backdrop quando viene creato da Bootstrap
+- **Aggressive Fix**: Rimozione backdrop ogni 100ms + event listeners + DOM observer
+
+### Technical Details
+- Aggiunto script in `prenotazione-aule-ssm-new-calendar.js`
+- MutationObserver cattura backdrop appena creato e lo rimuove immediatamente
+- Fallback con setInterval per rimozione continua
+- Rimuove anche classe `modal-open` dal body
+
+### Why v3.4.3 didn't work
+- Il fix CSS con z-index non era sufficiente
+- Bootstrap carica i suoi stili DOPO il plugin, overridando il nostro CSS
+- Soluzione JavaScript è più robusta e garantita
+
+---
+
 ## [3.4.3] - 2025-10-16
 
 ### Fixed

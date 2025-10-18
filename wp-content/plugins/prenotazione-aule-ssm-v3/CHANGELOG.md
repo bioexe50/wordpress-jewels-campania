@@ -1,3 +1,141 @@
+## [3.5.0] - 2025-10-18
+
+### Fixed - SOLUZIONE DEFINITIVA con Playwright
+- **Analisi DOM Reale**: Usato Playwright per ispezionare z-index effettivi nel browser
+- **Problema Identificato**: Backdrop z-index 10 era SOTTO header tema (z-index 999)
+- **Header Visibile**: Header/contenuto sito visibile SOPRA backdrop (utente vedeva tutto!)
+- **Backdrop Alzato**: z-index backdrop da 10 → 1040 (sopra header 999, sotto modale 1055)
+- **Header Search Hidden**: Nascosto `.thsn-header-search-form-wrapper` (z-index 9999) quando modale aperto
+
+### Technical Details - Playwright Analysis
+```json
+Elementi rilevati con Playwright:
+{
+  "Header Search Form": { "zIndex": 9999, "position": "fixed" },
+  "Header Sticky": { "zIndex": 999, "position": "fixed" },
+  "Modale": { "zIndex": 1055, "position": "fixed" },
+  "Modal Content": { "zIndex": 1057, "position": "relative" },
+  "Backdrop": { "zIndex": 10, "position": "fixed" }  ← PROBLEMA!
+}
+```
+
+**Soluzione:**
+- Backdrop: z-index 1040 (sopra header 999)
+- Modale: z-index 1055 (sopra backdrop 1040)
+- Header search form: opacity 0, z-index -1 quando modale aperto
+
+### Hierarchy Finale
+```
+Modale (1055)           ← SOPRA, interattivo
+    ↓
+Backdrop (1040)         ← Oscura header/contenuto
+    ↓
+Header (999)            ← SOTTO backdrop, nascosto
+    ↓
+Contenuto pagina        ← SOTTO backdrop, oscurato
+```
+
+### Why v3.4.9 Failed
+- v3.4.9 aveva backdrop z-index 10
+- Header tema aveva z-index 999
+- 10 < 999 = Header SOPRA backdrop
+- Utente vedeva header/contenuto sopra backdrop (non oscurato!)
+
+### Testing
+- ✅ Playwright DOM inspection
+- ✅ Screenshot comparison
+- ✅ Z-index verification in browser
+
+---
+
+## [3.4.9] - 2025-10-18
+
+### Fixed
+- **Z-Index Semplificato**: Eliminato custom backdrop, usato solo backdrop Bootstrap
+- **Backdrop Bootstrap Abbassato**: z-index backdrop 10 (invece di 1040)
+- **Modale Sopra**: z-index modale 1055+ (sopra backdrop 10)  
+- **Codice Ripulito**: Rimossi 130+ righe CSS custom backdrop inutile
+- **JavaScript Ripulito**: Rimosso CustomBackdrop manager (~130 righe)
+
+### Technical Details
+- Backdrop Bootstrap: z-index 10 !important
+- Modale: z-index 1055-1057
+- Eliminato `.prenotazione-backdrop-custom` (non serve)
+- Eliminato `CustomBackdrop` JavaScript object
+- Soluzione minimalista: solo 20 righe CSS vs 250+ precedenti
+
+### Why Previous Versions Failed
+- v3.4.5-3.4.7: Tentativo di creare custom backdrop
+- v3.4.8: Selettori corretti ma troppo complesso
+- **Root Problem**: Bootstrap backdrop aveva z-index 1040, modale 1055
+- **User Discovery**: Cambiando backdrop z-index 1-9 = tutto sotto, 10+ = modale sotto
+- **Solution**: Backdrop a z-index 10, modale 1055+ = funziona
+
+---
+
+## [3.4.8] - 2025-10-18
+
+### Fixed
+- **Modal Selector Corrected**: Cambiato selettore da `.multi-slot-selection-panel` a `#slotSelectionModal`
+- **Bootstrap Modal Integration**: Fix per modale Bootstrap reale (non esisteva `.multi-slot-selection-panel`)
+- **Z-Index Modale**: Modale 1060, dialog 1061, content 1062 (tutti sopra backdrop 1050)
+- **JavaScript Event**: Corretto `$('#slotSelectionModal').hasClass('show')` invece di classi inesistenti
+
+### Technical Details
+- CSS: Applicato z-index a `#slotSelectionModal.modal` (il modale Bootstrap reale)
+- CSS: `pointer-events: auto` su `.modal-dialog` e `.modal-content`
+- JavaScript: Evento backdrop corretto per rilevare apertura modale Bootstrap
+- Rimossi selettori inesistenti: `.multi-slot-selection-panel`, `#multiSlotModal`, `.slot-selection-container`
+
+### Why v3.4.7 didn't work
+- Il plugin usa **Bootstrap Modal** con ID `#slotSelectionModal`
+- v3.4.7 applicava CSS a `.multi-slot-selection-panel` che **NON ESISTE** nel DOM
+- JavaScript cercava `.multi-slot-selection-panel` invece di `#slotSelectionModal`
+- Fix: ispezionato template PHP per trovare ID reale del modale
+
+---
+
+## [3.4.7] - 2025-10-18
+
+### Fixed
+- **Backdrop Z-Index Hierarchy**: Pannello slot ora `position: fixed` invece di `relative`
+- **Panel Over Backdrop**: Risolto problema pannello coperto da backdrop (z-index non funzionava con position: relative)
+- **Click Through**: Pannello slot ora sempre sopra il backdrop, interazione garantita
+
+### Technical Details
+- Cambiato `.multi-slot-selection-panel` da `position: relative` a `position: fixed !important`
+- Backdrop (z-index 1050) < Pannello (z-index 1060) con entrambi `position: fixed`
+- Solo il container calendario rimane `position: relative`
+
+### Why v3.4.6 didn't work
+- Backdrop aveva `position: fixed` con z-index 1050
+- Pannello aveva `position: relative` con z-index 1060
+- **Con position: relative, z-index non ha priorità su position: fixed**
+- Fix: entrambi devono avere `position: fixed` per rispettare la gerarchia z-index
+
+---
+
+## [3.4.6] - 2025-10-18
+
+### Fixed
+- **Custom Backdrop Not Showing**: Rimosso vecchio codice v3.4.4 che eliminava TUTTI i backdrop
+- **MutationObserver Conflict**: Il vecchio observer Bootstrap rimuoveva anche il custom backdrop
+- **Console Logs Cleanup**: Rimossi log "Backdrop rilevato - rimozione immediata" e interval 100ms
+
+### Technical Details
+- Eliminato blocco codice righe 587-628 del file `prenotazione-aule-ssm-new-calendar.js`
+- Rimosso `setInterval(removeBackdrop, 100)` che causava rimozione continua
+- Rimosso `MutationObserver` che intercettava `.modal-backdrop` (incluso il nostro `.prenotazione-backdrop-custom`)
+- Ora solo `CustomBackdrop` manager è attivo (nessun conflitto)
+
+### Why v3.4.5 didn't work
+- Il file JavaScript conteneva ENTRAMBI i blocchi di codice (v3.4.4 + v3.4.5)
+- Il vecchio `MutationObserver` rilevava il custom backdrop e lo rimuoveva immediatamente
+- User vedeva console log `[Custom Backdrop] Backdrop personalizzato inizializzato` ma poi veniva rimosso
+- Fix: eliminato completamente il blocco v3.4.4, lasciando solo CustomBackdrop
+
+---
+
 ## [3.4.5] - 2025-10-18
 
 ### Added

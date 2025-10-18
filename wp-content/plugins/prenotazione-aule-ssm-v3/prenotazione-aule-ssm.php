@@ -3,7 +3,7 @@
  * Plugin Name: Prenotazione Aule SSM
  * Plugin URI: https://raffaelevitulano.com
  * Description: Sistema completo di gestione prenotazioni aule per istituzioni educative. Include calendario, multi-booking, notifiche email e dashboard amministrativa.
- * Version: 3.4.5
+ * Version: 3.5.2
  * Author: Benny e Raffa
  * Author URI: https://raffaelevitulano.com
  * License: GPL v2 or later
@@ -15,7 +15,7 @@
  * Network: false
  *
  * @package Prenotazione_Aule_SSM
- * @version 3.4.5
+ * @version 3.5.2
  * @since 1.0.0
  */
 
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
 /**
  * Definisci costanti del plugin
  */
-define('PRENOTAZIONE_AULE_SSM_VERSION', '3.4.5');
+define('PRENOTAZIONE_AULE_SSM_VERSION', '3.5.2');
 define('PRENOTAZIONE_AULE_SSM_DB_VERSION', '3.0');
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PRENOTAZIONE_AULE_SSM_PLUGIN_URL', plugin_dir_url(__FILE__));

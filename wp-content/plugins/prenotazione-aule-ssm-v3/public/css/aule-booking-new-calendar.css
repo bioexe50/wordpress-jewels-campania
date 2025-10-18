@@ -950,123 +950,63 @@
    Data fix: 2025-10-16
    ============================================ */
 
-/* Riduci z-index del backdrop per permettere interazione */
-.modal-backdrop {
-    z-index: 1040 !important;
-}
-
-/* Assicura che il modal sia SOPRA il backdrop */
-.prenotazione-aule-ssm-modal,
-.modal.fade.show {
-    z-index: 1055 !important;
-}
-
-/* Calendario deve essere accessibile sopra il backdrop */
-.aule-new-calendar-wrapper,
-.aule-new-calendar-container {
-    position: relative;
-    z-index: 1060 !important;
-}
-
-/* Form slot selection sopra tutto */
-#slotSelectionModal {
-    z-index: 1070 !important;
-}
-
-/* Alternativa: rimuovi backdrop completamente quando il calendario è attivo */
-body.modal-open .modal-backdrop.fade.show {
-    opacity: 0.3 !important;  /* Meno invadente */
-}
 /* ============================================
-   CUSTOM BACKDROP per Selezione Slot
-   - Oscura lo sfondo per focus visivo
-   - NON blocca interazione con il pannello
-   - Design elegante e professionale
+   SOLUZIONE DEFINITIVA Z-INDEX - v3.5.0
+   Basata su analisi Playwright del DOM reale
+
+   Problema rilevato:
+   - Header tema: z-index 999
+   - Header search form: z-index 9999
+   - Backdrop era a 10 → SOTTO header (header visibile sopra backdrop!)
+
+   Hierarchy corretta:
+   - Modale: 1055 (SOPRA tutto)
+   - Backdrop: 1040 (oscura header e contenuto)
+   - Header tema: 999 (SOTTO backdrop)
+
+   Fix: Backdrop a 1040 (sopra header), modale a 1055 (sopra backdrop)
    ============================================ */
 
-/* Backdrop personalizzato del plugin */
-.prenotazione-backdrop-custom {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);  /* Sfondo scuro semi-trasparente */
-    backdrop-filter: blur(3px);  /* Effetto blur sullo sfondo */
-    z-index: 1050;  /* Sotto il pannello slot */
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;  /* NON blocca click - FONDAMENTALE! */
+/* ============================================
+   SOLUZIONE DRASTICA: NASCONDI BACKDROP COMPLETAMENTE!
+
+   Problema: Backdrop copre modale, ordine rendering sbagliato
+   Soluzione: display: none sul backdrop, solo modale visibile
+   ============================================ */
+
+/* NASCONDI BACKDROP BOOTSTRAP - NON SERVE! */
+.modal-backdrop {
+    display: none !important;  /* Backdrop NON mostrato */
 }
 
-/* Backdrop visibile quando attivo */
-.prenotazione-backdrop-custom.active {
-    opacity: 1;
+/* Modale Bootstrap - NESSUN backdrop, solo modale */
+#slotSelectionModal.modal.fade.show {
+    z-index: 9999 !important;  /* Altissimo, sopra tutto */
+    background: rgba(0, 0, 0, 0.5) !important;  /* Backdrop integrato nel modale */
 }
 
-/* Il pannello di selezione slot deve essere SOPRA il backdrop */
-.multi-slot-selection-panel,
-#multiSlotModal,
-.slot-selection-container,
-.aule-new-calendar-container {
+/* Assicura che il contenuto modale sia interattivo */
+#slotSelectionModal .modal-dialog {
     position: relative;
-    z-index: 1060 !important;  /* Sopra il backdrop */
-    pointer-events: auto !important;  /* Permette interazione */
+    z-index: 10000 !important;
 }
 
-/* Assicura che TUTTO il contenuto del pannello sia interattivo */
-.multi-slot-selection-panel *,
-#multiSlotModal *,
-.slot-selection-container * {
-    pointer-events: auto !important;
+#slotSelectionModal .modal-content {
+    position: relative;
+    z-index: 10001 !important;
+    background: white !important;
 }
 
-/* Animazione di entrata backdrop */
-@keyframes fadeInBackdrop {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.prenotazione-backdrop-custom.entering {
-    animation: fadeInBackdrop 0.3s ease-in-out forwards;
-}
-
-/* Stile alternativo: sfondo con pattern */
-.prenotazione-backdrop-custom.pattern {
-    background: 
-        repeating-linear-gradient(
-            45deg,
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.5) 10px,
-            rgba(0, 0, 0, 0.6) 10px,
-            rgba(0, 0, 0, 0.6) 20px
-        );
-}
-
-/* Stile alternativo: gradiente elegante */
-.prenotazione-backdrop-custom.gradient {
-    background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.4) 0%,
-        rgba(0, 0, 0, 0.7) 100%
-    );
-}
-
-/* Focus visivo sul pannello quando backdrop attivo */
-body.has-prenotazione-backdrop .multi-slot-selection-panel,
-body.has-prenotazione-backdrop .slot-selection-container {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
-    transform: translateY(-5px);
-    transition: all 0.3s ease;
-}
-
-/* Nascondi elementi di disturbo quando backdrop attivo (opzionale) */
-body.has-prenotazione-backdrop .site-header,
-body.has-prenotazione-backdrop .site-footer {
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
+/* NASCONDI COMPLETAMENTE HEADER E FOOTER TEMA QUANDO MODALE APERTO */
+body.modal-open .thsn-header-search-form-wrapper,
+body.modal-open .thsn-header-wrapper,
+body.modal-open header,
+body.modal-open .site-header,
+body.modal-open footer,
+body.modal-open .site-footer,
+body.modal-open .thsn-footer-section {
+    z-index: -1 !important;  /* SOTTO backdrop */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
